@@ -98,7 +98,7 @@ import com.apercova.quickcsv.CsvWriterException;
         values.add(Arrays.asList(new String[] {"MX","Estados Unidos Mexicanos","Ciudad de México, \"CDMX\""}));
         values.add(Arrays.asList(new String[] {"AU","Austalia","Sidney"}));
         
-        CsvWriter.write(writer, values, CsvCons.COMMA, CsvCons.DOUBLE_QUOTE);
+        CsvWriter.write(writer, values);
         
     } catch(IOException e) {
         logger.log(Level.SEVERE, "Can't perform reading", e);
