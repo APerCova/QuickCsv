@@ -90,6 +90,7 @@ public class CsvWriter implements Closeable {
             throws CsvWriterException{
         write(writer, values, CsvCons.COMMA, CsvCons.DOUBLE_QUOTE, autoflush);
     }
+    
     /**
      * Core implementation for writing csv-values from a list of values.
      * @param writer Destination for writing.

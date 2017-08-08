@@ -6,6 +6,8 @@ import java.io.*;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Reader for Comma-Separated values in compliance with RFC 4180
@@ -19,6 +21,7 @@ import java.util.List;
  */
 public class CsvReader implements Closeable, Iterator<List<String>>, Iterable<List<String>>{
 
+    private static Logger logger = Logger.getLogger(CsvReader.class.getCanonicalName());
     protected Reader reader;
     protected char delimiter;
     protected char quote;
@@ -90,10 +93,8 @@ public class CsvReader implements Closeable, Iterator<List<String>>, Iterable<Li
         }
         IterableLineNumberReader buff = null;
         try {
-            if(reader instanceof IterableLineNumberReader)
-                buff = (IterableLineNumberReader) reader;
-            else
-                buff = new IterableLineNumberReader(reader);
+            //Create an underlying reader to keep original reader's reference
+            buff = new IterableLineNumberReader(reader);
 
             List<List<String>>  csv = new LinkedList<List<String>>();
             while(buff.hasNext()){
@@ -106,8 +107,9 @@ public class CsvReader implements Closeable, Iterator<List<String>>, Iterable<Li
             if(buff != null){
                 try{
                     buff.close();
+                    buff = null;
                 }catch(Exception e){
-                    e.printStackTrace(System.out);
+                    logger.log(Level.WARNING,"Unable to close underlying reader", e);
                 }
             }
         }
