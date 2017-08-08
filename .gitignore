@@ -32,3 +32,7 @@ buildNumber.properties
 *.iml
 *.project
 *.classpath
+
+#MS VSCode
+.settings/
+.vscode/
