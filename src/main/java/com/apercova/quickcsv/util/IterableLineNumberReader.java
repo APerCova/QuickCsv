@@ -1,4 +1,4 @@
-package com.quickcsv.util;
+package com.apercova.quickcsv.util;
 
 import java.io.IOException;
 import java.io.LineNumberReader;

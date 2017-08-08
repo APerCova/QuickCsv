@@ -1,17 +1,14 @@
-package com.quickcsv;
+package com.apercova.quickcsv;
 
 import org.junit.Assert;
 import org.junit.Test;
 
 import java.io.IOException;
-import java.io.OutputStreamWriter;
 import java.io.StringWriter;
 import java.io.Writer;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
-import static org.junit.Assert.*;
 
 public class CsvWriterTest {
     public char delimiter;

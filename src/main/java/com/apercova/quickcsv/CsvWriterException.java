@@ -1,4 +1,4 @@
-package com.quickcsv;
+package com.apercova.quickcsv;
 
 /**
  * Exception for a Csv writing error.

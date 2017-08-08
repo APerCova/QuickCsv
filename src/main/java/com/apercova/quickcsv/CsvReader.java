@@ -1,6 +1,6 @@
-package com.quickcsv;
+package com.apercova.quickcsv;
 
-import com.quickcsv.util.IterableLineNumberReader;
+import com.apercova.quickcsv.util.IterableLineNumberReader;
 
 import java.io.*;
 import java.util.Iterator;
