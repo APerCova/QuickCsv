@@ -6,15 +6,6 @@ Quick and easy handle of comma-separated values (CSV) as described in RFC 4180.
   
 #### See docs on the wiki:  (https://github.com/apercova/QuickCsv/wiki)
   
-*** 
-
-Rápido y fácil manejo de archivos CSV como se describe en el RFC 4180.  
-<a href="https://tools.ietf.org/html/rfc4180">Common Format and MIME Type for Comma-Separated Values (CSV) Files</a>  
-  
-#### Ver API:  (https://apercova.github.io/QuickCsv/apidocs/)  
-  
-#### Ver documentacion en la wiki:  (https://github.com/apercova/QuickCsv/wiki)
-
 ***
   
 ## Reading a file the quickest way:
