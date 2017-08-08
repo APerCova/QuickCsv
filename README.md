@@ -2,20 +2,20 @@
 Quick and easy handle of comma-separated values (CSV) as described in RFC 4180.  
 <a href="https://tools.ietf.org/html/rfc4180">Common Format and MIME Type for Comma-Separated Values (CSV) Files</a>  
   
-#### See API:  (<a href="https://apercova.github.io/QuickCsv/apidocs/" target="_blank">https://apercova.github.io/QuickCsv/apidocs/</a>)  
+#### See API:  (https://apercova.github.io/QuickCsv/apidocs/)  
   
-#### See docs on the wiki:  (<a href="https://apercova.github.io/QuickCsv/wiki/" target="_blank">https://apercova.github.io/QuickCsv/wiki/</a>)
+#### See docs on the wiki:  (https://github.com/apercova/QuickCsv/wiki)
   
---------------------------------------------------------------------------------  
+*** 
 
 Rápido y fácil manejo de archivos CSV como se describe en el RFC 4180.  
 <a href="https://tools.ietf.org/html/rfc4180">Common Format and MIME Type for Comma-Separated Values (CSV) Files</a>  
   
-#### Ver API:  (<a href="https://apercova.github.io/QuickCsv/apidocs/" target="_blank">https://apercova.github.io/QuickCsv/apidocs/</a>)  
+#### Ver API:  (https://apercova.github.io/QuickCsv/apidocs/)  
   
-#### Ver documentacion en la wiki:  (<a href="https://apercova.github.io/QuickCsv/wiki/" target="_blank">https://apercova.github.io/QuickCsv/wiki/</a>)
+#### Ver documentacion en la wiki:  (https://github.com/apercova/QuickCsv/wiki)
 
---------------------------------------------------------------------------------
+***
   
 ## Reading a file the quickest way:
   
@@ -71,9 +71,9 @@ import com.quickcsv.util.IterableLineNumberReader;
         logger.log(Level.SEVERE, "Can't perform reading", e);
     }
 ```
-### See more csv reading usecases <a href="#">here</a>. 
+#### See more csv reading usecases <a href="https://github.com/apercova/QuickCsv/wiki">here</a>. 
   
---------------------------------------------------------------------------------
+***
 ## Writing a file the quickest way:
   
 > - First the imports...
@@ -143,4 +143,4 @@ import com.quickcsv.CsvWriterException;
         logger.log(Level.SEVERE, "Can't perform reading", e);
     }
 ```
-### See more csv writing usecases <a href="#">here</a>.  
+#### See more csv writing usecases <a href="https://github.com/apercova/QuickCsv/wiki">here</a>.  
