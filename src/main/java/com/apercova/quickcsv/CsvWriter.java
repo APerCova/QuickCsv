@@ -1,7 +1,6 @@
 package com.quickcsv;
 
 import java.io.*;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -63,7 +62,7 @@ public class CsvWriter implements Closeable {
 
     /**
      * Writes a Csv-like document with current configuration.
-     * @throws CsvWriterException If an error happens when writing.
+     * @throws CsvWriterException If an error happens whilst writing.
      */
     public void write() throws CsvWriterException{
         CsvWriter.write(writer, values, delimiter, quote, autoflush);
@@ -73,9 +72,31 @@ public class CsvWriter implements Closeable {
      * Core implementation for writing csv-values from a list of values.
      * @param writer Destination for writing.
      * @param values List of csv values.
+     * @throws CsvWriterException If an error happens whilst writing.
+     */
+    public static void write(Writer writer, List<List<String>> values)
+            throws CsvWriterException{
+        write(writer, values, CsvCons.COMMA, CsvCons.DOUBLE_QUOTE, false);
+    }
+
+    /**
+     * Core implementation for writing csv-values from a list of values.
+     * @param writer Destination for writing.
+     * @param values List of csv values.
+     * @param autoflush Defines if destination writer should be flushed.
+     * @throws CsvWriterException If an error happens whilst writing.
+     */
+    public static void write(Writer writer, List<List<String>> values, boolean autoflush)
+            throws CsvWriterException{
+        write(writer, values, CsvCons.COMMA, CsvCons.DOUBLE_QUOTE, autoflush);
+    }
+    /**
+     * Core implementation for writing csv-values from a list of values.
+     * @param writer Destination for writing.
+     * @param values List of csv values.
      * @param delimiter Delimiter character. Default is a comma(,).
      * @param quote Quote character. Default is a double quote char(").
-     * @throws CsvWriterException If an error happens when writing.
+     * @throws CsvWriterException If an error happens whilst writing.
      */
     public static void write(Writer writer, List<List<String>> values, char delimiter, char quote)
             throws CsvWriterException{
@@ -88,8 +109,8 @@ public class CsvWriter implements Closeable {
      * @param values List of csv values.
      * @param delimiter Delimiter character. Default is a comma(,).
      * @param quote Quote character. Default is a double quote char(").
-     * @param autoflush States if destination writer shall be flushed.
-     * @throws CsvWriterException If an error happens when writing.
+     * @param autoflush Defines if destination writer should be flushed.
+     * @throws CsvWriterException If an error happens whilst writing.
      */
     public static void write(Writer writer, List<List<String>> values, char delimiter, char quote, boolean autoflush)
             throws CsvWriterException{

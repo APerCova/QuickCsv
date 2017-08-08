@@ -3,7 +3,6 @@ package com.quickcsv;
 import com.quickcsv.util.IterableLineNumberReader;
 
 import java.io.*;
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -53,7 +52,7 @@ public class CsvReader implements Closeable, Iterator<List<String>>, Iterable<Li
     /**
      * Reads a Csv-like document with current configuration.
      * @return List of read Csv lines.
-     * @throws CsvReaderException If an error happens when reading.
+     * @throws CsvReaderException If an error happens whilst reading.
      */
     public List<List<String>> read() throws CsvReaderException{
         return CsvReader.read(reader, delimiter, quote);
@@ -64,7 +63,7 @@ public class CsvReader implements Closeable, Iterator<List<String>>, Iterable<Li
      * Default delimiter and quote chars are used in compliance with RFC 4180.
      * @param reader Source for reading.
      * @return List of read Csv lines.
-     * @throws CsvReaderException If an error happens when reading.
+     * @throws CsvReaderException If an error happens whilst reading.
      */
     public static List<List<String>> read(Reader reader) throws CsvReaderException{
         return read(reader, CsvCons.COMMA, CsvCons.DOUBLE_QUOTE);
@@ -76,7 +75,7 @@ public class CsvReader implements Closeable, Iterator<List<String>>, Iterable<Li
      * @param delimiter Delimiter character. Default is a comma(,).
      * @param quote Quote character. Default is a double quote char(").
      * @return List of read Csv lines.
-     * @throws CsvReaderException If an error happens when reading.
+     * @throws CsvReaderException If an error happens whilst reading.
      */
     public static List<List<String>> read(Reader reader, char delimiter, char quote) throws CsvReaderException{
         if(reader == null){
@@ -91,7 +90,11 @@ public class CsvReader implements Closeable, Iterator<List<String>>, Iterable<Li
         }
         IterableLineNumberReader buff = null;
         try {
-            buff = new IterableLineNumberReader(reader);
+            if(reader instanceof IterableLineNumberReader)
+                buff = (IterableLineNumberReader) reader;
+            else
+                buff = new IterableLineNumberReader(reader);
+
             List<List<String>>  csv = new LinkedList<List<String>>();
             while(buff.hasNext()){
                 csv.add(readLine(buff.next(), delimiter, quote));
@@ -125,7 +128,7 @@ public class CsvReader implements Closeable, Iterator<List<String>>, Iterable<Li
         if(quote == ' ')
             quote = CsvCons.DOUBLE_QUOTE;
 
-        List<String> values = new ArrayList<String>();
+        List<String> values = new LinkedList<String>();
         char[] chars = line.toCharArray();
 
         StringBuffer value = new StringBuffer("");

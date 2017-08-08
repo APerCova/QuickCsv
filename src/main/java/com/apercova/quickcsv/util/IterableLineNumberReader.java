@@ -3,8 +3,8 @@ package com.quickcsv.util;
 import java.io.IOException;
 import java.io.LineNumberReader;
 import java.io.Reader;
-import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -32,13 +32,13 @@ public class IterableLineNumberReader extends LineNumberReader implements Iterat
     public IterableLineNumberReader(Reader in) {
         super(in);
         readForward = true;
-        suppressed = new ArrayList<Throwable>();
+        suppressed = new LinkedList<Throwable>();
     }
 
     public IterableLineNumberReader(Reader in, int sz) {
         super(in, sz);
         readForward = true;
-        suppressed = new ArrayList<Throwable>();
+        suppressed = new LinkedList<Throwable>();
     }
 
     /**
