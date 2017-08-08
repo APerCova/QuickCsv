@@ -20,9 +20,9 @@ import java.nio.charset.Charset;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import com.quickcsv.CsvReader;
-import com.quickcsv.CsvReaderException;
-import com.quickcsv.util.IterableLineNumberReader;
+import com.apercova.quickcsv.CsvReader;
+import com.apercova.quickcsv.CsvReaderException;
+import com.apercova.quickcsv.util.IterableLineNumberReader;
 ```
 > - java up to 1.6...
 ```java
@@ -80,9 +80,9 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import com.quickcsv.CsvCons;
-import com.quickcsv.CsvWriter;
-import com.quickcsv.CsvWriterException;
+import com.apercova.quickcsv.CsvCons;
+import com.apercova.quickcsv.CsvWriter;
+import com.apercova.quickcsv.CsvWriterException;
 ```
 > - java up to 1.6...
 ```java
@@ -128,7 +128,7 @@ import com.quickcsv.CsvWriterException;
         values.add(Arrays.asList(new String[] {"MX","Estados Unidos Mexicanos","Ciudad de México, \"CDMX\""}));
         values.add(Arrays.asList(new String[] {"AU","Austalia","Sidney"}));
         
-        CsvWriter.write(writer, values, CsvCons.COMMA, CsvCons.DOUBLE_QUOTE);
+        CsvWriter.write(writer, values);
         
     } catch(IOException | CsvWriterException e) {
         logger.log(Level.SEVERE, "Can't perform reading", e);
