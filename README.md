@@ -10,14 +10,16 @@ Quick and easy-of-use handling of comma-separated values (CSV) as described in R
   
 ## Reading a file the quickest way:
   
-> - Up to java 1.6
+### Up to java 1.6
 ```java
-    Reader reader;
+    Reader reader = null;
     try {
+    	//Getting a reader for CsvFile.csv
         reader = new InputStreamReader(
                 new FileInputStream("CsvFile.csv"), 
                 Charset.forName("utf-8"));
         
+        //Values are read as a row list
         List<List<String>> values = CsvReader.read(reader);
         
     } catch (IOException e) {
@@ -28,37 +30,30 @@ Quick and easy-of-use handling of comma-separated values (CSV) as described in R
         
     } finally {
         try {
-            reader.close();
+            if(reader != null)
+                reader.close();
             reader = null;
         } catch (IOException e) {
             logger.log(Level.FINE, "Unable to close reader", e);	
         }
     }
 ```
-> - Using java 1.7+...
+### Using java 1.7+
 ```java
-    try (Reader reader = new InputStreamReader(
-            new FileInputStream("CsvFile.csv"), 
-            Charset.forName("utf-8"))
-        ) {
-        
-        List<List<String>> values = CsvReader.read(reader);
-        
-    } catch(IOException | CsvReaderException e) {
-        logger.log(Level.SEVERE, "Can't perform reading", e);
-    }
+
 ```
 #### See more csv reading usecases <a href="https://github.com/apercova/QuickCsv/wiki">here</a>. 
   
 ***
 ## Writing a file the quickest way:
   
-> - Up to java 1.6
+### Up to java 1.6
 ```java
     Writer writer = null;
     try {
+        //Getting a reader for Countries.csv
         writer = new BufferedWriter(new OutputStreamWriter(
-                new FileOutputStream("CsvFile.csv"), 
+                new FileOutputStream("Countries.csv"), 
                 Charset.forName("utf-8")));
         
         List<List<String>> values = new LinkedList<List<String>>();
@@ -75,32 +70,16 @@ Quick and easy-of-use handling of comma-separated values (CSV) as described in R
         logger.log(Level.SEVERE, "Can't perform reading", e);
     } finally {
         try {
-            writer.close();
-            writer = null;
+            if(writer != null)
+        		    writer.close();
+                writer = null;
         } catch (IOException e) {
             logger.log(Level.FINE, "Failed to close resource", e);	
         }
     }
 ```
-> - Using java 1.7+...
+### Using java 1.7+
 ```java
-    try (
-        Writer writer = new BufferedWriter(new OutputStreamWriter(
-                new FileOutputStream("CsvFile.csv"), 
-                Charset.forName("utf-8")));
-        ) {
 
-        
-        List<List<String>> values = new LinkedList<List<String>>();
-        values.add(Arrays.asList(new String[] {"ISO_CODE","NAME","CAPITAL"}));
-        values.add(Arrays.asList(new String[] {"US","United States of America",""}));
-        values.add(Arrays.asList(new String[] {"MX","Estados Unidos Mexicanos","Ciudad de México, \"CDMX\""}));
-        values.add(Arrays.asList(new String[] {"AU","Austalia","Sidney"}));
-        
-        CsvWriter.write(writer, values);
-        
-    } catch(IOException | CsvWriterException e) {
-        logger.log(Level.SEVERE, "Can't perform reading", e);
-    }
 ```
 #### See more csv writing usecases <a href="https://github.com/apercova/QuickCsv/wiki">here</a>.  
