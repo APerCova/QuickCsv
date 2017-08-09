@@ -2,7 +2,7 @@
 Quick and easy-of-use handling of comma-separated values (CSV) as described in RFC 4180.  
 <a href="https://tools.ietf.org/html/rfc4180">Common Format and MIME Type for Comma-Separated Values (CSV) Files</a>  
   
-
+## Setting it Up
 ### Setup on local /.m2 repository
 > At the moment, QuickCsv is not available on Maven Central.  
 
