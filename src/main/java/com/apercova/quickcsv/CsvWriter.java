@@ -27,6 +27,11 @@ public class CsvWriter implements Closeable {
         autoflush = false;
     }
 
+    /**
+     * Constructor accepting target writer and source values.
+     * @param writer Target writer.
+     * @param values Ssource csv values list to write.
+     */
     public CsvWriter(Writer writer, List<List<String>> values){
         this.writer = writer;
         this.values = values;
@@ -35,26 +40,51 @@ public class CsvWriter implements Closeable {
         autoflush = false;
     }
 
+    /**
+     * Sets target writer.
+     * @param writer Target writer.
+     * @return Csv Writer.
+     */
     public CsvWriter to(Writer writer){
         this.writer = writer;
         return this;
     }
 
+    /**
+     * Sets source csv values list to write.
+     * @param values Source csv values.
+     * @return Csv Writer.
+     */
     public CsvWriter withValues(List<List<String>> values){
         this.values = values;
         return this;
     }
 
+    /**
+     * Sets custom delimiter.
+     * @param delimiter Csv delimiter.
+     * @return Csv Writer.
+     */
     public CsvWriter withDelimiter(char delimiter){
         this.delimiter = delimiter != ' '? delimiter: CsvCons.COMMA;
         return this;
     }
 
+    /**
+     * Sets custom quote.
+     * @param quote Csv quote.
+     * @return Csv Writer.
+     */
     public CsvWriter withQuote(char quote){
         this.quote = quote != ' '? quote: CsvCons.DOUBLE_QUOTE;
         return this;
     }
 
+    /**
+     * Sets auto-flush flag for underlying writer.
+     * @param autoflush Auto-flush flag
+     * @return Csv Writer.
+     */
     public CsvWriter setAutoFlush(boolean autoflush){
         this.autoflush = autoflush;
         return this;
@@ -173,11 +203,18 @@ public class CsvWriter implements Closeable {
         return value;
     }
 
-
+    /**
+     * Retrieves the delimiter char used for this writer.
+     * @return delimiter char.
+     */
     public char getDelimiter() {
         return delimiter;
     }
 
+    /**
+     * Retrieves the quotation char used for this writer.
+     * @return quotation char.
+     */
     public char getQuote() {
         return quote;
     }

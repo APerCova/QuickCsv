@@ -31,22 +31,41 @@ public class CsvReader implements Closeable, Iterator<List<String>>, Iterable<Li
         quote = CsvCons.DOUBLE_QUOTE;
     }
 
+    /**
+     * Constructor accepting source reader.
+     * @param reader Source reader.
+     */
     public CsvReader(Reader reader){
         this.reader = new IterableLineNumberReader(reader);
         delimiter = CsvCons.COMMA;
         quote = CsvCons.DOUBLE_QUOTE;
     }
 
+    /**
+     * Sets source reader.
+     * @param reader Source reader.
+     * @return Csv Reader
+     */
     public CsvReader from(Reader reader){
         this.reader = new IterableLineNumberReader(reader);
         return this;
     }
 
+    /**
+     * Sets custom delimiter.
+     * @param delimiter Csv delimiter.
+     * @return Csv Reader.
+     */
     public CsvReader withDelimiter(char delimiter){
         this.delimiter = delimiter;
         return this;
     }
 
+    /**
+     * Sets custom quote.
+     * @param quote Csv quote.
+     * @return Csv Reader.
+     */
     public CsvReader withQuote(char quote){
         this.quote = quote;
         return this;
@@ -188,10 +207,18 @@ public class CsvReader implements Closeable, Iterator<List<String>>, Iterable<Li
         return values;
     }
 
+    /**
+     * Retrieves the delimiter char used for this writer.
+     * @return delimiter char.
+     */
     public char getDelimiter() {
         return delimiter;
     }
 
+    /**
+     * Retrieves the quotation char used for this writer.
+     * @return quotation char.
+     */
     public char getQuote() {
         return quote;
     }
@@ -214,6 +241,11 @@ public class CsvReader implements Closeable, Iterator<List<String>>, Iterable<Li
         throw new UnsupportedOperationException();
     }
 
+    /**
+     * Get the current line number.
+     * @return  The current line number
+     * @see LineNumberReader#getLineNumber
+     */
     public int getLineNumber(){
         return ((IterableLineNumberReader) reader).getLineNumber();
     }
