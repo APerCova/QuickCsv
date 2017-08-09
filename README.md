@@ -2,9 +2,35 @@
 Quick and easy-of-use handling of comma-separated values (CSV) as described in RFC 4180.  
 <a href="https://tools.ietf.org/html/rfc4180">Common Format and MIME Type for Comma-Separated Values (CSV) Files</a>  
   
-#### See API:  (https://apercova.github.io/QuickCsv/apidocs/)  
+
+### Setup on local /.m2 repository
+> At the moment, QuickCsv is not available on Maven Central.  
+
+To setup on your local repository, you need to follow this steps:
+
+> - <a href="https://github.com/apercova/QuickCsv.git" >Clone</a> or <a href="https://github.com/apercova/QuickCsv/archive/master.zip">download</a> the repository.  
+> - Unzip the content in case of download.
+> - Change your current directory to the ***QuickCsv*** dir.
+> - Execute:  
+```bash
+        $ mvn clean install
+```
+
+***
+### Setup on Maven project
+
+Add the dependency in your pom.xml  
+```xml
+ 	<dependency>
+  		<groupId>com.apercova</groupId>
+  		<artifactId>quickcsv</artifactId>
+  		<version>1.0.17.8</version>
+  	</dependency>
+```
+
+> See API:  (https://apercova.github.io/QuickCsv/apidocs/)  
   
-#### See docs on the wiki:  (https://github.com/apercova/QuickCsv/wiki)
+> See docs on the wiki:  (https://github.com/apercova/QuickCsv/wiki)
   
 ***
   
