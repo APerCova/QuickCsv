@@ -10,21 +10,7 @@ Quick and easy-of-use handling of comma-separated values (CSV) as described in R
   
 ## Reading a file the quickest way:
   
-> - First the imports...
-```java
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.Reader;
-import java.nio.charset.Charset;
-import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import com.apercova.quickcsv.CsvReader;
-import com.apercova.quickcsv.CsvReaderException;
-import com.apercova.quickcsv.util.IterableLineNumberReader;
-```
-> - java up to 1.6...
+> - Up to java 1.6
 ```java
     Reader reader;
     try {
@@ -49,7 +35,7 @@ import com.apercova.quickcsv.util.IterableLineNumberReader;
         }
     }
 ```
-> - Now using java 1.7+...
+> - Using java 1.7+...
 ```java
     try (Reader reader = new InputStreamReader(
             new FileInputStream("CsvFile.csv"), 
@@ -67,24 +53,7 @@ import com.apercova.quickcsv.util.IterableLineNumberReader;
 ***
 ## Writing a file the quickest way:
   
-> - First the imports...
-```java
-import java.io.BufferedWriter;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStreamWriter;
-import java.io.Writer;
-import java.nio.charset.Charset;
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import com.apercova.quickcsv.CsvCons;
-import com.apercova.quickcsv.CsvWriter;
-import com.apercova.quickcsv.CsvWriterException;
-```
-> - java up to 1.6...
+> - Up to java 1.6
 ```java
     Writer writer = null;
     try {
@@ -113,7 +82,7 @@ import com.apercova.quickcsv.CsvWriterException;
         }
     }
 ```
-> - Now using java 1.7+...
+> - Using java 1.7+...
 ```java
     try (
         Writer writer = new BufferedWriter(new OutputStreamWriter(
