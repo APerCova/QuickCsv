@@ -62,7 +62,9 @@ Quick and easy-of-use handling of comma-separated values (CSV) as described in R
         values.add(Arrays.asList(new String[] {"MX","Estados Unidos Mexicanos","Ciudad de México, \"CDMX\""}));
         values.add(Arrays.asList(new String[] {"AU","Austalia","Sidney"}));
         
+        //Writing out values
         CsvWriter.write(writer, values);
+        writer.flush();
         
     } catch(IOException e) {
         logger.log(Level.SEVERE, "Can't perform reading", e);
