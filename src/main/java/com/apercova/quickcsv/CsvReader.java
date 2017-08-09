@@ -218,6 +218,17 @@ public class CsvReader implements Closeable, Iterator<List<String>>, Iterable<Li
         return ((IterableLineNumberReader) reader).getLineNumber();
     }
 
+    /**
+     * Exception list caused by reading errors when iterating.
+     * {@link Iterator#next()} does not declare a {@code throws} statement.
+     * @return Suppressed exceptions list.
+     */
+    public List<Throwable> getSuppressed(){
+        if(reader == null)
+            return null;
+        return ((IterableLineNumberReader)reader).getSuppressed();
+    }
+    
     public Iterator<List<String>> iterator() {
         return this;
     }
