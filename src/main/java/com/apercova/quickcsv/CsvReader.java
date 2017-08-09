@@ -228,7 +228,7 @@ public class CsvReader implements Closeable, Iterator<List<String>>, Iterable<Li
             return null;
         return ((IterableLineNumberReader)reader).getSuppressed();
     }
-    
+
     public Iterator<List<String>> iterator() {
         return this;
     }
