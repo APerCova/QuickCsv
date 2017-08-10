@@ -27,10 +27,12 @@ Add the dependency in your pom.xml
   		<version>1.0.17.8</version>
   	</dependency>
 ```
-
+***
 > See API:  (https://apercova.github.io/QuickCsv/apidocs/)  
   
 > See docs on the wiki:  (https://github.com/apercova/QuickCsv/wiki)
+
+> See complete usecases code: (https://github.com/apercova/QuickCsv/tree/master/usecases) 
   
 ***
   
