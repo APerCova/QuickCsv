@@ -1,4 +1,4 @@
-package com.apercova.quickcsv.usecases;
+package com.apercova.quickcsv.usecases.writer;
 
 import java.io.BufferedWriter;
 import java.io.FileInputStream;
@@ -15,19 +15,20 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import com.apercova.quickcsv.CsvCons;
 import com.apercova.quickcsv.CsvReader;
 import com.apercova.quickcsv.CsvReaderException;
 import com.apercova.quickcsv.CsvWriter;
 import com.apercova.quickcsv.CsvWriterException;
 
-public class QuickWriting {
+public class CustomDelimQuote {
 
-	private static final Logger logger = Logger.getLogger(QuickWriting.class.getCanonicalName());
+	private static final Logger logger = Logger.getLogger(CustomDelimQuote.class.getCanonicalName());
 	
-	public void read() {
+	public void write() {
 	    Writer writer = null;
 	    try {
-	    	//Getting a reader for Countries.csv
+	    	//Getting a writer for Countries.csv
 	        writer = new BufferedWriter(new OutputStreamWriter(
 	                new FileOutputStream("Countries.csv"), 
 	                Charset.forName("utf-8")));
@@ -39,8 +40,14 @@ public class QuickWriting {
 	        values.add(Arrays.asList(new String[] {"AU","Austalia","Sidney"}));
 	        
 	        //Writing out values
-	        CsvWriter.write(writer, values);
+	        //Custom delimiter an quotation chars from CsvCons
+	        CsvWriter.write(writer, values, CsvCons.PIPE, CsvCons.SINGLE_QUOTE);
 	        writer.flush();
+	        
+	        //Custom delimiter an quotation chars from char values
+	        CsvWriter.write(writer, values, '|', '\'');
+	        writer.flush();
+	        
 	        
 	    } catch(IOException e) {
 	        logger.log(Level.SEVERE, "Can't perform reading", e);

@@ -1,4 +1,4 @@
-package com.apercova.quickcsv.usecases;
+package com.apercova.quickcsv.usecases.reader;
 
 import java.io.FileInputStream;
 import java.io.IOException;
