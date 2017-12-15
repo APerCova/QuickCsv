@@ -1,4 +1,4 @@
-package com.apercova.quickcsv.usecases.reader;
+package net.apercova.quickcsv.usecases.reader;
 
 import java.io.BufferedReader;
 import java.io.Reader;

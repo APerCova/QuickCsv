@@ -1,4 +1,4 @@
-package com.apercova.quickcsv;
+package net.apercova.quickcsv;
 
 import java.io.*;
 import java.util.List;

@@ -1,4 +1,4 @@
-package com.apercova.quickcsv;
+package net.apercova.quickcsv;
 
 import org.junit.Assert;
 import org.junit.Test;

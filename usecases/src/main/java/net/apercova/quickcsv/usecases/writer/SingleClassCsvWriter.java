@@ -1,4 +1,4 @@
-package com.apercova.quickcsv.usecases.writer;
+package net.apercova.quickcsv.usecases.writer;
 
 import java.io.Writer;
 import java.util.List;

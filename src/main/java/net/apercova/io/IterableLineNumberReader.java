@@ -1,4 +1,4 @@
-package com.apercova.quickcsv.util;
+package net.apercova.io;
 
 import java.io.IOException;
 import java.io.LineNumberReader;
@@ -12,13 +12,14 @@ import java.util.List;
  * number tracking.
  * @author <a href="https://twitter.com/apercova" target="_blank">{@literal @}apercova</a> <a href="https://github.com/apercova" target="_blank">https://github.com/apercova</a>
  * @version 1.0 2017.08
+ * @version 1.1 2017.12 Adding {@link #hasMoreLines()} and {@link #getLine()}
  * Use:
  * <pre>
  * {@code
  *  IterableLineNumberReader it = new IterableLineNumberReader(reader);
- *  while (it.hasNext()){
- *      String nextLine = it.next();
+ *  while (it.hasMoreLines()){
  *      int lineNum = it.getLineNumber();
+ *      String nextLine = it.getLine();
  *      System.out.printf("#[%d]-%s%n",lineNum, nextLine);
  *  }}
  *  </pre>
@@ -103,4 +104,24 @@ public class IterableLineNumberReader extends LineNumberReader implements Iterat
     public void remove() {
         throw new UnsupportedOperationException();
     }
+
+    /**
+     * Returns {@code true} if there's more lines to read.
+     * (In other words, returns {@code true} if {@link #getLine()} would
+     * return an element rather than throwing an exception.)
+     *
+     * @return {@code true} if there's more lines to read
+     */
+    public boolean hasMoreLines() {
+        return this.hasNext();
+    }
+
+    /**
+     * Retrieves value of the next read text line.
+     * @return The next read text line.
+     */
+    public String getLine() {
+        return this.next();
+    }
+
 }
