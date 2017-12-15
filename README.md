@@ -22,9 +22,9 @@ To setup on your local repository, you need to follow this steps:
 Add the dependency in your pom.xml  
 ```xml
  	<dependency>
-  		<groupId>com.apercova</groupId>
+  		<groupId>net.apercova</groupId>
   		<artifactId>quickcsv</artifactId>
-  		<version>1.0.17.8</version>
+  		<version>1.0.1712</version>
   	</dependency>
 ```
 ***
