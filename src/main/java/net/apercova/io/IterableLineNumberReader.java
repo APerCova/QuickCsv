@@ -14,8 +14,10 @@ import java.util.NoSuchElementException;
  * @author <a href="https://twitter.com/apercova" target="_blank">{@literal @}apercova</a> <a href="https://github.com/apercova" target="_blank">https://github.com/apercova</a>
  * @version 1.0 2017.08
  * @version 1.1 2017.15 Adding {@link #hasMoreLines()} and {@link #getNextLine()}
- * Use:
+ * @since 1.0
+ * 
  * <pre>
+ * Use:
  * {@code
  *  IterableLineNumberReader it = new IterableLineNumberReader(reader);
  *  while (it.hasMoreLines()){
@@ -61,7 +63,7 @@ public class IterableLineNumberReader extends LineNumberReader implements Iterat
     }
 
     /**
-     * Looks for forward text line within underlying reader.
+     * Looks up next text line within underlying reader.
      */
     protected void readNextLine(){
         try {

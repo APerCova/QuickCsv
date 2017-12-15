@@ -21,7 +21,7 @@ import net.apercova.io.IterableLineNumberReader;
  *  <a href="https://tools.ietf.org/html/rfc4180" target="_blank">https://tools.ietf.org/html/rfc4180</a>
  * </pre>
  * @author <a href="https://twitter.com/apercova" target="_blank">{@literal @}apercova</a> <a href="https://github.com/apercova" target="_blank">https://github.com/apercova</a>
- * @version 1.0 2017.08
+ * @since 1.0
  */
 public class CsvReader implements Closeable, Iterator<List<String>>, Iterable<List<String>>{
 
