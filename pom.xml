@@ -9,7 +9,7 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     </properties>
 
-    <groupId>com.apercova</groupId>
+    <groupId>net.apercova</groupId>
     <artifactId>quickcsv</artifactId>
     <version>1.0.17.8</version>
     <dependencies>
