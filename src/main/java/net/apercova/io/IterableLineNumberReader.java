@@ -6,20 +6,21 @@ import java.io.Reader;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 /**
  * Allows to iterate over a {@link LineNumberReader} while keep line
  * number tracking.
  * @author <a href="https://twitter.com/apercova" target="_blank">{@literal @}apercova</a> <a href="https://github.com/apercova" target="_blank">https://github.com/apercova</a>
  * @version 1.0 2017.08
- * @version 1.1 2017.12 Adding {@link #hasMoreLines()} and {@link #getLine()}
+ * @version 1.1 2017.15 Adding {@link #hasMoreLines()} and {@link #getNextLine()}
  * Use:
  * <pre>
  * {@code
  *  IterableLineNumberReader it = new IterableLineNumberReader(reader);
  *  while (it.hasMoreLines()){
+ *      String nextLine = it.getNextLine();
  *      int lineNum = it.getLineNumber();
- *      String nextLine = it.getLine();
  *      System.out.printf("#[%d]-%s%n",lineNum, nextLine);
  *  }}
  *  </pre>
@@ -72,7 +73,11 @@ public class IterableLineNumberReader extends LineNumberReader implements Iterat
     }
 
     /**
-     * @see Iterator#hasNext
+     * Returns {@code true} if there's more lines to be read.
+     * (In other words, returns {@code true} if {@link #getNextLine()} would
+     * return an element rather than throwing an exception.)
+     *
+     * @return {@code true} if there's more lines to read
      */
     public boolean hasNext() {
         //look forward if next line is available
@@ -82,9 +87,10 @@ public class IterableLineNumberReader extends LineNumberReader implements Iterat
     }
 
     /**
-     * Retrieves value of the next read text line.
-     * @see Iterator#next
-     * @return Value of the next read text line.
+     * Returns the next line read.
+     *
+     * @return Value of the next line read
+     * @throws NoSuchElementException if there's no more lines to be read.
      */
     public String next() {
         if(readForward){
@@ -98,7 +104,7 @@ public class IterableLineNumberReader extends LineNumberReader implements Iterat
 
     /**
      * Not supported.
-     * @see Iterator#remove
+     * @see Iterator#remove()
      * @throws UnsupportedOperationException Not supported.
      */
     public void remove() {
@@ -106,21 +112,23 @@ public class IterableLineNumberReader extends LineNumberReader implements Iterat
     }
 
     /**
-     * Returns {@code true} if there's more lines to read.
-     * (In other words, returns {@code true} if {@link #getLine()} would
+     * Returns {@code true} if there's more lines to be read.
+     * (In other words, returns {@code true} if {@link #getNextLine()} would
      * return an element rather than throwing an exception.)
-     *
-     * @return {@code true} if there's more lines to read
+     * Convenience alias for {@link #hasNext()}
+     * @return {@code true} if there's more lines to be read
      */
     public boolean hasMoreLines() {
         return this.hasNext();
     }
 
     /**
-     * Retrieves value of the next read text line.
-     * @return The next read text line.
+     * Returns the next line read.
+     * Convenience alias for {@link #next()}
+     * @return Value of the next line read
+     * @throws NoSuchElementException if there's no more lines to be read.
      */
-    public String getLine() {
+    public String getNextLine() {
         return this.next();
     }
 

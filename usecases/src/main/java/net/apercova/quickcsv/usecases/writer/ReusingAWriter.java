@@ -1,12 +1,9 @@
 package net.apercova.quickcsv.usecases.writer;
 
 import java.io.BufferedWriter;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
-import java.io.Reader;
 import java.io.Writer;
 import java.nio.charset.Charset;
 import java.util.Arrays;
@@ -41,7 +38,7 @@ public class ReusingAWriter {
 	        
 	        //Configuring CsvWriter
 	        csvWriter.to(writer)
-	                 .withValues(values)
+	                 .withLines(values)
 	                 .setAutoFlush(true);
 	        
 	        //Writing out values
@@ -55,7 +52,7 @@ public class ReusingAWriter {
 	        
 	        //Configuring CsvWiter (Reusing with diferent writer)
 	        csvWriter.to(writer)
-	                 .withValues(values)
+	                 .withLines(values)
 	                 .setAutoFlush(true);
 	        
 	        //Writing out values

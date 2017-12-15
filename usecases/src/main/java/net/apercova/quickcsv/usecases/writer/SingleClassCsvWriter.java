@@ -4,6 +4,8 @@ import java.io.Writer;
 import java.util.List;
 import java.util.logging.Logger;
 
+import net.apercova.quickcsv.CsvWriterException;
+
 public class SingleClassCsvWriter {
 
 	public static final Logger logger = Logger.getLogger(SingleClassCsvWriter.class.getCanonicalName());

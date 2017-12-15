@@ -7,7 +7,9 @@ package net.apercova.quickcsv;
  */
 public class CsvReaderException extends Exception{
 
-    public CsvReaderException() {
+	private static final long serialVersionUID = 2070949263453202075L;
+
+	public CsvReaderException() {
     }
 
     public CsvReaderException(String message) {

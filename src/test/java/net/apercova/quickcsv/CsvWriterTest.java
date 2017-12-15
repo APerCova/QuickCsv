@@ -38,7 +38,7 @@ public class CsvWriterTest {
                     .to(writer)
                     .withDelimiter(delimiter)
                     .withQuote(quote)
-                    .withValues(csvValues)
+                    .withLines(csvValues)
                     .setAutoFlush(autoflush);
 
             csvWriter.write();

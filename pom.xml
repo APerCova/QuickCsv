@@ -11,7 +11,7 @@
 
     <groupId>net.apercova</groupId>
     <artifactId>quickcsv</artifactId>
-    <version>1.0.17.8</version>
+    <version>1.0.1712</version>
     <dependencies>
         <dependency>
             <groupId>junit</groupId>

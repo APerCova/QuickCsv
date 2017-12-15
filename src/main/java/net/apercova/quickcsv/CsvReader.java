@@ -1,13 +1,17 @@
 package net.apercova.quickcsv;
 
-import net.apercova.io.IterableLineNumberReader;
-
-import java.io.*;
+import java.io.Closeable;
+import java.io.IOException;
+import java.io.LineNumberReader;
+import java.io.Reader;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import net.apercova.io.IterableLineNumberReader;
 
 /**
  * Reader for Comma-Separated values in compliance with RFC 4180
@@ -229,16 +233,50 @@ public class CsvReader implements Closeable, Iterator<List<String>>, Iterable<Li
         }
     }
 
+    /**
+     * Returns {@code true} if there's more lines to be read.
+     * (In other words, returns {@code true} if {@link #getNextLine()} would
+     * return an element rather than throwing an exception.)
+     *
+     * @return {@code true} if there's more lines to read
+     */
     public boolean hasNext() {
         return ((IterableLineNumberReader) reader).hasNext();
     }
 
+    /**
+     * Returns the next line read.
+     *
+     * @return Value of the next line read
+     * @throws NoSuchElementException if there's no more lines to be read.
+     */
     public List<String> next() {
         return CsvReader.readLine(((IterableLineNumberReader) reader).next(), delimiter, quote);
     }
 
     public void remove() {
         throw new UnsupportedOperationException();
+    }
+    
+    /**
+     * Returns {@code true} if there's more lines to be read.
+     * (In other words, returns {@code true} if {@link #getNextLine()} would
+     * return an element rather than throwing an exception.)
+     * Convenience alias for {@link #hasNext()}
+     * @return {@code true} if there's more lines to be read
+     */
+    public boolean hasMoreLines() {
+        return hasNext();
+    }
+
+    /**
+     * Returns the next line read.
+     * Convenience alias for {@link #next()}
+     * @return Value of the next line read
+     * @throws NoSuchElementException if there's no more lines to be read.
+     */
+    public List<String> getNextLine() {
+        return next();
     }
 
     /**
@@ -261,6 +299,10 @@ public class CsvReader implements Closeable, Iterator<List<String>>, Iterable<Li
         return ((IterableLineNumberReader)reader).getSuppressed();
     }
 
+    /**
+     * Returns an instance of this {@link CsvReader} as {@link Iterator}.
+     * @return Iterator.
+     */
     public Iterator<List<String>> iterator() {
         return this;
     }

@@ -1,6 +1,10 @@
 package net.apercova.quickcsv;
 
-import java.io.*;
+import java.io.Closeable;
+import java.io.Flushable;
+import java.io.IOException;
+import java.io.Writer;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -13,15 +17,16 @@ import java.util.List;
  * @author <a href="https://twitter.com/apercova" target="_blank">{@literal @}apercova</a> <a href="https://github.com/apercova" target="_blank">https://github.com/apercova</a>
  * @version 1.0 2017.08
  */
-public class CsvWriter implements Closeable {
+public class CsvWriter implements Closeable, Flushable {
 
     protected Writer writer;
-    protected List<List<String>> values;
+    protected List<List<String>> lines;
     protected char delimiter;
     protected char quote;
     protected boolean autoflush;
 
     public CsvWriter(){
+    	lines = new ArrayList<List<String>>(0);
         delimiter = CsvCons.COMMA;
         quote = CsvCons.DOUBLE_QUOTE;
         autoflush = false;
@@ -30,34 +35,53 @@ public class CsvWriter implements Closeable {
     /**
      * Constructor accepting target writer and source values.
      * @param writer Target writer.
-     * @param values Ssource csv values list to write.
      */
-    public CsvWriter(Writer writer, List<List<String>> values){
+    public CsvWriter(Writer writer){
         this.writer = writer;
-        this.values = values;
+        lines = new ArrayList<List<String>>(0);
         delimiter = CsvCons.COMMA;
         quote = CsvCons.DOUBLE_QUOTE;
         autoflush = false;
     }
-
+    
     /**
-     * Sets target writer.
+     * Constructor accepting target writer and source values.
      * @param writer Target writer.
-     * @return Csv Writer.
+     * @param autoflush Indicates whether flush or not underlying writer.
      */
-    public CsvWriter to(Writer writer){
+    public CsvWriter(Writer writer, boolean autoflush){
         this.writer = writer;
-        return this;
+        lines = new ArrayList<List<String>>(0);
+        delimiter = CsvCons.COMMA;
+        quote = CsvCons.DOUBLE_QUOTE;
+        this.autoflush = autoflush;
     }
-
+    
     /**
-     * Sets source csv values list to write.
-     * @param values Source csv values.
-     * @return Csv Writer.
+     * Constructor accepting target writer and source values.
+     * @param writer Target writer.
+     * @param lines Source CSV row list to write.
      */
-    public CsvWriter withValues(List<List<String>> values){
-        this.values = values;
-        return this;
+    public CsvWriter(Writer writer, List<List<String>> lines){
+        this.writer = writer;
+        this.lines = lines;
+        delimiter = CsvCons.COMMA;
+        quote = CsvCons.DOUBLE_QUOTE;
+        autoflush = false;
+    }
+    
+    /**
+     * Constructor accepting target writer and source values.
+     * @param writer Target writer.
+     * @param lines Source CSV row list to write.
+     * @param autoflush Indicates whether flush or not underlying writer.
+     */
+    public CsvWriter(Writer writer, List<List<String>> lines, boolean autoflush){
+        this.writer = writer;
+        this.lines = lines;
+        delimiter = CsvCons.COMMA;
+        quote = CsvCons.DOUBLE_QUOTE;
+        this.autoflush = autoflush;
     }
 
     /**
@@ -91,59 +115,99 @@ public class CsvWriter implements Closeable {
     }
 
     /**
-     * Writes a Csv-like document with current configuration.
-     * @throws CsvWriterException If an error happens whilst writing.
+     * Sets target writer.
+     * @param writer Target writer.
+     * @return Csv Writer.
      */
-    public void write() throws CsvWriterException{
-        CsvWriter.write(writer, values, delimiter, quote, autoflush);
+    public CsvWriter to(Writer writer){
+        this.writer = writer;
+        return this;
     }
 
     /**
-     * Core implementation for writing csv-values from a list of values.
-     * @param writer Destination for writing.
-     * @param values List of csv values.
-     * @throws CsvWriterException If an error happens whilst writing.
+     * Sets source CSV row list to write.
+     * @param lines Source CSV row list to write.
+     * @return CSV Writer.
      */
-    public static void write(Writer writer, List<List<String>> values)
-            throws CsvWriterException{
-        write(writer, values, CsvCons.COMMA, CsvCons.DOUBLE_QUOTE, false);
-    }
-
-    /**
-     * Core implementation for writing csv-values from a list of values.
-     * @param writer Destination for writing.
-     * @param values List of csv values.
-     * @param autoflush Defines if destination writer should be flushed.
-     * @throws CsvWriterException If an error happens whilst writing.
-     */
-    public static void write(Writer writer, List<List<String>> values, boolean autoflush)
-            throws CsvWriterException{
-        write(writer, values, CsvCons.COMMA, CsvCons.DOUBLE_QUOTE, autoflush);
+    public CsvWriter withLines(List<List<String>> lines){
+        this.lines = lines;
+        return this;
     }
     
     /**
-     * Core implementation for writing csv-values from a list of values.
+     * Adds CSV rows to current row list.
+     * @param lines Source CSV row list to add.
+     * @return CSV Writer.
+     */
+    public CsvWriter addLines(List<List<String>> lines){
+        this.lines.addAll(lines);
+        return this;
+    }
+    
+    /**
+     * Adds CSV row to current row list.
+     * @param line Source CSV row to add.
+     * @return CSV Writer.
+     */
+    public CsvWriter addLine(List<String> line){
+        this.lines.add(line);;
+        return this;
+    }
+    
+    /**
+     * Writes a CSV-like document with current configuration.
+     * @throws CsvWriterException If an error happens whilst writing.
+     */
+    public void write() throws CsvWriterException{
+        CsvWriter.write(writer, lines, delimiter, quote, autoflush);
+    }
+
+    /**
+     * Core implementation for writing CSV-values from a list of values.
      * @param writer Destination for writing.
-     * @param values List of csv values.
+     * @param lines CSV row list.
+     * @throws CsvWriterException If an error happens whilst writing.
+     */
+    public static void write(Writer writer, List<List<String>> lines)
+            throws CsvWriterException{
+        write(writer, lines, CsvCons.COMMA, CsvCons.DOUBLE_QUOTE, false);
+    }
+
+    /**
+     * Core implementation for writing CSV-values from a list of values.
+     * @param writer Destination for writing.
+     * @param lines CSV row list.
+     * @param autoflush Defines if destination writer should be flushed.
+     * @throws CsvWriterException If an error happens whilst writing.
+     */
+    public static void write(Writer writer, List<List<String>> lines, boolean autoflush)
+            throws CsvWriterException{
+        write(writer, lines, CsvCons.COMMA, CsvCons.DOUBLE_QUOTE, autoflush);
+    }
+    
+    /**
+     * Core implementation for writing CSV-values from a list of values.
+     * @param writer Destination for writing.
+     * @param lines CSV row list.
      * @param delimiter Delimiter character. Default is a comma(,).
      * @param quote Quote character. Default is a double quote char(").
      * @throws CsvWriterException If an error happens whilst writing.
      */
-    public static void write(Writer writer, List<List<String>> values, char delimiter, char quote)
+    public static void write(Writer writer, List<List<String>> lines, char delimiter, char quote)
             throws CsvWriterException{
-        write(writer, values, delimiter,quote, false);
+        write(writer, lines, delimiter,quote, false);
     }
 
     /**
-     * Core implementation for writing csv-values from a list of values.
+     * Core implementation for writing CSV-values from a list of values.
      * @param writer Destination for writing.
-     * @param values List of csv values.
+     * @param lines CSV row list.
      * @param delimiter Delimiter character. Default is a comma(,).
      * @param quote Quote character. Default is a double quote char(").
      * @param autoflush Defines if destination writer should be flushed.
      * @throws CsvWriterException If an error happens whilst writing.
      */
-    public static void write(Writer writer, List<List<String>> values, char delimiter, char quote, boolean autoflush)
+    public static void write(Writer writer, List<List<String>> lines, char delimiter, char quote, boolean autoflush)
             throws CsvWriterException{
         if(writer == null){
             throw new CsvWriterException("missing writer",
@@ -157,8 +221,8 @@ public class CsvWriter implements Closeable {
             quote = CsvCons.DOUBLE_QUOTE;
 
         try{
-            if(values != null && !values.isEmpty()) {
-                for (List<String> line : values) {
+            if(lines != null && !lines.isEmpty()) {
+                for (List<String> line : lines) {
                     for (int c = 0; c < line.size(); c++) {
                         writer.write(formatValue(line.get(c), delimiter, quote));
                         if ((c + 1) < line.size()) {
@@ -167,8 +231,9 @@ public class CsvWriter implements Closeable {
                     }
                     writer.write(System.getProperty("line.separator"));
                 }
-                if(autoflush)
+                if(autoflush) {
                     writer.flush();
+                }
             }
         }catch(Exception e){
             throw new CsvWriterException(e.getMessage(), e);
@@ -222,6 +287,12 @@ public class CsvWriter implements Closeable {
     public void close() throws IOException {
         if(writer != null)
             writer.close();
+    }
+    
+    public void flush() throws IOException{
+    	if(writer != null) {
+    		writer.flush();
+    	}
     }
 
 }
