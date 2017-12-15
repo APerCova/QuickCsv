@@ -30,6 +30,23 @@
 
     <build>
         <plugins>
+        	<plugin>
+				<artifactId>maven-clean-plugin</artifactId>
+				<version>3.0.0</version>
+				<configuration>
+					<filesets>
+						<fileset>
+							<directory>${basedir}/docs/apidocs/</directory>
+						    <includes>
+							    <include>**/**</include>
+						    </includes>
+						    <excludes>
+						    </excludes>
+						    <followSymlinks>false</followSymlinks>
+						</fileset>
+					</filesets>
+				</configuration>
+			</plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -43,15 +60,33 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-resources-plugin</artifactId>
-                <version>2.6</version>
+                <version>3.0.0</version>
                 <configuration>
                     <encoding>UTF-8</encoding>
                 </configuration>
+                <executions>
+                	<execution>
+                		<id>copy-resources</id>
+                		<phase>verify</phase>
+                		<goals>
+                			<goal>copy-resources</goal>
+                		</goals>
+                		<configuration>
+							<outputDirectory>${basedir}/docs/apidocs/</outputDirectory>
+							<resources>          
+								<resource>
+									<directory>target/apidocs</directory>
+									<filtering>true</filtering>
+								</resource>
+							</resources>              
+			            </configuration>            
+                	</execution>
+                </executions>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-source-plugin</artifactId>
-                <version>3.0.1</version>
+                <version>3.0.0</version>
                 <executions>
                     <execution>
                         <id>attach-sources</id>
@@ -64,7 +99,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
-                <version>3.0.0-M1</version>
+                <version>3.0.0</version>
                 <configuration>
                     <javadocVersion>1.5</javadocVersion>
                     <encoding>UTF-8</encoding>
