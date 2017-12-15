@@ -1,4 +1,4 @@
-package com.apercova.quickcsv.usecases.writer;
+package net.apercova.quickcsv.usecases.writer;
 
 import java.io.BufferedWriter;
 import java.io.FileInputStream;
@@ -15,11 +15,9 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import com.apercova.quickcsv.CsvCons;
-import com.apercova.quickcsv.CsvReader;
-import com.apercova.quickcsv.CsvReaderException;
-import com.apercova.quickcsv.CsvWriter;
-import com.apercova.quickcsv.CsvWriterException;
+import net.apercova.quickcsv.CsvCons;
+import net.apercova.quickcsv.CsvWriter;
+import net.apercova.quickcsv.CsvWriterException;
 
 public class CustomDelimQuote {
 
