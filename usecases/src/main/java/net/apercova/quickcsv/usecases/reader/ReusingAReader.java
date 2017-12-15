@@ -1,4 +1,4 @@
-package com.apercova.quickcsv.usecases.reader;
+package net.apercova.quickcsv.usecases.reader;
 
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -9,9 +9,9 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import com.apercova.quickcsv.CsvCons;
-import com.apercova.quickcsv.CsvReader;
-import com.apercova.quickcsv.CsvReaderException;
+import net.apercova.quickcsv.CsvCons;
+import net.apercova.quickcsv.CsvReader;
+import net.apercova.quickcsv.CsvReaderException;
 
 public class ReusingAReader {
 

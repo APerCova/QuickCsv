@@ -1,4 +1,4 @@
-package com.apercova.quickcsv;
+package net.apercova.quickcsv;
 
 /**
  * Constants for using within readers and writers.

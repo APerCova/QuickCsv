@@ -1,24 +1,24 @@
-package com.apercova.quickcsv;
+package net.apercova.quickcsv;
 
 /**
- * Exception for a Csv writing error.
+ * Exception for a Csv reading error.
  * @author <a href="https://twitter.com/apercova" target="_blank">{@literal @}apercova</a> <a href="https://github.com/apercova" target="_blank">https://github.com/apercova</a>
  * @version 1.0 2017.08
  */
-public class CsvWriterException extends Exception{
+public class CsvReaderException extends Exception{
 
-    public CsvWriterException() {
+    public CsvReaderException() {
     }
 
-    public CsvWriterException(String message) {
+    public CsvReaderException(String message) {
         super(message);
     }
 
-    public CsvWriterException(String message, Throwable cause) {
+    public CsvReaderException(String message, Throwable cause) {
         super(message, cause);
     }
 
-    public CsvWriterException(Throwable cause) {
+    public CsvReaderException(Throwable cause) {
         super(cause);
     }
 }
