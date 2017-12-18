@@ -42,7 +42,7 @@ Add the dependency in your pom.xml
 ```java
     Reader reader = null;
     try {
-    	//Getting a reader for CsvFile.csv
+        //Getting a reader for CsvFile.csv
         reader = new InputStreamReader(
                 new FileInputStream("CsvFile.csv"), 
                 Charset.forName("utf-8"));
@@ -68,7 +68,19 @@ Add the dependency in your pom.xml
 ```
 ### Using java 1.7+
 ```java
-
+    try (
+        //Getting a reader for CsvFile.csv
+        Reader reader = new InputStreamReader(
+                new FileInputStream("CsvFile.csv"),
+                Charset.forName("utf-8"));				
+        ) {
+    
+        //Values are read as a row list
+        List<List<String>> values = CsvReader.read(reader);
+    
+    } catch (IOException | CsvReaderException e) {
+        logger.log(Level.SEVERE, "Can't perform reading", e);
+    }
 ```
 #### See more csv reading usecases <a href="https://github.com/apercova/QuickCsv/wiki">here</a>. 
   
@@ -79,7 +91,7 @@ Add the dependency in your pom.xml
 ```java
     Writer writer = null;
     try {
-        //Getting a reader for Countries.csv
+        //Getting a writer for Countries.csv
         writer = new BufferedWriter(new OutputStreamWriter(
                 new FileOutputStream("Countries.csv"), 
                 Charset.forName("utf-8")));
@@ -91,13 +103,15 @@ Add the dependency in your pom.xml
         values.add(Arrays.asList(new String[] {"AU","Austalia","Sidney"}));
         
         //Writing out values
-        CsvWriter.write(writer, values);
+        CsvWriter.write(writer, values, true);//autoflush
+        
+        //also direct flush
         writer.flush();
         
     } catch(IOException e) {
-        logger.log(Level.SEVERE, "Can't perform reading", e);
+        logger.log(Level.SEVERE, "Can't perform writing", e);
     } catch (CsvWriterException e) {
-        logger.log(Level.SEVERE, "Can't perform reading", e);
+        logger.log(Level.SEVERE, "Can't perform writing", e);
     } finally {
         try {
             if(writer != null)
@@ -110,6 +124,27 @@ Add the dependency in your pom.xml
 ```
 ### Using java 1.7+
 ```java
-
+    try (
+        //Getting a writer for Countries.csv
+        Writer writer = new BufferedWriter(new OutputStreamWriter(
+                    new FileOutputStream("Countries.csv"), 
+                    Charset.forName("utf-8")));
+        ){
+        
+        List<List<String>> values = new LinkedList<List<String>>();
+        values.add(Arrays.asList(new String[] {"ISO_CODE","NAME","CAPITAL"}));
+        values.add(Arrays.asList(new String[] {"US","United States of America",""}));
+        values.add(Arrays.asList(new String[] {"MX","Estados Unidos Mexicanos","Ciudad de México, \"CDMX\""}));
+        values.add(Arrays.asList(new String[] {"AU","Austalia","Sidney"}));
+        
+        //Writing out values
+        CsvWriter.write(writer, values, true);//autoflush
+        
+        //also direct flush
+        writer.flush();
+        
+    } catch(IOException | CsvWriterException e) {
+        logger.log(Level.SEVERE, "Can't perform writing", e);
+    } 
 ```
 #### See more csv writing usecases <a href="https://github.com/apercova/QuickCsv/wiki">here</a>.  
