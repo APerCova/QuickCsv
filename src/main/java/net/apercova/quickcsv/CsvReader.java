@@ -81,16 +81,18 @@ public class CsvReader implements Closeable, Iterator<List<String>>, Iterable<Li
      * Sets line index to read from.
      * @param fromLine 1-based line index as beginning of reading.
      */
-    public void fromLine(long fromLine) {
+    public CsvReader fromLine(long fromLine) {
 		this.fromLine = fromLine;
+		return this;
 	}
     
     /**
      * Sets max number of lines to read.
      * @param maxLines limit the number of lines to read.
      */
-    public void maxLines(long maxLines) {
+    public CsvReader maxLines(long maxLines) {
 		this.maxLines = maxLines;
+		return this;
 	}
     
     /**
