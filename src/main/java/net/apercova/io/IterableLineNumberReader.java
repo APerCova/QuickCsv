@@ -6,7 +6,6 @@ import java.io.Reader;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.NoSuchElementException;
 
 /**
  * Allows to iterate over a {@link LineNumberReader} while keep line
@@ -91,8 +90,7 @@ public class IterableLineNumberReader extends LineNumberReader implements Iterat
     /**
      * Returns the next line read.
      *
-     * @return Value of the next line read
-     * @throws NoSuchElementException if there's no more lines to be read.
+     * @return Value of the next line read or null if there's no more lines to be read. 
      */
     public String next() {
         if(readForward){
@@ -127,8 +125,7 @@ public class IterableLineNumberReader extends LineNumberReader implements Iterat
     /**
      * Returns the next line read.
      * Convenience alias for {@link #next()}
-     * @return Value of the next line read
-     * @throws NoSuchElementException if there's no more lines to be read.
+     * @return Value of the next line read or null if there's no more lines to be read.
      */
     public String getNextLine() {
         return this.next();
