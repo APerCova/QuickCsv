@@ -29,6 +29,8 @@ public class CsvReader implements Closeable, Iterator<List<String>>, Iterable<Li
     protected Reader reader;
     protected char delimiter;
     protected char quote;
+    protected long fromLine;
+    protected long maxLines;
 
     public CsvReader(){
         delimiter = CsvCons.COMMA;
@@ -76,16 +78,34 @@ public class CsvReader implements Closeable, Iterator<List<String>>, Iterable<Li
     }
 
     /**
-     * Reads a Csv-like document with current configuration.
+     * Sets line index to read from.
+     * @param fromLine 1-based line index as beginning of reading.
+     */
+    public CsvReader fromLine(long fromLine) {
+		this.fromLine = fromLine;
+		return this;
+	}
+    
+    /**
+     * Sets max number of lines to read.
+     * @param maxLines limit the number of lines to read.
+     */
+    public CsvReader maxLines(long maxLines) {
+		this.maxLines = maxLines;
+		return this;
+	}
+    
+    /**
+     * Reads a CSV-like document with current configuration.
      * @return List of read Csv lines.
      * @throws CsvReaderException If an error happens whilst reading.
      */
     public List<List<String>> read() throws CsvReaderException{
-        return CsvReader.read(reader, delimiter, quote);
+        return CsvReader.read(reader, delimiter, quote, fromLine, maxLines);
     }
 
     /**
-     * Core implementation for reading csv-values from a {@link java.io.Reader}.
+     * Core implementation for reading CSV-values from a {@link java.io.Reader}.
      * Default delimiter and quote chars are used in compliance with RFC 4180.
      * @param reader Source for reading.
      * @return List of read Csv lines.
@@ -96,7 +116,7 @@ public class CsvReader implements Closeable, Iterator<List<String>>, Iterable<Li
     }
 
     /**
-     * Core implementation for reading csv-values from a {@link java.io.Reader}
+     * Core implementation for reading CSV-values from a {@link java.io.Reader}
      * @param reader Source for reading.
      * @param delimiter Delimiter character. Default is a comma(,).
      * @param quote Quote character. Default is a double quote char(").
@@ -104,7 +124,38 @@ public class CsvReader implements Closeable, Iterator<List<String>>, Iterable<Li
      * @throws CsvReaderException If an error happens whilst reading.
      */
     public static List<List<String>> read(Reader reader, char delimiter, char quote) throws CsvReaderException{
-        if(reader == null){
+    	return read(reader, delimiter, quote, 0, 0);
+    }
+    
+    /**
+     * Core implementation for reading CSV-values from a {@link java.io.Reader}
+     * @param reader Source for reading.
+     * @param delimiter Delimiter character. Default is a comma(,).
+     * @param quote Quote character. Default is a double quote char(").
+     * @param fromLine 1-based line index as beginning of reading.
+     * @return List of read Csv lines.
+     * @throws CsvReaderException If an error happens whilst reading.
+     */
+    public static List<List<String>> read(Reader reader, char delimiter, char quote, long fromLine) throws CsvReaderException{
+    	return read(reader, delimiter, quote, fromLine, 0);
+    }
+    
+    /**
+     * Core implementation for reading CSV-values from a {@link java.io.Reader}
+     * @param reader Source for reading.
+     * @param delimiter Delimiter character. Default is a comma(,).
+     * @param quote Quote character. Default is a double quote char(").
+     * @param fromLine 1-based line index as beginning of reading.
+     * @param maxLines limit the number of lines to read.
+     * @return List of read Csv lines.
+     * @throws CsvReaderException If an error happens whilst reading.
+     */
+    public static List<List<String>> read(Reader reader, char delimiter, char quote, long fromLine, long maxLines) throws CsvReaderException{
+        if(fromLine < 1) {
+        	fromLine = 1;
+        }
+        
+    	if(reader == null){
             throw new CsvReaderException("missing reader",
                     new IllegalArgumentException(new NullPointerException("reader")));
         }
@@ -120,9 +171,20 @@ public class CsvReader implements Closeable, Iterator<List<String>>, Iterable<Li
             buff = new IterableLineNumberReader(reader);
 
             List<List<String>>  csv = new LinkedList<List<String>>();
-            while(buff.hasNext()){
-                csv.add(readLine(buff.next(), delimiter, quote));
+            
+            int lineCount = 0;
+            z:
+            while(buff.hasNext()) {
+            	if(buff.getLineNumber() >= fromLine) {   
+        			csv.add(readLine(buff.next(), delimiter, quote));
+        			lineCount ++;
+        			if( (0 < maxLines) && (maxLines <= lineCount) ) {
+        				break z;
+        			}
+            	}
             }
+            
+            
             return csv;
         }catch(Exception e){
             throw new CsvReaderException(e);
@@ -138,8 +200,9 @@ public class CsvReader implements Closeable, Iterator<List<String>>, Iterable<Li
         }
     }
 
+    
     /**
-     * Core implementation for reading csv-values within text line.
+     * Core implementation for reading CSV-values within text line.
      * @param line Csv text line
      * @param delimiter Delimiter character. Default is a comma(,).
      * @param quote Quote character. Default is a double quote char(").

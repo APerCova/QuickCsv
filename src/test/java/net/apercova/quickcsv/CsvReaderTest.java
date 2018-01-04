@@ -43,6 +43,7 @@ public class CsvReaderTest {
             e.printStackTrace();
         } finally {
             try {
+            	csvReader.close();
                 inStream.close();
                 reader.close();
             } catch (IOException e) {
@@ -172,6 +173,7 @@ public class CsvReaderTest {
             e.printStackTrace();
         } finally {
             try {
+            	csvReader.close();
                 inStream.close();
                 reader.close();
             } catch (IOException e) {
@@ -211,6 +213,7 @@ public class CsvReaderTest {
             e.printStackTrace();
         } finally {
             try {
+            	csvReader.close();
                 inStream.close();
                 reader.close();
             } catch (IOException e) {
@@ -247,6 +250,7 @@ public class CsvReaderTest {
             e.printStackTrace();
         } finally {
             try {
+            	reader.close();
                 inputStream.close();
                 reader.close();
             } catch (IOException e) {
@@ -256,4 +260,77 @@ public class CsvReaderTest {
         System.out.println("======================================================");
     }
 
+    @Test
+    public void readFromLine() throws Exception {
+        System.out.println("========== CsvReaderTest#readFromLine()==========");
+        inStream = ClassLoader.getSystemResourceAsStream("Months.csv");
+        reader = new InputStreamReader(inStream);
+
+        char delimiter = CsvCons.COMMA;
+        char quote = CsvCons.DOUBLE_QUOTE;
+
+        CsvReader csvReader = new CsvReader()
+                .from(reader)
+                .withDelimiter(delimiter)
+                .withQuote(quote)
+                .fromLine(2);
+        try{
+
+            List<List<String>> rows = csvReader.read();
+            Assert.assertTrue("Fail fromLine(2) method.", rows.size() == 5);
+
+            for(List<String> row: rows){
+                System.out.println(row);
+            }
+        }catch(Exception e){
+            Assert.fail(e.getMessage());
+            e.printStackTrace();
+        } finally {
+            try {
+            	csvReader.close();
+                inStream.close();
+                reader.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        System.out.println("======================================================");
+    }
+    
+    @Test
+    public void readMaxLines() throws Exception {
+        System.out.println("========== CsvReaderTest#readMaxLines()==========");
+        inStream = ClassLoader.getSystemResourceAsStream("Months.csv");
+        reader = new InputStreamReader(inStream);
+
+        char delimiter = CsvCons.COMMA;
+        char quote = CsvCons.DOUBLE_QUOTE;
+
+        CsvReader csvReader = new CsvReader()
+                .from(reader)
+                .withDelimiter(delimiter)
+                .withQuote(quote)
+                .maxLines(3);
+        try{
+
+            List<List<String>> rows = csvReader.read();
+            Assert.assertTrue("Fail maxLines(2) method.", rows.size() == 3);
+
+            for(List<String> row: rows){
+                System.out.println(row);
+            }
+        }catch(Exception e){
+            Assert.fail(e.getMessage());
+            e.printStackTrace();
+        } finally {
+            try {
+            	csvReader.close();
+                inStream.close();
+                reader.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        System.out.println("======================================================");
+    }
 }
