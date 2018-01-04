@@ -43,6 +43,7 @@ public class CsvReaderTest {
             e.printStackTrace();
         } finally {
             try {
+            	csvReader.close();
                 inStream.close();
                 reader.close();
             } catch (IOException e) {
@@ -172,6 +173,7 @@ public class CsvReaderTest {
             e.printStackTrace();
         } finally {
             try {
+            	csvReader.close();
                 inStream.close();
                 reader.close();
             } catch (IOException e) {
@@ -211,6 +213,7 @@ public class CsvReaderTest {
             e.printStackTrace();
         } finally {
             try {
+            	csvReader.close();
                 inStream.close();
                 reader.close();
             } catch (IOException e) {
@@ -247,6 +250,7 @@ public class CsvReaderTest {
             e.printStackTrace();
         } finally {
             try {
+            	reader.close();
                 inputStream.close();
                 reader.close();
             } catch (IOException e) {
@@ -283,6 +287,7 @@ public class CsvReaderTest {
             e.printStackTrace();
         } finally {
             try {
+            	csvReader.close();
                 inStream.close();
                 reader.close();
             } catch (IOException e) {
@@ -319,6 +324,7 @@ public class CsvReaderTest {
             e.printStackTrace();
         } finally {
             try {
+            	csvReader.close();
                 inStream.close();
                 reader.close();
             } catch (IOException e) {
