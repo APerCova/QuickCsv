@@ -6,7 +6,7 @@ Quick and easy-of-use handling of comma-separated values (CSV) as described in R
   
 ## Setting it Up
 ### Setup on local /.m2 repository
-> At the moment, QuickCsv is not available on Maven Central.  
+> Note: Currently, QuickCsv is not available on Maven Central.  
 
 To setup on your local repository, you need to follow this steps:
 
