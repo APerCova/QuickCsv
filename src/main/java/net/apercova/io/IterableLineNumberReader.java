@@ -6,14 +6,13 @@ import java.io.Reader;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.NoSuchElementException;
 
 /**
  * Allows to iterate over a {@link LineNumberReader} while keep line
- * number tracking.
+ * number tracking. Works with java 1.5+
  * @author <a href="https://twitter.com/apercova" target="_blank">{@literal @}apercova</a> <a href="https://github.com/apercova" target="_blank">https://github.com/apercova</a>
  * @version 1.0 2017.08
- * @version 1.1 2017.15 Adding {@link #hasMoreLines()} and {@link #getNextLine()}
+ * @version 1.1 2018.01 Adding {@link #hasMoreLines()} and {@link #getNextLine()}
  * @since 1.0
  * 
  * <pre>
@@ -91,10 +90,9 @@ public class IterableLineNumberReader extends LineNumberReader implements Iterat
     /**
      * Returns the next line read.
      *
-     * @return Value of the next line read
-     * @throws NoSuchElementException if there's no more lines to be read.
+     * @return Value of the next line read or null if there's no more lines to be read. 
      */
-    public String next() {
+    public String next(){
         if(readForward){
             //read next line
             readNextLine();
@@ -127,8 +125,7 @@ public class IterableLineNumberReader extends LineNumberReader implements Iterat
     /**
      * Returns the next line read.
      * Convenience alias for {@link #next()}
-     * @return Value of the next line read
-     * @throws NoSuchElementException if there's no more lines to be read.
+     * @return Value of the next line read or null if there's no more lines to be read.
      */
     public String getNextLine() {
         return this.next();
