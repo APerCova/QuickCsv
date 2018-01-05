@@ -3,6 +3,7 @@ Quick and easy-of-use handling of comma-separated values (CSV) as described in R
 <a href="https://tools.ietf.org/html/rfc4180">Common Format and MIME Type for Comma-Separated Values (CSV) Files</a>  
   
 [![Build Status](https://travis-ci.org/apercova/QuickCsv.svg?branch=master)](https://travis-ci.org/apercova/QuickCsv)
+[![CircleCI](https://circleci.com/gh/apercova/QuickCsv/tree/master.svg?style=svg)](https://circleci.com/gh/apercova/QuickCsv/tree/master)
   
 ## Setting it Up
 ### Setup on local /.m2 repository
