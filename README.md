@@ -4,6 +4,7 @@ Quick and easy-of-use handling of comma-separated values (CSV) as described in R
   
 [![Build Status](https://travis-ci.org/apercova/QuickCsv.svg?branch=master)](https://travis-ci.org/apercova/QuickCsv)
 [![CircleCI](https://circleci.com/gh/apercova/QuickCsv/tree/master.svg?style=svg)](https://circleci.com/gh/apercova/QuickCsv/tree/master)
+[ ![Codeship Status for apercova/QuickCsv](https://app.codeship.com/projects/51f07940-d484-0135-ca4a-26fb29ed09db/status?branch=master)](https://app.codeship.com/projects/263046)
   
 ## Setting it Up
 ### Setup on local /.m2 repository
