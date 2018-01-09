@@ -34,12 +34,12 @@ public class CsvWriterTest {
             csvValues.add(Arrays.asList(new String[]{"United Kingdom", "London", "UK"}));
             csvValues.add(Arrays.asList(new String[]{"Belize", "Belmopán", "BZ"}));
 
-            CsvWriter csvWriter = new CsvWriter()
-                    .to(writer)
-                    .withDelimiter(delimiter)
-                    .withQuote(quote)
-                    .withLines(csvValues)
-                    .setAutoFlush(autoflush);
+            CsvWriter<List<String>> csvWriter = new SimpleCsvWriter()
+                    .setWriter(writer)
+                    .setDelimiter(delimiter)
+                    .setQuote(quote)
+                    .setLines(csvValues)
+                    .setAutoflush(autoflush);
 
             csvWriter.write();
 
@@ -79,7 +79,7 @@ public class CsvWriterTest {
             csvValues.add(Arrays.asList(new String[]{"United Kingdom", "London", "UK"}));
             csvValues.add(Arrays.asList(new String[]{"Belize", "Belmopán", "BZ"}));
 
-            CsvWriter.write(writer, csvValues, delimiter, quote);
+            SimpleCsvWriter.write(writer, csvValues, delimiter, quote);
             writer.flush();
 
             String dest = ((StringWriter)writer).toString();
@@ -119,7 +119,8 @@ public class CsvWriterTest {
             csvValues.add(Arrays.asList(new String[]{"United Kingdom", "London", "UK"}));
             csvValues.add(Arrays.asList(new String[]{"Belize", "Belmopán", "BZ"}));
 
-            CsvWriter.write(writer, csvValues, delimiter, quote, autoflush);
+            SimpleCsvWriter.write(writer, csvValues, delimiter, quote);
+            writer.flush();
 
             String dest = ((StringWriter)writer).toString();
             Assert.assertTrue(dest.length() > 0);
@@ -147,18 +148,18 @@ public class CsvWriterTest {
         quote = CsvCons.DOUBLE_QUOTE;
 
         String value = "México";
-        String formated = CsvWriter.formatValue(value, delimiter, quote);
+        String formated = SimpleCsvWriter.formatValue(value, delimiter, quote);
         Assert.assertTrue("Simple value format error", value.equals(formated));
         System.out.printf("from (%s) to (%s)%n", value, formated);
 
         value = "Ciudad de México, CDMX";
-        formated = CsvWriter.formatValue(value, delimiter, quote);
+        formated = SimpleCsvWriter.formatValue(value, delimiter, quote);
         Assert.assertTrue("Delimiter in value format error",
                 formated.equals("\"Ciudad de México, CDMX\""));
         System.out.printf("from (%s) to (%s)%n", value, formated);
 
         value = "\"MX\"";
-        formated = CsvWriter.formatValue(value, delimiter, quote);
+        formated = SimpleCsvWriter.formatValue(value, delimiter, quote);
         Assert.assertTrue("Quote in value format error",
                 formated.equals(quote+""+quote+value+quote+""+quote));
         System.out.printf("from (%s) to (%s)%n", value, formated);
@@ -166,7 +167,7 @@ public class CsvWriterTest {
         delimiter = CsvCons.PIPE;
         quote = CsvCons.SINGLE_QUOTE;
         value = "'Ciudad de México, 'CDMX''";
-        formated = CsvWriter.formatValue(value, delimiter, quote);
+        formated = SimpleCsvWriter.formatValue(value, delimiter, quote);
         Assert.assertTrue("Quote in value format error",
                 formated.equals("'''Ciudad de México, ''CDMX'''''"));
         System.out.printf("from (%s) to (%s)%n", value, formated);
