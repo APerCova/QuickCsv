@@ -17,7 +17,7 @@ public class CsvReaderTest {
     public InputStream inStream;
     public Reader reader;
 
-//    @Test
+    @Test
     public void read() throws Exception {
         System.out.println("========== CsvReaderTest#read()==========");
         inStream = ClassLoader.getSystemResourceAsStream("Months.csv");
