@@ -10,7 +10,7 @@ public abstract class AbstractCsvReader<E> implements CsvReader<E>{
 	protected Reader reader;
 	protected char delimiter;
 	protected char quote;
-	protected boolean readHeader;
+	protected boolean escapeHeader;
 	protected long fromLine;
 	protected long maxLines;
 
@@ -18,7 +18,7 @@ public abstract class AbstractCsvReader<E> implements CsvReader<E>{
 		super();
 		delimiter = CsvCons.COMMA;
 		quote = CsvCons.DOUBLE_QUOTE;
-		readHeader = true;
+		escapeHeader = false;
 		fromLine = 0;
 		maxLines = 0;
 	}
@@ -27,7 +27,7 @@ public abstract class AbstractCsvReader<E> implements CsvReader<E>{
 		setReader(reader);
 		delimiter = CsvCons.COMMA;
 		quote = CsvCons.DOUBLE_QUOTE;
-		readHeader = true;
+		escapeHeader = false;
 		fromLine = 0;
 		maxLines = 0;
 	}
@@ -55,12 +55,12 @@ public abstract class AbstractCsvReader<E> implements CsvReader<E>{
 		this.maxLines = maxLines;
 		return this;
 	};
-	public CsvReader<E> readheader(boolean readHeader){
-		this.readHeader = readHeader;
+	public CsvReader<E> escapeheader(boolean escapeHeader){
+		this.escapeHeader = escapeHeader;
 		return this;
 	};
-	public boolean isHeaderReadable() {
-		return readHeader;
+	public boolean isHeaderEscaped() {
+		return escapeHeader;
 	}
 	
 	public void close() throws IOException {
@@ -69,6 +69,9 @@ public abstract class AbstractCsvReader<E> implements CsvReader<E>{
 		}
 	}
 	
+	/**
+	 * Not implemented by default
+	 */
 	public void remove() {
 		throw new UnsupportedOperationException();
 	}
