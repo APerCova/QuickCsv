@@ -22,8 +22,8 @@ public interface CsvReader<C> extends Iterator<C>, Iterable<C>, Closeable{
 	public CsvReader<C> setQuote(char quote);
 	public CsvReader<C> fromLine(long fromLine);
 	public CsvReader<C> maxLines(long maxLines);
-	public CsvReader<C> readheader(boolean readHeader);
-	public boolean isHeaderReadable();
+	public CsvReader<C> escapeheader(boolean readHeader);
+	public boolean isHeaderEscaped();
 	public int getLineNumber();
 	public List<C> read() throws CsvReaderException; 
 }
