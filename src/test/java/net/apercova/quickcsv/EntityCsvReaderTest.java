@@ -12,6 +12,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import net.apercova.quickcsv.entity.Month;
+import net.apercova.quickcsv.entity.WeekDays;
 
 public class EntityCsvReaderTest {
 
