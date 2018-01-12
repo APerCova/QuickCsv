@@ -5,24 +5,24 @@ import java.io.Writer;
 import java.util.Collection;
 import java.util.List;
 
-public class SimpleCsvWriter extends AbstractCsvWriter<List<String>> {
+public class DefaultCsvWriter extends AbstractCsvWriter<List<String>> {
 	
 	
 	
-	public SimpleCsvWriter() {
+	public DefaultCsvWriter() {
 		super();
 	}
 	
-	public SimpleCsvWriter(Writer writer) {
+	public DefaultCsvWriter(Writer writer) {
 		super(writer);
 	}
 
-	public SimpleCsvWriter(Writer writer, Collection<List<String>> lines) {
+	public DefaultCsvWriter(Writer writer, Collection<List<String>> lines) {
 		super(writer, lines);
 	}
 	
 	public void write() throws CsvWriterException {
-		SimpleCsvWriter.write(writer, lines, delimiter, quote, escapeHeader);
+		DefaultCsvWriter.write(writer, lines, delimiter, quote, escapeHeader);
 	}
 
 	public static void write(Writer writer, Collection<List<String>> lines) 
