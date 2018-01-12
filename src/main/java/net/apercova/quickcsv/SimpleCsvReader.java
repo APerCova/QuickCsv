@@ -24,11 +24,6 @@ public class SimpleCsvReader extends AbstractCsvReader<List<String>>  {
 	}
 	
 	public List<List<String>> read() throws CsvReaderException {
-		System.out.println("delimiter: "+delimiter);
-		System.out.println("quote: "+quote);
-		System.out.println("escapeHeader: "+escapeHeader);
-		System.out.println("fromLine: "+fromLine);
-		System.out.println("maxLines: "+maxLines);
 		return SimpleCsvReader.read(reader, delimiter, quote, escapeHeader, fromLine, maxLines);
 	}
 
