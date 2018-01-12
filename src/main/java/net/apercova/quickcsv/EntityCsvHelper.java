@@ -9,10 +9,10 @@ import java.util.TreeMap;
 import net.apercova.quickcsv.annotation.CsvEntity;
 import net.apercova.quickcsv.annotation.CsvValue;
 
-public class ObjectCsvHelper<T> {
+public class EntityCsvHelper<T> {
 	
 	
-	protected ObjectCsvHelper() {
+	protected EntityCsvHelper() {
 	}
 	
 	static <E> Map<Integer, Field> getAnnotatedFields(Class<E> type){
