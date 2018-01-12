@@ -11,14 +11,14 @@ public abstract class AbstractCsvWriter<E> implements CsvWriter<E> {
 	protected Collection<E> lines;
 	protected char delimiter;
 	protected char quote;
-	protected boolean writeHeader;
+	protected boolean escapeHeader;
 	protected boolean autoflush;
 	
 	protected AbstractCsvWriter() {
 		this.lines = new LinkedList<E>();
 		this.delimiter = CsvCons.COMMA;
 		this.quote = CsvCons.DOUBLE_QUOTE;
-		this.writeHeader = true;
+		this.escapeHeader = false;
 		this.autoflush = true;
 	}
 	
@@ -27,7 +27,7 @@ public abstract class AbstractCsvWriter<E> implements CsvWriter<E> {
 		this.lines = new LinkedList<E>();
 		this.delimiter = CsvCons.COMMA;
 		this.quote = CsvCons.DOUBLE_QUOTE;
-		this.writeHeader = true;
+		this.escapeHeader = false;
 		this.autoflush = true;
 	}
 	
@@ -36,7 +36,7 @@ public abstract class AbstractCsvWriter<E> implements CsvWriter<E> {
 		this.lines = lines;
 		this.delimiter = CsvCons.COMMA;
 		this.quote = CsvCons.DOUBLE_QUOTE;
-		this.writeHeader = true;
+		this.escapeHeader = false;
 		this.autoflush = true;
 	}
 	
@@ -79,13 +79,13 @@ public abstract class AbstractCsvWriter<E> implements CsvWriter<E> {
 		return this;
 	}
 	
-	public CsvWriter<E> writeheader(boolean writeHeader){
-		this.writeHeader = writeHeader;
+	public CsvWriter<E> escapeHeader(boolean escapeHeader){
+		this.escapeHeader = escapeHeader;
 		return this;
 	}
 	
 	public boolean isHeaderWritable() {
-		return writeHeader;
+		return escapeHeader;
 	}
 	
 	public void flush() throws IOException {
