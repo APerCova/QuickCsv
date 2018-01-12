@@ -1,33 +1,36 @@
 package net.apercova.quickcsv;
 
+import org.junit.Assert;
+import org.junit.Test;
+
 import java.io.IOException;
 import java.io.StringWriter;
 import java.io.Writer;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
-import org.junit.Assert;
-import org.junit.Test;
-
-public class ObjectCsvWriterTest {
+public class DefaultCsvWriterTest {
 
     @Test
-    public void test01() throws Exception {
-        System.out.println("========== ObjectCsvWriterTest#test01()==========");
+    public void write() throws Exception {
+        System.out.println("========== CsvWriterTest#write()==========");
 
         Writer writer = null;
-        CsvWriter<Country> csvWriter = ObjectCsvWriter.getInstance(Country.class);
+        CsvWriter<List<String>> csvWriter = new DefaultCsvWriter();
         try {
-        	List<Country> countries = new ArrayList<Country>();
-        	countries.add(new Country("United States of America","Washington D.C.","US"));
-        	countries.add(new Country("Estados Unidos Mexicanos","Ciudad de México, \"CDMX\"","MX"));
-        	countries.add(new Country("Australia","Sidney","AU"));
-        	countries.add(new Country("United Kingdom","London","OK"));
-        	countries.add(new Country("Belize","Belmopán","BZ"));
+            
+            List<List<String>> csvValues = new ArrayList<List<String>>();
+            csvValues.add(Arrays.asList(new String[]{"NAME", "CAPITAL", "ISO_CODE"}));
+            csvValues.add(Arrays.asList(new String[]{"United States of America", "Washington D.C.", "US"}));
+            csvValues.add(Arrays.asList(new String[]{"Estados Unidos Mexicanos", "Ciudad de México, \"CDMX\"", "MX"}));
+            csvValues.add(Arrays.asList(new String[]{"Australia", "Sidney", "AU"}));
+            csvValues.add(Arrays.asList(new String[]{"United Kingdom", "London", "UK"}));
+            csvValues.add(Arrays.asList(new String[]{"Belize", "Belmopán", "BZ"}));
 
             writer = new StringWriter();
             csvWriter.setWriter(writer)
-                    .setLines(countries)
+                    .setLines(csvValues)
                     .write();
 
             String result = ((StringWriter)writer).toString();
@@ -39,7 +42,7 @@ public class ObjectCsvWriterTest {
             csvWriter.setWriter(writer)
                     .setDelimiter(CsvCons.COMMA)
                     .setQuote(CsvCons.DOUBLE_QUOTE)
-                    .setLines(countries)
+                    .setLines(csvValues)
                     .escapeHeader(true)
                     .setAutoflush(true)
                     .write();
@@ -52,7 +55,7 @@ public class ObjectCsvWriterTest {
             writer = new StringWriter();
             csvWriter.setWriter(writer)
                     .setDelimiter(CsvCons.PIPE)
-                    .setLines(countries)
+                    .setLines(csvValues)
                     .escapeHeader(true)
                     .setAutoflush(true)
                     .write();
