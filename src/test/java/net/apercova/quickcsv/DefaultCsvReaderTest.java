@@ -12,186 +12,25 @@ import java.util.List;
 import org.junit.Assert;
 import org.junit.Test;
 
-public class ObjectCsvReaderTest {
+public class DefaultCsvReaderTest {
 
 	public InputStream inStream;
     public Reader reader;
-    
+  
     @Test
     public void test01() throws Exception {
-        System.out.println("========== ObjectCsvReaderTest#test01()==========");
-        inStream = ClassLoader.getSystemResourceAsStream("Months.csv");
-        reader = new InputStreamReader(inStream);
-
-        CsvReader<Month> csvReader = null;
-        try{
-        	csvReader = ObjectCsvReader.getInstance(Month.class);
-            csvReader.setReader(reader);
-            
-            List<Month> rows = csvReader.read();
-            
-            for(Month row: rows){
-                System.out.println(row);
-            }
-            
-            Assert.assertTrue("Empty list", rows.size() == 5);
-
-        }catch(Exception e){
-            Assert.fail(e.getMessage());
-            e.printStackTrace();
-        } finally {
-            try {
-            	csvReader.close();
-                inStream.close();
-                reader.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-        System.out.println("======================================================");
-    }
-
-    @Test
-    public void test02() throws Exception {
-        System.out.println("========== ObjectCsvReaderTest#test02()==========");
-        String line = "sunday,\"\"\"monday\"\"\",\"tues,day\",wednesday,\"\"\"thu,rsday\"\"\",\"\"\"\"\"friday\"\"\"\"\",saturday";
-        System.out.println("source: "+line);
-
-        Month values = ObjectCsvReader.readLine(Month.class, line, CsvCons.COMMA, CsvCons.DOUBLE_QUOTE);
-
-        Assert.assertTrue("Error["+values.get(0)+"]","sunday".equals(values.get(0)));
-        Assert.assertTrue("Error["+values.get(1)+"]","\"monday\"".equals(values.get(1)));
-        Assert.assertTrue("Error["+values.get(2)+"]","tues,day".equals(values.get(2)));
-        Assert.assertTrue("Error["+values.get(3)+"]","wednesday".equals(values.get(3)));
-        Assert.assertTrue("Error["+values.get(4)+"]","\"thu,rsday\"".equals(values.get(4)));
-        Assert.assertTrue("Error["+values.get(5)+"]","\"\"friday\"\"".equals(values.get(5)));
-        Assert.assertTrue("Error["+values.get(6)+"]","saturday".equals(values.get(6)));
-
-
-        System.out.println("read: "+Arrays.toString(values.toArray()));
-        System.out.println("======================================================");
-    }
-
-//    @Test
-    public void test03(){
-        System.out.println("========== ObjectCsvReaderTest#test03()==========");
-        inStream = ClassLoader.getSystemResourceAsStream("Months.csv");
-        reader = new InputStreamReader(inStream);
-
-        List<List<String>> rows = new ArrayList<List<String>>();
-        CsvReader<List<String>> csvReader = null;
-        try{
-        	csvReader = new SimpleCsvReader();
-        	csvReader.setReader(reader)
-                    .setDelimiter(CsvCons.COMMA)
-                    .setQuote(CsvCons.DOUBLE_QUOTE);
-
-            while(csvReader.hasNext()){
-                List<String> row = csvReader.next();
-                int rnum = csvReader.getLineNumber();
-                rows.add(row);
-                System.out.printf("%d-%s %n", rnum, row);
-            }
-
-            Assert.assertTrue("Empty list", rows.size() == 6);
-        }catch(Exception e){
-            Assert.fail(e.getMessage());
-            e.printStackTrace();
-        } finally {
-            try {
-            	csvReader.close();
-                inStream.close();
-                reader.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-        System.out.println("======================================================");
-    }
-    
-//    @Test
-    @SuppressWarnings("rawtypes")
-	public void test04(){
-        System.out.println("========== ObjectCsvReaderTest#test04()==========");
-        inStream = ClassLoader.getSystemResourceAsStream("Months.csv");
-        reader = new InputStreamReader(inStream);
-
-        List<List<String>> rows = new ArrayList<List<String>>();
-        CsvReader<List<String>> csvReader = null;
-        try{
-        	csvReader = new SimpleCsvReader();
-        	csvReader.setReader(reader)
-                    .setDelimiter(CsvCons.COMMA)
-                    .setQuote(CsvCons.DOUBLE_QUOTE);
-
-            Iterator<List<String>> it = csvReader.iterator();
-            while(it.hasNext()){
-                List<String> row = it.next();
-                int rnum = ((CsvReader)it).getLineNumber();
-                rows.add(row);
-                System.out.printf("%d-%s %n", rnum, row);
-            }
-
-            Assert.assertTrue("Empty list", rows.size() == 6);
-        }catch(Exception e){
-            Assert.fail(e.getMessage());
-            e.printStackTrace();
-        } finally {
-            try {
-            	csvReader.close();
-                inStream.close();
-                reader.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-        System.out.println("======================================================");
-    }
-
-//    @Test
-    public void test05(){
-        System.out.println("========== ObjectCsvReaderTest#test05()==========");
-        inStream = ClassLoader.getSystemResourceAsStream("Months.csv");
-        reader = new InputStreamReader(inStream);
-
-        List<List<String>> rows = new ArrayList<List<String>>();
-        CsvReader<List<String>> csvReader = null;
-        try{
-        	csvReader = new SimpleCsvReader();
-        	csvReader.setReader(reader)
-                    .setDelimiter(CsvCons.COMMA)
-                    .setQuote(CsvCons.DOUBLE_QUOTE);
-
-            for(List<String> row: csvReader){
-                int rnum = csvReader.getLineNumber();
-                rows.add(row);
-                System.out.printf("%d-%s %n", rnum, row);
-            }
-
-            Assert.assertTrue("Empty list", rows.size() == 6);
-        }catch(Exception e){
-        	e.printStackTrace();
-            Assert.fail(e.getMessage());
-        } finally {
-            try {
-            	csvReader.close();
-                inStream.close();
-                reader.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-        System.out.println("======================================================");
-    }
-
-//    @Test
-    public void test06() throws Exception {
-        System.out.println("========== ObjectCsvReaderTest#test06()==========");
+        System.out.println("========== SimpleCsvReaderTest#test01()==========");
        
         CsvReader<List<String>> csvReader = null;
         List<List<String>> rows = null;
-        csvReader = new SimpleCsvReader();
+        csvReader = new DefaultCsvReader();
         try{
+        	reader = new InputStreamReader(ClassLoader.getSystemResourceAsStream("Months.csv"));
+        	csvReader.setReader(reader);
+        	
+        	rows = csvReader.read();
+        	Assert.assertTrue("Fail: default fromat.", rows.size() == 6);
+        	
         	reader = new InputStreamReader(ClassLoader.getSystemResourceAsStream("Months.csv"));
         	csvReader.setReader(reader)
                     .escapeheader(true);
@@ -261,4 +100,131 @@ public class ObjectCsvReaderTest {
         System.out.println("======================================================");
     }
     
+    @Test
+    public void test02() throws Exception {
+        System.out.println("========== SimpleCsvReaderTest#test02()==========");
+        String line = "sunday,\"\"\"monday\"\"\",\"tues,day\",wednesday,\"\"\"thu,rsday\"\"\",\"\"\"\"\"friday\"\"\"\"\",saturday";
+        System.out.println("source: "+line);
+
+        List<String> values = DefaultCsvReader.readLine(line, CsvCons.COMMA, CsvCons.DOUBLE_QUOTE);
+
+        Assert.assertTrue("Error["+values.get(0)+"]","sunday".equals(values.get(0)));
+        Assert.assertTrue("Error["+values.get(1)+"]","\"monday\"".equals(values.get(1)));
+        Assert.assertTrue("Error["+values.get(2)+"]","tues,day".equals(values.get(2)));
+        Assert.assertTrue("Error["+values.get(3)+"]","wednesday".equals(values.get(3)));
+        Assert.assertTrue("Error["+values.get(4)+"]","\"thu,rsday\"".equals(values.get(4)));
+        Assert.assertTrue("Error["+values.get(5)+"]","\"\"friday\"\"".equals(values.get(5)));
+        Assert.assertTrue("Error["+values.get(6)+"]","saturday".equals(values.get(6)));
+
+
+        System.out.println("read: "+Arrays.toString(values.toArray()));
+        System.out.println("======================================================");
+    }
+
+    @Test
+    public void test03(){
+        System.out.println("========== SimpleCsvReaderTest#test03()==========");
+        inStream = ClassLoader.getSystemResourceAsStream("Months.csv");
+        reader = new InputStreamReader(inStream);
+
+        List<List<String>> rows = new ArrayList<List<String>>();
+        CsvReader<List<String>> csvReader = null;
+        try{
+        	csvReader = new DefaultCsvReader();
+        	csvReader.setReader(reader);
+
+            while(csvReader.hasNext()){
+                List<String> row = csvReader.next();
+                int rnum = csvReader.getLineNumber();
+                rows.add(row);
+                System.out.printf("%d-%s %n", rnum, row);
+            }
+
+            Assert.assertTrue("Empty list", rows.size() == 6);
+        }catch(Exception e){
+            Assert.fail(e.getMessage());
+            e.printStackTrace();
+        } finally {
+            try {
+            	csvReader.close();
+                inStream.close();
+                reader.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        System.out.println("======================================================");
+    }
+    
+    @Test
+    @SuppressWarnings("rawtypes")
+	public void test04(){
+        System.out.println("========== SimpleCsvReaderTest#test04()==========");
+        inStream = ClassLoader.getSystemResourceAsStream("Months.csv");
+        reader = new InputStreamReader(inStream);
+
+        List<List<String>> rows = new ArrayList<List<String>>();
+        CsvReader<List<String>> csvReader = null;
+        try{
+        	csvReader = new DefaultCsvReader();
+        	csvReader.setReader(reader);
+
+            Iterator<List<String>> it = csvReader.iterator();
+            while(it.hasNext()){
+                List<String> row = it.next();
+                int rnum = ((CsvReader)it).getLineNumber();
+                rows.add(row);
+                System.out.printf("%d-%s %n", rnum, row);
+            }
+
+            Assert.assertTrue("Empty list", rows.size() == 6);
+        }catch(Exception e){
+            Assert.fail(e.getMessage());
+            e.printStackTrace();
+        } finally {
+            try {
+            	csvReader.close();
+                inStream.close();
+                reader.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        System.out.println("======================================================");
+    }
+
+    @Test
+    public void test05(){
+        System.out.println("========== SimpleCsvReaderTest#test05()==========");
+        inStream = ClassLoader.getSystemResourceAsStream("Months.csv");
+        reader = new InputStreamReader(inStream);
+
+        List<List<String>> rows = new ArrayList<List<String>>();
+        CsvReader<List<String>> csvReader = null;
+        try{
+        	csvReader = new DefaultCsvReader();
+        	csvReader.setReader(reader);
+
+            for(List<String> row: csvReader){
+                int rnum = csvReader.getLineNumber();
+                rows.add(row);
+                System.out.printf("%d-%s %n", rnum, row);
+            }
+
+            Assert.assertTrue("Empty list", rows.size() == 6);
+        }catch(Exception e){
+        	e.printStackTrace();
+            Assert.fail(e.getMessage());
+        } finally {
+            try {
+            	csvReader.close();
+                inStream.close();
+                reader.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        System.out.println("======================================================");
+    }
+   
 }
