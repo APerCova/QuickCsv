@@ -7,44 +7,48 @@ import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
+import net.apercova.quickcsv.annotation.CsvDatatypeConverter;
 import net.apercova.quickcsv.annotation.CsvEntity;
+import net.apercova.quickcsv.converter.DatatypeConversionException;
+import net.apercova.quickcsv.converter.DatatypeConverter;
 
-public class ObjectCsvWriter<E> extends AbstractCsvWriter<E>{
+public class EntityCsvWriter<E> extends AbstractCsvWriter<E>{
 
 	protected Class<E> type;
 	
-	protected ObjectCsvWriter() {
+	protected EntityCsvWriter() {
 	}
 	
-	protected ObjectCsvWriter(Class<E> type) {
+	protected EntityCsvWriter(Class<E> type) {
 		this.type = type;
 	}
 	
-	protected ObjectCsvWriter(Class<E> type, Writer writer) {
+	protected EntityCsvWriter(Class<E> type, Writer writer) {
 		super(writer);
 		this.type = type;
 	}
 	
-	protected ObjectCsvWriter(Class<E> type, Writer writer, Collection<E> lines) {
+	protected EntityCsvWriter(Class<E> type, Writer writer, Collection<E> lines) {
 		super(writer, lines);
 		this.type = type;
 	}
 	
 	public void write() throws CsvWriterException {
-		ObjectCsvWriter.write(type, writer, lines, delimiter, quote, escapeHeader);
+		EntityCsvWriter.write(type, writer, lines, delimiter, quote, escapeHeader);
 	}
 	
-	public static <E> ObjectCsvWriter<E> getInstance(Class<E> type) {
-		return new ObjectCsvWriter<E>(type);
+	public static <E> EntityCsvWriter<E> getInstance(Class<E> type) {
+		return new EntityCsvWriter<E>(type);
 	}
 	
-	public static <E> ObjectCsvWriter<E> getInstance(Class<E> type, Writer writer) {
-		return new ObjectCsvWriter<E>(type, writer);
+	public static <E> EntityCsvWriter<E> getInstance(Class<E> type, Writer writer) {
+		return new EntityCsvWriter<E>(type, writer);
 	}
 
-	public static <E> ObjectCsvWriter<E> getInstance(Class<E> type, Writer writer, Collection<E> lines) {
-		return new ObjectCsvWriter<E>(type, writer, lines);
+	public static <E> EntityCsvWriter<E> getInstance(Class<E> type, Writer writer, Collection<E> lines) {
+		return new EntityCsvWriter<E>(type, writer, lines);
 	}
 
 	public static <E> void write(Class<E> type, Writer writer, Collection<E> lines) 
@@ -76,7 +80,7 @@ public class ObjectCsvWriter<E> extends AbstractCsvWriter<E>{
 	public static <E> void write(Class<E> type, Writer writer, Collection<E> lines, char delimiter, char quote, boolean escapeHeader)
             throws CsvWriterException{
 		try {
-			SimpleCsvWriter.write(writer, readCollectionValues(lines, type), delimiter, quote, escapeHeader);
+			DefaultCsvWriter.write(writer, readCollectionValues(lines, type), delimiter, quote, escapeHeader);
 		} catch (Exception e) {
 			throw new CsvWriterException(e);
 		}
@@ -85,14 +89,14 @@ public class ObjectCsvWriter<E> extends AbstractCsvWriter<E>{
 	public static <E> void writeLine(Class<E> type, Writer writer, E line, char delimiter, char quote) 
 			throws CsvWriterException {
 		try {
-			SimpleCsvWriter.writeLine(writer, readObjectValues(line, ObjectCsvHelper.getAnnotatedFields(type)), delimiter, quote);
+			DefaultCsvWriter.writeLine(writer, readObjectValues(line, EntityCsvHelper.getAnnotatedFields(type)), delimiter, quote);
 		} catch (Exception e) {
 			throw new CsvWriterException(e.getMessage(), e);
 		}
 	}
 	
 	protected static <E> List<List<String>> readCollectionValues(Collection<E> lines, Class<E> type) 
-			throws IllegalAccessException {
+			throws IllegalAccessException, IllegalArgumentException, InstantiationException, DatatypeConversionException {
 		List<List<String>> values = new LinkedList<List<String>>();
 		
 		if(!type.isAnnotationPresent(CsvEntity.class)) {
@@ -109,35 +113,40 @@ public class ObjectCsvWriter<E> extends AbstractCsvWriter<E>{
 			
 			//Parse fields as CsvCollection
 			for(E line: lines) {
-				values.add(readObjectValues(line, ObjectCsvHelper.getAnnotatedFields(type) ));
+				values.add(readObjectValues(line, EntityCsvHelper.getAnnotatedFields(type) ));
 			}
 		}
 		
 		return values;
 	}
 		
+	@SuppressWarnings("unchecked")
 	protected static <E> List<String> readObjectValues(E obj, Map<Integer, Field> fieldMap) 
-			throws IllegalArgumentException, IllegalAccessException {
+			throws IllegalArgumentException, IllegalAccessException, InstantiationException, DatatypeConversionException {
 		List<String> values = new LinkedList<String>();
 		int i = 0;
-		for(Integer k: fieldMap.keySet()) {
-			Field field_ = fieldMap.get(k);
-			field_.setAccessible(true);
-			
-			while(!k.equals(i)) {
+		for(Entry<Integer, Field> entry: fieldMap.entrySet()) {
+			Field field = entry.getValue();
+			field.setAccessible(true);
+			while(!(entry.getKey().equals(i))) {
 				values.add("");
 				i++;
 			}
 			
-			Object value = field_.get(obj);
+			Object value = field.get(obj);
 			String sValue = String.valueOf(value);
-			if(value != null && sValue.length() > 0) {
-				values.add(sValue);
-			}else {
-				values.add("");
+			
+			if(field.isAnnotationPresent(CsvDatatypeConverter.class)) {
+				CsvDatatypeConverter converterTag = field.getAnnotation(CsvDatatypeConverter.class);
+				Class<? extends DatatypeConverter<?>> converterClazz = converterTag.value();
+				DatatypeConverter<?> converter = converterClazz.newInstance();
+				sValue = ((DatatypeConverter<Object>) converter).format(value);
 			}
+			
+			values.add( ((value != null && sValue.length() > 0)?sValue:"")  );
 			i++;
 		}
+		
 		return values;
 	}
 
