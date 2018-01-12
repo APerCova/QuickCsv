@@ -7,38 +7,50 @@ import java.util.List;
 
 public class SimpleCsvWriter extends AbstractCsvWriter<List<String>> {
 	
+	
+	
 	public SimpleCsvWriter() {
 		super();
+	}
+	
+	public SimpleCsvWriter(Writer writer) {
+		super(writer);
 	}
 
 	public SimpleCsvWriter(Writer writer, Collection<List<String>> lines) {
 		super(writer, lines);
 	}
-
-	public SimpleCsvWriter(Writer writer) {
-		super(writer);
-	}
-
+	
 	public void write() throws CsvWriterException {
-		SimpleCsvWriter.write(writer, lines, delimiter, quote, writeHeader);
+		SimpleCsvWriter.write(writer, lines, delimiter, quote, escapeHeader);
 	}
+
+	public static void write(Writer writer, Collection<List<String>> lines) 
+    		throws CsvWriterException {
+    	write(writer, lines, CsvCons.COMMA, CsvCons.DOUBLE_QUOTE, false);
+    }
+    
+    public static void write(Writer writer, Collection<List<String>> lines, boolean escapeHeader) 
+    		throws CsvWriterException {
+    	write(writer, lines, CsvCons.COMMA, CsvCons.DOUBLE_QUOTE, escapeHeader);
+    }
+    
+    public static void write(Writer writer, Collection<List<String>> lines, char delimiter) 
+    		throws CsvWriterException {
+    	write(writer, lines, delimiter, CsvCons.DOUBLE_QUOTE, false);
+    }
+    
+    public static void write(Writer writer, Collection<List<String>> lines, char delimiter, boolean escapeHeader) 
+    		throws CsvWriterException {
+    	write(writer, lines, delimiter, CsvCons.DOUBLE_QUOTE, escapeHeader);
+    }
+    
+    public static void write(Writer writer, Collection<List<String>> lines, char delimiter, char quote) 
+    		throws CsvWriterException {
+    	write(writer, lines, delimiter, quote, false);
+    }
 	
-	public static void write(Writer writer, Collection<List<String>> lines)
-            throws CsvWriterException{
-		write(writer, lines, CsvCons.COMMA, CsvCons.DOUBLE_QUOTE);
-	}
-	
-	public static void write(Writer writer, Collection<List<String>> lines, char delimiter)
-            throws CsvWriterException{
-		write(writer, lines, delimiter, CsvCons.DOUBLE_QUOTE);
-	}
-	
-	public static void write(Writer writer, Collection<List<String>> lines, char delimiter, char quote)
-            throws CsvWriterException{
-		write(writer, lines, delimiter, quote, true);
-	}
-	
-	public static void write(Writer writer, Collection<List<String>> lines, char delimiter, char quote, boolean writeHeader)
+	public static void write(Writer writer, Collection<List<String>> lines, char delimiter, char quote, boolean escapeHeader)
             throws CsvWriterException{
         if(writer == null){
             throw new CsvWriterException("missing writer",
@@ -55,7 +67,8 @@ public class SimpleCsvWriter extends AbstractCsvWriter<List<String>> {
         if(lines != null && !lines.isEmpty()) {
         	int lineCount = 1;
         	for (List<String> line : lines) {
-        		if(writeHeader || (!writeHeader && lineCount > 1)) {
+        		
+        		if((lineCount == 1 && !escapeHeader) || lineCount > 1 ) {
         			writeLine(writer, line, delimiter, quote);
         		}
                 lineCount++;
@@ -98,8 +111,5 @@ public class SimpleCsvWriter extends AbstractCsvWriter<List<String>> {
 
         return value;
     }
-
-
-	
 	
 }
