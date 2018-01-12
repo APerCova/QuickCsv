@@ -9,13 +9,15 @@ import java.util.logging.Logger;
 
 import net.apercova.io.IterableLineNumberReader;
 
-public class SimpleCsvReader extends AbstractCsvReader<List<String>>  {
+public class DefaultCsvReader extends AbstractCsvReader<List<String>>  {
 	
-	public SimpleCsvReader() {
+	public static final Logger logger = Logger.getLogger(DefaultCsvReader.class.getName());
+	
+	public DefaultCsvReader() {
 		super();
 	}
 
-	public SimpleCsvReader(Reader reader) {
+	public DefaultCsvReader(Reader reader) {
 		super(reader);
 	}
 	
@@ -24,7 +26,7 @@ public class SimpleCsvReader extends AbstractCsvReader<List<String>>  {
 	}
 	
 	public List<List<String>> read() throws CsvReaderException {
-		return SimpleCsvReader.read(reader, delimiter, quote, escapeHeader, fromLine, maxLines);
+		return DefaultCsvReader.read(reader, delimiter, quote, escapeHeader, fromLine, maxLines);
 	}
 
 	public boolean hasNext() {
@@ -32,18 +34,21 @@ public class SimpleCsvReader extends AbstractCsvReader<List<String>>  {
 	}
 
 	public List<String> next() {
-		return SimpleCsvReader.readLine(((IterableLineNumberReader) reader).next(), delimiter, quote);
+		return DefaultCsvReader.readLine(((IterableLineNumberReader) reader).next(), delimiter, quote);
 	}
 
 	public Iterator<List<String>> iterator() {
 		return this;
 	}
-
-	public static final Logger logger = Logger.getLogger(SimpleCsvReader.class.getName());
 	
     public static List<List<String>> read(Reader reader) 
     		throws CsvReaderException{
     	return read(reader, CsvCons.COMMA, CsvCons.DOUBLE_QUOTE, false, 0, 0);
+    }
+    
+    public static List<List<String>> read(Reader reader, boolean escapeHeader) 
+    		throws CsvReaderException{
+    	return read(reader, CsvCons.COMMA, CsvCons.DOUBLE_QUOTE, escapeHeader, 0, 0);
     }
     
     public static List<List<String>> read(Reader reader, char delimiter, boolean escapeHeader) 
