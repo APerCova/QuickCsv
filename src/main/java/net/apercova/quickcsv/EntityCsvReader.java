@@ -19,20 +19,20 @@ import net.apercova.quickcsv.converter.SimpleBooleanConverter;
 import net.apercova.quickcsv.converter.SimpleNumberConverter;
 import net.apercova.quickcsv.converter.SimpleStringConverter;
 
-public class ObjectCsvReader<T> extends AbstractCsvReader<T>{
+public class EntityCsvReader<T> extends AbstractCsvReader<T>{
 
-	public static final Logger logger = Logger.getLogger(ObjectCsvReader.class.getName());
+	public static final Logger logger = Logger.getLogger(EntityCsvReader.class.getName());
 	
 	protected Class<T> type;
 	
-	protected ObjectCsvReader(Class<T> type) {
+	protected EntityCsvReader(Class<T> type) {
 		super();
 		//Prevents header invalid casting to entity
 		this.escapeHeader = true;
 		this.type = type;
 	}
 	
-	protected ObjectCsvReader(Class<T> type, Reader reader) {
+	protected EntityCsvReader(Class<T> type, Reader reader) {
 		super(reader);
 		//Prevents header invalid casting to entity
 		this.escapeHeader = true;
@@ -44,7 +44,7 @@ public class ObjectCsvReader<T> extends AbstractCsvReader<T>{
 	}
 
 	public List<T> read() throws CsvReaderException {
-		return ObjectCsvReader.read(type, reader, delimiter, quote, escapeHeader, fromLine, maxLines);
+		return EntityCsvReader.read(type, reader, delimiter, quote, escapeHeader, fromLine, maxLines);
 	}
 
 	public boolean hasNext() {
@@ -53,9 +53,9 @@ public class ObjectCsvReader<T> extends AbstractCsvReader<T>{
 
 	public T next() {
 		try {
-			return ObjectCsvReader.readObject(
+			return EntityCsvReader.readObject(
 					type,
-					SimpleCsvReader.readLine(((IterableLineNumberReader) reader).next(), delimiter, quote));
+					DefaultCsvReader.readLine(((IterableLineNumberReader) reader).next(), delimiter, quote));
 		} catch (Exception e) {
 			logger.log(Level.WARNING, "Error reading next entity", e);
 			return null;
@@ -67,17 +67,22 @@ public class ObjectCsvReader<T> extends AbstractCsvReader<T>{
 		return this;
 	}
 	
-	public static <E> ObjectCsvReader<E> getInstance(Class<E> type){
-		return new ObjectCsvReader<E>(type);
+	public static <E> EntityCsvReader<E> getInstance(Class<E> type){
+		return new EntityCsvReader<E>(type);
 	}
 	
-	public static <E> ObjectCsvReader<E> getInstance(Class<E> type, Reader reader){
-		return new ObjectCsvReader<E>(type, reader);
+	public static <E> EntityCsvReader<E> getInstance(Class<E> type, Reader reader){
+		return new EntityCsvReader<E>(type, reader);
 	}
 	
  	public static <E> List<E> read(Class<E> type, Reader reader) 
     		throws CsvReaderException{
     	return read(type, reader, CsvCons.COMMA, CsvCons.DOUBLE_QUOTE, true, 0, 0);
+    }
+ 	
+ 	public static <E> List<E> read(Class<E> type, Reader reader, boolean escapeHeader) 
+    		throws CsvReaderException{
+    	return read(type, reader, CsvCons.COMMA, CsvCons.DOUBLE_QUOTE, escapeHeader, 0, 0);
     }
     
     public static <E> List<E> read(Class<E> type, Reader reader, char delimiter, boolean escapeHeader) 
@@ -129,7 +134,7 @@ public class ObjectCsvReader<T> extends AbstractCsvReader<T>{
 			throws CsvReaderException{
 		try {
 			List<E> entities = new LinkedList<E>();
-			List<List<String>> lines = SimpleCsvReader.read(reader, delimiter, quote, escapeHeader, fromLine, maxLines);
+			List<List<String>> lines = DefaultCsvReader.read(reader, delimiter, quote, escapeHeader, fromLine, maxLines);
 						
 			for(int cLine = 0; cLine < lines.size(); cLine++) {
 				List<String> line = lines.get(cLine);
@@ -145,13 +150,13 @@ public class ObjectCsvReader<T> extends AbstractCsvReader<T>{
 	
 	public static <E> E readLine(Class<E> type, String line, char delimiter, char quote) 
 			throws InstantiationException, IllegalAccessException, DatatypeConversionException{
-		return readObject(type, SimpleCsvReader.readLine(line, delimiter, quote) );
+		return readObject(type, DefaultCsvReader.readLine(line, delimiter, quote) );
 	}
 	
 	protected static <E> E readObject(Class<E> type, List<String> values) 
 			throws InstantiationException, IllegalAccessException, DatatypeConversionException{
 		E entity = type.newInstance();
-		Map<Integer,Field> fieldMap = ObjectCsvHelper.getAnnotatedFields(type);
+		Map<Integer,Field> fieldMap = EntityCsvHelper.getAnnotatedFields(type);
 		for(Integer k :fieldMap.keySet()) {
 			Field field = fieldMap.get(k);
 			if(!field.isAnnotationPresent(CsvDatatypeConverter.class)) {
