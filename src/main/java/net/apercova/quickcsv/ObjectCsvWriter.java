@@ -14,42 +14,84 @@ public class ObjectCsvWriter<E> extends AbstractCsvWriter<E>{
 
 	protected Class<E> type;
 	
-	public ObjectCsvWriter(Class<E> type) {
-		super();
+	protected ObjectCsvWriter() {
+	}
+	
+	protected ObjectCsvWriter(Class<E> type) {
 		this.type = type;
 	}
 	
-	public ObjectCsvWriter(Writer writer, Class<E> type) {
+	protected ObjectCsvWriter(Class<E> type, Writer writer) {
 		super(writer);
 		this.type = type;
 	}
-
-	public ObjectCsvWriter(Writer writer, Collection<E> lines, Class<E> type) {
+	
+	protected ObjectCsvWriter(Class<E> type, Writer writer, Collection<E> lines) {
 		super(writer, lines);
 		this.type = type;
 	}
-
+	
 	public void write() throws CsvWriterException {
+		ObjectCsvWriter.write(type, writer, lines, delimiter, quote, escapeHeader);
 	}
-	public static <E> void write(Writer writer, Collection<E> lines, char delimiter, char quote, boolean writeHeader, Class<E> type)
+	
+	public static <E> ObjectCsvWriter<E> getInstance(Class<E> type) {
+		return new ObjectCsvWriter<E>(type);
+	}
+	
+	public static <E> ObjectCsvWriter<E> getInstance(Class<E> type, Writer writer) {
+		return new ObjectCsvWriter<E>(type, writer);
+	}
+
+	public static <E> ObjectCsvWriter<E> getInstance(Class<E> type, Writer writer, Collection<E> lines) {
+		return new ObjectCsvWriter<E>(type, writer, lines);
+	}
+
+	public static <E> void write(Class<E> type, Writer writer, Collection<E> lines) 
+    		throws CsvWriterException {
+    	write(type, writer, lines, CsvCons.COMMA, CsvCons.DOUBLE_QUOTE, false);
+    }
+    
+    public static <E> void write(Class<E> type, Writer writer, Collection<E> lines, boolean escapeHeader) 
+    		throws CsvWriterException {
+    	write(type, writer, lines, CsvCons.COMMA, CsvCons.DOUBLE_QUOTE, escapeHeader);
+    }
+    
+    public static <E> void write(Class<E> type, Writer writer, Collection<E> lines, char delimiter) 
+    		throws CsvWriterException {
+    	write(type, writer, lines, delimiter, CsvCons.DOUBLE_QUOTE, false);
+    }
+    
+    public static <E> void write(Class<E> type, Writer writer, Collection<E> lines, char delimiter, boolean escapeHeader) 
+    		throws CsvWriterException {
+    	write(type, writer, lines, delimiter, CsvCons.DOUBLE_QUOTE, escapeHeader);
+    }
+    
+    public static <E> void write(Class<E> type, Writer writer, Collection<E> lines, char delimiter, char quote) 
+    		throws CsvWriterException {
+    	write(type, writer, lines, delimiter, quote, false);
+    	
+    }
+	
+	public static <E> void write(Class<E> type, Writer writer, Collection<E> lines, char delimiter, char quote, boolean escapeHeader)
             throws CsvWriterException{
 		try {
-			SimpleCsvWriter.write(writer, readCollectionValues(lines, type, writeHeader), delimiter, quote, writeHeader);
+			SimpleCsvWriter.write(writer, readCollectionValues(lines, type), delimiter, quote, escapeHeader);
 		} catch (Exception e) {
-			throw new CsvWriterException(e.getMessage(), e);
+			throw new CsvWriterException(e);
 		}
 	}
 	
-	public static <E> void writeLine(Writer writer, E line, char delimiter, char quote, Class<E> type) throws CsvWriterException {
+	public static <E> void writeLine(Class<E> type, Writer writer, E line, char delimiter, char quote) 
+			throws CsvWriterException {
 		try {
 			SimpleCsvWriter.writeLine(writer, readObjectValues(line, ObjectCsvHelper.getAnnotatedFields(type)), delimiter, quote);
 		} catch (Exception e) {
 			throw new CsvWriterException(e.getMessage(), e);
 		}
-		
 	}
 	
-	protected static <E> List<List<String>> readCollectionValues(Collection<E> lines, Class<E> type, boolean writeHeader) 
+	protected static <E> List<List<String>> readCollectionValues(Collection<E> lines, Class<E> type) 
 			throws IllegalAccessException {
 		List<List<String>> values = new LinkedList<List<String>>();
 		
@@ -61,7 +103,7 @@ public class ObjectCsvWriter<E> extends AbstractCsvWriter<E>{
 			CsvEntity rowMeta = type.getAnnotation(CsvEntity.class);
 			
 			//resolve header values
-			if(rowMeta.headers().length > 0 && writeHeader) {
+			if(rowMeta.headers().length > 0) {
 				values.add(Arrays.asList(rowMeta.headers()));
 			}
 			
@@ -75,7 +117,7 @@ public class ObjectCsvWriter<E> extends AbstractCsvWriter<E>{
 	}
 		
 	protected static <E> List<String> readObjectValues(E obj, Map<Integer, Field> fieldMap) 
-			throws IllegalArgumentException, IllegalAccessException{
+			throws IllegalArgumentException, IllegalAccessException {
 		List<String> values = new LinkedList<String>();
 		int i = 0;
 		for(Integer k: fieldMap.keySet()) {
@@ -98,6 +140,5 @@ public class ObjectCsvWriter<E> extends AbstractCsvWriter<E>{
 		}
 		return values;
 	}
-	
 
 }
