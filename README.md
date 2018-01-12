@@ -52,7 +52,7 @@ Add the dependency in your pom.xml
                 Charset.forName("utf-8"));
         
         //Values are read as a row list
-        List<List<String>> values = CsvReader.read(reader);
+        List<List<String>> values = DefaultCsvReader.read(reader);
         
     } catch (IOException e) {
         logger.log(Level.SEVERE, "Can't perform reading", e);
@@ -80,7 +80,7 @@ Add the dependency in your pom.xml
         ) {
     
         //Values are read as a row list
-        List<List<String>> values = CsvReader.read(reader);
+        List<List<String>> values = DefaultCsvReader.read(reader);
     
     } catch (IOException | CsvReaderException e) {
         logger.log(Level.SEVERE, "Can't perform reading", e);
@@ -107,9 +107,9 @@ Add the dependency in your pom.xml
         values.add(Arrays.asList(new String[] {"AU","Austalia","Sidney"}));
         
         //Writing out values
-        CsvWriter.write(writer, values, true);//autoflush
+        DefaultCsvWriter.write(writer, values);
         
-        //also direct flush
+        //flush writer
         writer.flush();
         
     } catch(IOException e) {
@@ -142,9 +142,9 @@ Add the dependency in your pom.xml
         values.add(Arrays.asList(new String[] {"AU","Austalia","Sidney"}));
         
         //Writing out values
-        CsvWriter.write(writer, values, true);//autoflush
+        DefaultCsvWriter.write(writer, values);
         
-        //also direct flush
+        //flush writer
         writer.flush();
         
     } catch(IOException | CsvWriterException e) {
