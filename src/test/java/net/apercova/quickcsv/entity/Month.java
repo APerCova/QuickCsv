@@ -1,4 +1,4 @@
-package net.apercova.quickcsv;
+package net.apercova.quickcsv.entity;
 
 import net.apercova.quickcsv.annotation.CsvEntity;
 import net.apercova.quickcsv.annotation.CsvValue;
