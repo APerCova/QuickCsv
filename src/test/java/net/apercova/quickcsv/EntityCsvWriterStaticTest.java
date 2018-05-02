@@ -101,7 +101,7 @@ public class EntityCsvWriterStaticTest {
             System.out.println(result);
             DateFormat testdf = new SimpleDateFormat("yyyy-MM-dd");
             String test = testdf.format(Calendar.getInstance().getTime());
-            Assert.assertTrue("Fail: complete writing",result.startsWith("2018-01-12"));
+            Assert.assertTrue("Fail: complete writing",result.startsWith(test));
             
             
 
