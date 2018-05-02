@@ -5,6 +5,8 @@ import java.io.StringWriter;
 import java.io.Writer;
 import java.nio.charset.Charset;
 import java.security.MessageDigest;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -97,6 +99,8 @@ public class EntityCsvWriterStaticTest {
 
             result = ((StringWriter)writer).toString();
             System.out.println(result);
+            DateFormat testdf = new SimpleDateFormat("yyyy-MM-dd");
+            String test = testdf.format(Calendar.getInstance().getTime());
             Assert.assertTrue("Fail: complete writing",result.startsWith("2018-01-12"));
             
             
