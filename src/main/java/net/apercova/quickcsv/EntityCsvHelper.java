@@ -15,7 +15,7 @@ public class EntityCsvHelper<T> {
 	protected EntityCsvHelper() {
 	}
 	
-	static <E> Map<Integer, Field> getAnnotatedFields(Class<E> type){
+	public static <E> Map<Integer, Field> getAnnotatedFields(Class<E> type){
 		Map<Integer, Field> fieldMap = new TreeMap<Integer, Field>();
 		
 		CsvEntity rowMeta = type.getAnnotation(CsvEntity.class);
@@ -55,7 +55,7 @@ public class EntityCsvHelper<T> {
 		return fieldMap;
 	}
 	
-	static int getHeaderPosition(List<String> headers, String lookup) {
+	public static int getHeaderPosition(List<String> headers, String lookup) {
 		int hpos = -1;
 		if(lookup != null && lookup.length() > 0) {
 			for(String h: headers) {
