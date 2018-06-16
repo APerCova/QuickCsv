@@ -23,7 +23,7 @@ public interface CsvReader<T> extends Iterator<T>, Iterable<T>, Closeable{
 	public CsvReader<T> fromLine(long fromLine);
 	public CsvReader<T> maxLines(long maxLines);
 	public CsvReader<T> escapeheader(boolean readHeader);
-	public boolean isHeaderEscaped();
+	public boolean escapeheader();
 	public List<T> read() throws CsvReaderException; 
 	public int getLineNumber();
 	public List<Throwable> getSuppressed();

@@ -9,7 +9,7 @@ import java.util.TreeMap;
 import net.apercova.quickcsv.annotation.CsvEntity;
 import net.apercova.quickcsv.annotation.CsvValue;
 
-public class EntityCsvHelper<T> {
+public final class EntityCsvHelper<T> {
 	
 	
 	protected EntityCsvHelper() {

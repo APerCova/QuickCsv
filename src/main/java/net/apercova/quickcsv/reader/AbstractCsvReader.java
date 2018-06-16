@@ -66,7 +66,7 @@ public abstract class AbstractCsvReader<T> implements CsvReader<T>{
 		this.escapeHeader = escapeHeader;
 		return this;
 	}
-	public boolean isHeaderEscaped() {
+	public boolean escapeheader() {
 		return escapeHeader;
 	}
 	public int getLineNumber() {

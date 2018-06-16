@@ -17,9 +17,9 @@ import net.apercova.quickcsv.EntityCsvHelper;
 import net.apercova.quickcsv.annotation.CsvDatatypeConverter;
 import net.apercova.quickcsv.converter.DatatypeConversionException;
 import net.apercova.quickcsv.converter.DatatypeConverter;
-import net.apercova.quickcsv.converter.SimpleBooleanConverter;
-import net.apercova.quickcsv.converter.SimpleNumberConverter;
-import net.apercova.quickcsv.converter.SimpleStringConverter;
+import net.apercova.quickcsv.converter.DefaultBooleanConverter;
+import net.apercova.quickcsv.converter.DefaultNumberConverter;
+import net.apercova.quickcsv.converter.DefaultStringConverter;
 
 public class EntityCsvReader<T> extends AbstractCsvReader<T>{
 
@@ -33,7 +33,6 @@ public class EntityCsvReader<T> extends AbstractCsvReader<T>{
 		this.escapeHeader = true;
 		this.type = type;
 	}
-	
 	protected EntityCsvReader(Reader reader, Class<T> type) {
 		super(reader);
 		//Prevents header invalid casting to entity
@@ -41,6 +40,13 @@ public class EntityCsvReader<T> extends AbstractCsvReader<T>{
 		this.type = type;
 	}
 
+	public static <T> EntityCsvReader<T> newInstance(Class<T> type) {
+		return new EntityCsvReader<T>(type);
+	}
+	public static  <T> EntityCsvReader<T> newInstance(Reader reader, Class<T> type) {
+		return new EntityCsvReader<T>(reader, type);
+	}
+	
 	public List<T> read() throws CsvReaderException {
 		return EntityCsvReader.read(reader, delimiter, quote, escapeHeader, fromLine, maxLines, type);
 	}
@@ -63,14 +69,6 @@ public class EntityCsvReader<T> extends AbstractCsvReader<T>{
 
 	public Iterator<T> iterator() {
 		return this;
-	}
-	
-	public static <E> EntityCsvReader<E> newInstance(Class<E> type){
-		return new EntityCsvReader<E>(type);
-	}
-	
-	public static <E> EntityCsvReader<E> newInstance(Reader reader, Class<E> type){
-		return new EntityCsvReader<E>(reader, type);
 	}
 	
     public static <E> List<E> read(Reader reader, Class<E> type) 
@@ -175,7 +173,7 @@ public class EntityCsvReader<T> extends AbstractCsvReader<T>{
 		}
 	}
 	
-	public static <E> E readLine(Class<E> type, String line, char delimiter, char quote) 
+	public static <E> E readLine(String line, char delimiter, char quote, Class<E> type) 
 			throws InstantiationException, IllegalAccessException, DatatypeConversionException{
 		return readObject(type, readLine(line, delimiter, quote) );
 	}
@@ -214,13 +212,13 @@ public class EntityCsvReader<T> extends AbstractCsvReader<T>{
 			DatatypeConverter<?> vc = null;
 			
 			if(String.class.equals(type)) {
-				vc = new SimpleStringConverter();
-				field.set(entity, ((SimpleStringConverter)vc).parse(value) );
+				vc = new DefaultStringConverter();
+				field.set(entity, ((DefaultStringConverter)vc).parse(value) );
 			}
 			
 			if(Boolean.class.equals(type) || boolean.class.equals(type)) {
-				vc = new SimpleBooleanConverter();
-				field.set(entity, ((SimpleBooleanConverter)vc).parse(value) );
+				vc = new DefaultBooleanConverter();
+				field.set(entity, ((DefaultBooleanConverter)vc).parse(value) );
 			}
 			
 			if(Number.class.isAssignableFrom(type) ||
@@ -232,8 +230,8 @@ public class EntityCsvReader<T> extends AbstractCsvReader<T>{
 					double.class.equals(type)
 					) {				
 				try {
-					vc = new SimpleNumberConverter();
-					Number raw = ((SimpleNumberConverter)vc).parse(value);
+					vc = new DefaultNumberConverter();
+					Number raw = ((DefaultNumberConverter)vc).parse(value);
 					if(Byte.class.equals(type) || byte.class.equals(type)) {
 						field.set(entity, Byte.valueOf(String.valueOf(raw)));
 					}

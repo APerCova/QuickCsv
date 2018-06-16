@@ -2,6 +2,7 @@ package net.apercova.quickcsv.reader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -11,25 +12,22 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import net.apercova.quickcsv.DefaultCsvReaderTest;
-import net.apercova.quickcsv.reader.CsvReader;
-import net.apercova.quickcsv.reader.CsvReaderException;
-import net.apercova.quickcsv.reader.CsvReaderFactory;
+import net.apercova.quickcsv.CsvReaderFactory;
 
 public class SimpleCsvReaderPatternTest {
 	
-	private static final Logger logger = Logger.getLogger(DefaultCsvReaderTest.class.getName());
+	private static final Logger logger = Logger.getLogger(SimpleCsvReaderPatternTest.class.getName());
     
     @Before
     public void init() {
     }
     
     @Test
-    public void Rfc4180Iterator() throws CsvReaderException, IOException {
+    public void IteratorTest() throws CsvReaderException, IOException {
     	CsvReader<List<String>> csvReader = CsvReaderFactory.newInstance();
     	
     	//Getting an Iterator
-    	Reader reader = new InputStreamReader(ClassLoader.getSystemResourceAsStream("Months.csv"));
+    	Reader reader = new InputStreamReader(ClassLoader.getSystemResourceAsStream("Months.csv"), Charset.forName("utf-8"));
     	csvReader.setReader(reader);
     	List<List<String>> values = new ArrayList<List<String>>();
     	Iterator<List<String>> it = csvReader.iterator();
@@ -46,11 +44,11 @@ public class SimpleCsvReaderPatternTest {
     	
     	csvReader.close();
     	Assert.assertTrue(values != null);
-        Assert.assertTrue("Size: "+values.size(), values.size() == 6);
+        Assert.assertEquals(values.size(), 6);
         Assert.assertEquals(values.get(0).get(0), "m_01");
     	
         //CsvReader instance is actually an Iterator
-    	reader = new InputStreamReader(ClassLoader.getSystemResourceAsStream("Months.csv"));
+    	reader = new InputStreamReader(ClassLoader.getSystemResourceAsStream("Months.csv"), Charset.forName("utf-8"));
     	csvReader.setReader(reader);
     	values = new ArrayList<List<String>>();
     	
@@ -66,11 +64,11 @@ public class SimpleCsvReaderPatternTest {
     	
         csvReader.close();
         Assert.assertTrue(values != null);
-        Assert.assertTrue("Size: "+values.size(), values.size() == 6);
+        Assert.assertEquals(values.size(), 6);
         Assert.assertEquals(values.get(0).get(0), "m_01");
         
         //CsvReader instance can be used inside enhanced for loop
-        reader = new InputStreamReader(ClassLoader.getSystemResourceAsStream("Months.csv"));
+        reader = new InputStreamReader(ClassLoader.getSystemResourceAsStream("Months.csv"), Charset.forName("utf-8"));
     	csvReader.setReader(reader);
     	values = new ArrayList<List<String>>();
     	
@@ -86,86 +84,86 @@ public class SimpleCsvReaderPatternTest {
         
     	csvReader.close();
         Assert.assertTrue(values != null);
-        Assert.assertTrue("Size: "+values.size(), values.size() == 6);
+        Assert.assertEquals(values.size(), 6);
         Assert.assertEquals(values.get(0).get(0), "m_01");
         
-        logger.info("Rfc4180Iterator completed successfully");
+        logger.info("IteratorTest completed successfully");
     }
     
     @Test
-    public void Rfc4180ReuseReader() throws CsvReaderException, IOException {
+    public void ReuseReaderTest() throws CsvReaderException, IOException {
     	Reader reader = null;
     	CsvReader<List<String>> csvReader = null;
         List<List<String>> rows = null;
         
         csvReader = CsvReaderFactory.newInstance();
         
-        reader = new InputStreamReader(ClassLoader.getSystemResourceAsStream("Months.csv"));
+        reader = new InputStreamReader(ClassLoader.getSystemResourceAsStream("Months.csv"), Charset.forName("utf-8"));
     	csvReader.setReader(reader);
     	rows = csvReader.read();
-    	Assert.assertTrue("Fail: default fromat.", rows.size() == 6);
-    	Assert.assertTrue("Fail: default fromat.", "m_01".equals(rows.get(0).get(0)));
+    	Assert.assertEquals(rows.size(), 6);
+    	Assert.assertEquals("m_01", rows.get(0).get(0));
     	csvReader.close();
     	
     	
-    	reader = new InputStreamReader(ClassLoader.getSystemResourceAsStream("Months.csv"));
+    	reader = new InputStreamReader(ClassLoader.getSystemResourceAsStream("Months.csv"), Charset.forName("utf-8"));
     	csvReader.setReader(reader)
                 .escapeheader(true);
     	rows = csvReader.read();
-    	Assert.assertTrue("Fail: escapeheader(true).", rows.size() == 5);
+    	Assert.assertEquals(rows.size(), 5);
     	csvReader.close();
     	
     	
-    	reader = new InputStreamReader(ClassLoader.getSystemResourceAsStream("Months.csv"));
+    	reader = new InputStreamReader(ClassLoader.getSystemResourceAsStream("Months.csv"), Charset.forName("utf-8"));
     	csvReader.setReader(reader)
                 .escapeheader(true)
                 .fromLine(4);
     	rows = csvReader.read();
-    	Assert.assertTrue("Fail: escapeheader(true), fromLine(4).", rows.size() == 3);
+    	Assert.assertEquals(rows.size(), 3);
     	csvReader.close();
     	
     	
-    	reader = new InputStreamReader(ClassLoader.getSystemResourceAsStream("Months.csv"));
+    	reader = new InputStreamReader(ClassLoader.getSystemResourceAsStream("Months.csv"), Charset.forName("utf-8"));
     	csvReader.setReader(reader)
     			.escapeheader(true)
                 .fromLine(1)
                 .maxLines(4);
     	rows = csvReader.read();
-    	Assert.assertTrue("Fail: escapeheader(true), fromLine(1), maxLines(4).", rows.size() == 3);
+    	Assert.assertEquals(rows.size(), 3);
     	csvReader.close();
     	
     	
-    	reader = new InputStreamReader(ClassLoader.getSystemResourceAsStream("Months.csv"));
+    	reader = new InputStreamReader(ClassLoader.getSystemResourceAsStream("Months.csv"), Charset.forName("utf-8"));
     	csvReader.setReader(reader)
     			.escapeheader(false)
                 .fromLine(1)
                 .maxLines(4);
     	rows = csvReader.read();
-    	Assert.assertTrue("Fail: escapeheader(false), fromLine(1), maxLines(4).", rows.size() == 4);
+    	Assert.assertEquals(rows.size(), 4);
     	csvReader.close();
     	
         
-    	reader = new InputStreamReader(ClassLoader.getSystemResourceAsStream("Months.csv"));
+    	reader = new InputStreamReader(ClassLoader.getSystemResourceAsStream("Months.csv"), Charset.forName("utf-8"));
     	csvReader.setReader(reader)
     			.escapeheader(true)
                 .fromLine(3)
                 .maxLines(3);
     	rows = csvReader.read();
-    	Assert.assertTrue("Fail: escapeheader(true), fromLine(3), maxLines(3).", rows.size() == 3);
+    	Assert.assertEquals(rows.size(), 3);
     	csvReader.close();
     	
     	
-    	reader = new InputStreamReader(ClassLoader.getSystemResourceAsStream("Months.csv"));
+    	reader = new InputStreamReader(ClassLoader.getSystemResourceAsStream("Months.csv"), Charset.forName("utf-8"));
     	csvReader.setReader(reader)
     			.escapeheader(false)
                 .fromLine(3)
                 .maxLines(3);
     	rows = csvReader.read();
-    	Assert.assertTrue("Fail: escapeheader(false), fromLine(3), maxLines(3).", rows.size() == 4);
+    	Assert.assertEquals(rows.size(), 4);
     	csvReader.close();
     	
         
-        logger.info("Rfc4180ReuseReader completed successfully");
+        logger.info("ReuseReaderTest completed successfully");
             
     }
 }

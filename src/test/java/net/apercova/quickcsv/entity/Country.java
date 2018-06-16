@@ -24,6 +24,30 @@ public class Country {
 		this.isoCode = isoCode;
 	}
 
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public String getCapital() {
+		return capital;
+	}
+
+	public void setCapital(String capital) {
+		this.capital = capital;
+	}
+
+	public String getIsoCode() {
+		return isoCode;
+	}
+
+	public void setIsoCode(String isoCode) {
+		this.isoCode = isoCode;
+	}
+
 	@Override
 	public String toString() {
 		return "Country [name=" + name + ", capital=" + capital + ", isoCode=" + isoCode + "]";

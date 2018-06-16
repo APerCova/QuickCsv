@@ -15,9 +15,15 @@ public class SimpleCsvReader extends AbstractCsvReader<List<String>>  {
 	protected SimpleCsvReader() {
 		super();
 	}
-
 	protected SimpleCsvReader(Reader reader) {
 		super(reader);
+	}
+	
+	public static SimpleCsvReader newInstance() {
+		return new SimpleCsvReader();
+	}
+	public static SimpleCsvReader newInstance(Reader reader) {
+		return new SimpleCsvReader(reader);
 	}
 	
 	public List<List<String>> read() throws CsvReaderException {
