@@ -14,13 +14,13 @@ import net.apercova.quickcsv.converter.MessageDigestConverter;
 @CsvEntity(headers= {"DATE","CHARSET","MESSAGE_DIGEST"})
 public class ComplexType {
 	
-	@CsvValue(colnum=0)
+	@CsvValue(index=0)
 	@CsvDatatypeConverter(DefaultDateConverter.class)
 	private Date date;
-	@CsvValue(colnum=1)
+	@CsvValue(index=1)
 	@CsvDatatypeConverter(CharsetConverter.class)
 	private Charset charset;
-	@CsvValue(colnum=2)
+	@CsvValue(index=2)
 	@CsvDatatypeConverter(MessageDigestConverter.class)
 	private MessageDigest messageDigest;
 	

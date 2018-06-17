@@ -9,6 +9,6 @@ import java.lang.annotation.Target;
 @Retention(RUNTIME)
 @Target(FIELD)
 public @interface CsvValue {
-	int colnum() default -1;
+	int index() default -1;
 	String header() default "";
 }

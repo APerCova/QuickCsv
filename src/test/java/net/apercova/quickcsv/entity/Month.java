@@ -6,29 +6,29 @@ import net.apercova.quickcsv.annotation.CsvValue;
 @CsvEntity(headers= {"m1","m2","m3","m4","m5","m6","m7","m8","m9","m10","m11","m12"})
 public class Month {
 
-	@CsvValue(colnum=0)
+	@CsvValue(index=0)
 	private String m1;
-	@CsvValue(colnum=1)
+	@CsvValue(index=1)
 	private String m2;
-	@CsvValue(colnum=2)
+	@CsvValue(index=2)
 	private String m3;
-	@CsvValue(colnum=3)
+	@CsvValue(index=3)
 	private String m4;
-	@CsvValue(colnum=4)
+	@CsvValue(index=4)
 	private String m5;
-	@CsvValue(colnum=5)
+	@CsvValue(index=5)
 	private String m6;
-	@CsvValue(colnum=6)
+	@CsvValue(index=6)
 	private String m7;
-	@CsvValue(colnum=7)
+	@CsvValue(index=7)
 	private String m8;
-	@CsvValue(colnum=8)
+	@CsvValue(index=8)
 	private String m9;
-	@CsvValue(colnum=9)
+	@CsvValue(index=9)
 	private String m10;
-	@CsvValue(colnum=10)
+	@CsvValue(index=10)
 	private String m11;
-	@CsvValue(colnum=11)
+	@CsvValue(index=11)
 	private String m12;
 	
 	public Month() {

@@ -6,19 +6,19 @@ import net.apercova.quickcsv.annotation.CsvValue;
 @CsvEntity
 public class WeekDays {
 
-	@CsvValue(colnum=0)
+	@CsvValue(index=0)
 	private String d_01;
-	@CsvValue(colnum=1)
+	@CsvValue(index=1)
 	private String d_02;
-	@CsvValue(colnum=2)
+	@CsvValue(index=2)
 	private String d_03;
-	@CsvValue(colnum=3)
+	@CsvValue(index=3)
 	private String d_04;
-	@CsvValue(colnum=4)
+	@CsvValue(index=4)
 	private String d_05;
-	@CsvValue(colnum=5)
+	@CsvValue(index=5)
 	private String d_06;
-	@CsvValue(colnum=6)
+	@CsvValue(index=6)
 	private String d_07;
 	
 	public String getD_01() {

@@ -42,7 +42,7 @@ public final class EntityCsvHelper<T> {
 					}
 				}else {
 					//Resolve position by index
-					int hpos = valMeta.colnum();
+					int hpos = valMeta.index();
 					if(hpos >= 0) {
 						fieldMap.put(hpos, f);
 					}else {
