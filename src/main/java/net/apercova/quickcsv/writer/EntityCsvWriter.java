@@ -9,11 +9,11 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import net.apercova.quickcsv.CsvCons;
-import net.apercova.quickcsv.EntityCsvHelper;
-import net.apercova.quickcsv.annotation.CsvDatatypeConverter;
+import net.apercova.quickcsv.CsvEntityHelper;
+import net.apercova.quickcsv.annotation.CsvDataTypeConverter;
 import net.apercova.quickcsv.annotation.CsvEntity;
-import net.apercova.quickcsv.converter.DatatypeConversionException;
-import net.apercova.quickcsv.converter.DatatypeConverter;
+import net.apercova.quickcsv.converter.DataTypeConversionException;
+import net.apercova.quickcsv.converter.DataTypeConverter;
 
 public class EntityCsvWriter<E> extends AbstractCsvWriter<E>{
 
@@ -80,13 +80,13 @@ public class EntityCsvWriter<E> extends AbstractCsvWriter<E>{
 	public static <E> void writeLine(Writer writer, E line, char delimiter, char quote, Class<E> type) 
 			throws CsvWriterException {
 		try {
-			writeLine(writer, readObjectValues(line, EntityCsvHelper.getAnnotatedFields(type)), delimiter, quote);
+			writeLine(writer, readObjectValues(line, CsvEntityHelper.getAnnotatedFields(type)), delimiter, quote);
 		} catch (Exception e) {
 			throw new CsvWriterException(e.getMessage(), e);
 		}
 	}	
 	protected static <E> Collection<Collection<String>> readCollectionValues(Collection<E> lines, Class<E> type) 
-			throws IllegalAccessException, IllegalArgumentException, InstantiationException, DatatypeConversionException {
+			throws IllegalAccessException, IllegalArgumentException, InstantiationException, DataTypeConversionException {
 		Collection<Collection<String>> values = new LinkedList<Collection<String>>();
 		
 		if(!type.isAnnotationPresent(CsvEntity.class)) {
@@ -103,7 +103,7 @@ public class EntityCsvWriter<E> extends AbstractCsvWriter<E>{
 			
 			//Parse fields as CsvCollection
 			for(E line: lines) {
-				values.add(readObjectValues(line, EntityCsvHelper.getAnnotatedFields(type) ));
+				values.add(readObjectValues(line, CsvEntityHelper.getAnnotatedFields(type) ));
 			}
 		}
 		
@@ -111,7 +111,7 @@ public class EntityCsvWriter<E> extends AbstractCsvWriter<E>{
 	}	
 	@SuppressWarnings("unchecked")
 	protected static <E> Collection<String> readObjectValues(E obj, Map<Integer, Field> fieldMap) 
-			throws IllegalArgumentException, IllegalAccessException, InstantiationException, DatatypeConversionException {
+			throws IllegalArgumentException, IllegalAccessException, InstantiationException, DataTypeConversionException {
 		Collection<String> values = new LinkedList<String>();
 		int i = 0;
 		for(Entry<Integer, Field> entry: fieldMap.entrySet()) {
@@ -125,11 +125,11 @@ public class EntityCsvWriter<E> extends AbstractCsvWriter<E>{
 			Object value = field.get(obj);
 			String sValue = String.valueOf(value);
 			
-			if(field.isAnnotationPresent(CsvDatatypeConverter.class)) {
-				CsvDatatypeConverter converterTag = field.getAnnotation(CsvDatatypeConverter.class);
-				Class<? extends DatatypeConverter<?>> converterClazz = converterTag.value();
-				DatatypeConverter<?> converter = converterClazz.newInstance();
-				sValue = ((DatatypeConverter<Object>) converter).format(value);
+			if(field.isAnnotationPresent(CsvDataTypeConverter.class)) {
+				CsvDataTypeConverter converterTag = field.getAnnotation(CsvDataTypeConverter.class);
+				Class<? extends DataTypeConverter<?>> converterClazz = converterTag.value();
+				DataTypeConverter<?> converter = converterClazz.newInstance();
+				sValue = ((DataTypeConverter<Object>) converter).format(value);
 			}
 			
 			values.add( ((value != null && sValue.length() > 0)?sValue:"")  );

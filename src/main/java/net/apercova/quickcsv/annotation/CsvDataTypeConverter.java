@@ -6,10 +6,10 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
-import net.apercova.quickcsv.converter.DatatypeConverter;
+import net.apercova.quickcsv.converter.DataTypeConverter;
 
 @Retention(RUNTIME)
 @Target(FIELD)
-public @interface CsvDatatypeConverter {
-	Class<? extends DatatypeConverter<?>> value();
+public @interface CsvDataTypeConverter {
+	Class<? extends DataTypeConverter<?>> value();
 }

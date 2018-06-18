@@ -13,10 +13,10 @@ import java.util.logging.Logger;
 
 import net.apercova.io.IterableLineNumberReader;
 import net.apercova.quickcsv.CsvCons;
-import net.apercova.quickcsv.EntityCsvHelper;
-import net.apercova.quickcsv.annotation.CsvDatatypeConverter;
-import net.apercova.quickcsv.converter.DatatypeConversionException;
-import net.apercova.quickcsv.converter.DatatypeConverter;
+import net.apercova.quickcsv.CsvEntityHelper;
+import net.apercova.quickcsv.annotation.CsvDataTypeConverter;
+import net.apercova.quickcsv.converter.DataTypeConversionException;
+import net.apercova.quickcsv.converter.DataTypeConverter;
 import net.apercova.quickcsv.converter.DefaultBooleanConverter;
 import net.apercova.quickcsv.converter.DefaultNumberConverter;
 import net.apercova.quickcsv.converter.DefaultStringConverter;
@@ -174,17 +174,17 @@ public class EntityCsvReader<T> extends AbstractCsvReader<T>{
 	}
 	
 	public static <E> E readLine(String line, char delimiter, char quote, Class<E> type) 
-			throws InstantiationException, IllegalAccessException, DatatypeConversionException{
+			throws InstantiationException, IllegalAccessException, DataTypeConversionException {
 		return readObject(type, readLine(line, delimiter, quote) );
 	}
 	
 	protected static <E> E readObject(Class<E> type, List<String> values) 
-			throws InstantiationException, IllegalAccessException, DatatypeConversionException{
+			throws InstantiationException, IllegalAccessException, DataTypeConversionException {
 		E entity = type.newInstance();
-		Map<Integer,Field> fieldMap = EntityCsvHelper.getAnnotatedFields(type);
+		Map<Integer,Field> fieldMap = CsvEntityHelper.getAnnotatedFields(type);
 		for(Integer k :fieldMap.keySet()) {
 			Field field = fieldMap.get(k);
-			if(!field.isAnnotationPresent(CsvDatatypeConverter.class)) {
+			if(!field.isAnnotationPresent(CsvDataTypeConverter.class)) {
 				setDefaultFieldValue(entity, field, values.get(k));
 			}else {
 				setCustomFieldValue(entity, field, values.get(k));
@@ -194,22 +194,22 @@ public class EntityCsvReader<T> extends AbstractCsvReader<T>{
 	}
 	
 	protected static <E> void setCustomFieldValue(E entity, Field field, String value) 
-			throws InstantiationException, IllegalAccessException, IllegalArgumentException, DatatypeConversionException {
+			throws InstantiationException, IllegalAccessException, IllegalArgumentException, DataTypeConversionException {
 		field.setAccessible(true);
-		CsvDatatypeConverter converterTag = field.getAnnotation(CsvDatatypeConverter.class);
-		final Class<? extends DatatypeConverter<?>> converterClass = converterTag.value();
-		DatatypeConverter<?> converter = converterClass.newInstance();
+		CsvDataTypeConverter converterTag = field.getAnnotation(CsvDataTypeConverter.class);
+		final Class<? extends DataTypeConverter<?>> converterClass = converterTag.value();
+		DataTypeConverter<?> converter = converterClass.newInstance();
 		field.set(entity, converter.parse(value) );		
 	}
 	
 	protected static <E> void setDefaultFieldValue(E entity, Field field, String value) 
-			throws IllegalAccessException, DatatypeConversionException {
+			throws IllegalAccessException, DataTypeConversionException {
 		field.setAccessible(true);
 		Class<?> type = field.getType();
 		
 		try {
 			
-			DatatypeConverter<?> vc = null;
+			DataTypeConverter<?> vc = null;
 			
 			if(String.class.equals(type)) {
 				vc = new DefaultStringConverter();
@@ -257,7 +257,7 @@ public class EntityCsvReader<T> extends AbstractCsvReader<T>{
 						field.set(entity, new BigDecimal(String.valueOf(raw)));
 					}
 				} catch (NumberFormatException e) {
-					throw new DatatypeConversionException(String.format("Not a valid number for type %s : %s", type, value), e);
+					throw new DataTypeConversionException(String.format("Not a valid number for type %s : %s", type, value), e);
 				}
 			}
 			

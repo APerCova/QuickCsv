@@ -2,17 +2,17 @@ package net.apercova.quickcsv.converter;
 
 import java.nio.charset.Charset;
 
-public class CharsetConverter implements DatatypeConverter<Charset>{
+public class CharsetConverter implements DataTypeConverter<Charset> {
 
-	public Charset parse(String value) throws DatatypeConversionException {
+	public Charset parse(String value) throws DataTypeConversionException {
 		try {
 			return Charset.forName(value);
 		} catch (Exception e) {
-			throw new DatatypeConversionException("For: "+value, e);
+			throw new DataTypeConversionException("For: "+value, e);
 		}
 	}
 
-	public String format(Charset value) throws DatatypeConversionException {
+	public String format(Charset value) throws DataTypeConversionException {
 		return value!= null? value.name(): "";
 	}
 

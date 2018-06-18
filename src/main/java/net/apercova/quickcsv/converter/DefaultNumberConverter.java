@@ -6,7 +6,7 @@ import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class DefaultNumberConverter implements DatatypeConverter<Number>  {
+public class DefaultNumberConverter implements DataTypeConverter<Number> {
 
 	protected static final String NUM_REGEX = "\\+([\\-]?[\\d]+[.,\\,]?[\\d]+)";
 
@@ -14,12 +14,12 @@ public class DefaultNumberConverter implements DatatypeConverter<Number>  {
 		return NumberFormat.getInstance(Locale.getDefault()).format(value);
 	}
 
-	public Number parse(String value) throws DatatypeConversionException{
+	public Number parse(String value) throws DataTypeConversionException {
 		value = normalize(value);
 		try {
 			return NumberFormat.getInstance(Locale.getDefault()).parse(value);
 		} catch (ParseException e) {
-			throw new DatatypeConversionException(String.format("Not a valid number: %s", value), e);
+			throw new DataTypeConversionException(String.format("Not a valid number: %s", value), e);
 		}
 	}
 	

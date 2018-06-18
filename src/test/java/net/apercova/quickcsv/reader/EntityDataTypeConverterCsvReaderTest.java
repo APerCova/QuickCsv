@@ -17,9 +17,9 @@ import org.junit.Test;
 import net.apercova.quickcsv.CsvReaderFactory;
 import net.apercova.quickcsv.entity.ComplexType;
 
-public class EntityDatatypeConverterCsvReaderTest {
+public class EntityDataTypeConverterCsvReaderTest {
 
-	private static final Logger logger = Logger.getLogger(EntityDatatypeConverterCsvReaderTest.class.getName());
+	private static final Logger logger = Logger.getLogger(EntityDataTypeConverterCsvReaderTest.class.getName());
 	private InputStream complexTypeStream;
     
     @Before

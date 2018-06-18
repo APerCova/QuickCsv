@@ -4,7 +4,7 @@ import java.nio.charset.Charset;
 import java.security.MessageDigest;
 import java.util.Date;
 
-import net.apercova.quickcsv.annotation.CsvDatatypeConverter;
+import net.apercova.quickcsv.annotation.CsvDataTypeConverter;
 import net.apercova.quickcsv.annotation.CsvEntity;
 import net.apercova.quickcsv.annotation.CsvValue;
 import net.apercova.quickcsv.converter.CharsetConverter;
@@ -15,13 +15,13 @@ import net.apercova.quickcsv.converter.MessageDigestConverter;
 public class ComplexType {
 	
 	@CsvValue(index=0)
-	@CsvDatatypeConverter(DefaultDateConverter.class)
+	@CsvDataTypeConverter(DefaultDateConverter.class)
 	private Date date;
 	@CsvValue(index=1)
-	@CsvDatatypeConverter(CharsetConverter.class)
+	@CsvDataTypeConverter(CharsetConverter.class)
 	private Charset charset;
 	@CsvValue(index=2)
-	@CsvDatatypeConverter(MessageDigestConverter.class)
+	@CsvDataTypeConverter(MessageDigestConverter.class)
 	private MessageDigest messageDigest;
 	
 	public ComplexType() {

@@ -11,11 +11,9 @@ import org.junit.Before;
 import org.junit.Test;
 
 import net.apercova.quickcsv.CsvCons;
-import net.apercova.quickcsv.converter.DatatypeConversionException;
+import net.apercova.quickcsv.converter.DataTypeConversionException;
 import net.apercova.quickcsv.entity.Month;
 import net.apercova.quickcsv.entity.WeekDays;
-import net.apercova.quickcsv.reader.CsvReaderException;
-import net.apercova.quickcsv.reader.EntityCsvReader;
 
 public class EntityCsvReaderStaticTest {
 	
@@ -93,7 +91,7 @@ public class EntityCsvReaderStaticTest {
     }
     
     @Test
-    public void ReadLineTest() throws CsvReaderException, InstantiationException, IllegalAccessException, DatatypeConversionException {
+    public void ReadLineTest() throws CsvReaderException, InstantiationException, IllegalAccessException, DataTypeConversionException {
         
     	WeekDays days = EntityCsvReader.readLine(daysOfWeek, CsvCons.COMMA, CsvCons.DOUBLE_QUOTE, WeekDays.class);
         
