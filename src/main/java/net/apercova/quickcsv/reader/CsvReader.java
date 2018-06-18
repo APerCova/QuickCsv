@@ -17,15 +17,15 @@ import java.util.List;
  */
 public interface CsvReader<T> extends Iterator<T>, Iterable<T>, Closeable{
 
-	public CsvReader<T> setReader(Reader reader);
-	public CsvReader<T> setDelimiter(char delimiter);
-	public CsvReader<T> setQuote(char quote);
-	public CsvReader<T> fromLine(long fromLine);
-	public CsvReader<T> maxLines(long maxLines);
-	public CsvReader<T> escapeheader(boolean readHeader);
-	public boolean escapeheader();
-	public List<T> read() throws CsvReaderException; 
-	public int getLineNumber();
-	public List<Throwable> getSuppressed();
+	CsvReader<T> setReader(Reader reader);
+	CsvReader<T> setDelimiter(char delimiter);
+	CsvReader<T> setQuote(char quote);
+	CsvReader<T> fromLine(long fromLine);
+	CsvReader<T> maxLines(long maxLines);
+	CsvReader<T> escapeheader(boolean readHeader);
+	boolean escapeheader();
+	List<T> read() throws CsvReaderException;
+	int getLineNumber();
+	List<Throwable> getSuppressed();
 }
  

@@ -17,15 +17,15 @@ import java.util.Collection;
  */
 public interface CsvWriter<E> extends Closeable,Flushable{
 
-	public CsvWriter<E> setWriter(Writer writer);
-	public CsvWriter<E> setDelimiter(char delimiter);
-	public CsvWriter<E> setQuote(char quote);
-	public CsvWriter<E> autoflush(boolean autoflush);
-	public CsvWriter<E> setLines(Collection<E> lines);
-	public CsvWriter<E> addLines(Collection<E> lines);
-	public CsvWriter<E> addLine(E line);
-	public Collection<E> getLines();
-	public CsvWriter<E> escapeHeader(boolean escapeHeader);
-	public boolean escapeHeader();
-	public void write() throws CsvWriterException; 
+	CsvWriter<E> setWriter(Writer writer);
+	CsvWriter<E> setDelimiter(char delimiter);
+	CsvWriter<E> setQuote(char quote);
+	CsvWriter<E> autoflush(boolean autoflush);
+	CsvWriter<E> setLines(Collection<E> lines);
+	CsvWriter<E> addLines(Collection<E> lines);
+	CsvWriter<E> addLine(E line);
+	Collection<E> getLines();
+	CsvWriter<E> escapeHeader(boolean escapeHeader);
+	boolean escapeHeader();
+	void write() throws CsvWriterException;
 }
