@@ -1,6 +1,8 @@
 package net.apercova.quickcsv.reader;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -10,11 +12,15 @@ import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 
+import net.apercova.quickcsv.CsvCons;
+import net.apercova.quickcsv.CsvReaderFactory;
+
 public class CsvReaderTest {
 
 	private InputStream monthsStream;
 	private Reader reader;
 	private SimpleCsvReader csvReader;
+	private CsvReader<List<String>> csvReaderBase;
 	private List<List<String>> lines;
 	
 	@Before
@@ -32,7 +38,7 @@ public class CsvReaderTest {
 	
 	@Test
 	public void test02() throws CsvReaderException {
-		lines = csvReader.escapeheader(true).read();
+		lines = csvReader.skipHeader(true).read();
 		assertEquals(5, lines.size());
 	}
 	
@@ -44,7 +50,7 @@ public class CsvReaderTest {
 	
 	@Test
 	public void test04() throws CsvReaderException {
-		lines = csvReader.fromLine(3).escapeheader(true).read();
+		lines = csvReader.fromLine(3).skipHeader(true).read();
 		assertEquals(4, lines.size());
 	}
 	
@@ -56,7 +62,7 @@ public class CsvReaderTest {
 	
 	@Test
 	public void test06() throws CsvReaderException {
-		lines = csvReader.fromLine(4).maxLines(4).escapeheader(true).read();
+		lines = csvReader.fromLine(4).maxLines(4).skipHeader(true).read();
 		assertEquals(3, lines.size());
 	}
 	
@@ -68,7 +74,7 @@ public class CsvReaderTest {
 	
 	@Test
 	public void test08() throws CsvReaderException {
-		lines = csvReader.fromLine(-1).maxLines(600).escapeheader(true).read();
+		lines = csvReader.fromLine(-1).maxLines(600).skipHeader(true).read();
 		assertEquals(5, lines.size());
 	}
 	
@@ -80,7 +86,7 @@ public class CsvReaderTest {
 	
 	@Test
 	public void test10() throws CsvReaderException {
-		lines = csvReader.fromLine(4).maxLines(1).escapeheader(true).read();
+		lines = csvReader.fromLine(4).maxLines(1).skipHeader(true).read();
 		assertEquals(1, lines.size());
 	}
 	
@@ -92,7 +98,7 @@ public class CsvReaderTest {
 	
 	@Test
 	public void test12() throws CsvReaderException {
-		lines = csvReader.fromLine(7).maxLines(1).escapeheader(true).read();
+		lines = csvReader.fromLine(7).maxLines(1).skipHeader(true).read();
 		assertEquals(0, lines.size());
 	}
 	
@@ -114,7 +120,7 @@ public class CsvReaderTest {
 	
 	@Test
 	public void test14() throws CsvReaderException {
-		csvReader.fromLine(2).maxLines(1).escapeheader(true);
+		csvReader.fromLine(2).maxLines(1).skipHeader(true);
 		int c = 0;
 		for(List<String> line: csvReader) {
 			c++;
@@ -143,7 +149,7 @@ public class CsvReaderTest {
 	
 	@Test
 	public void test16() throws CsvReaderException {
-		csvReader.fromLine(2).maxLines(1).escapeheader(true);
+		csvReader.fromLine(2).maxLines(1).skipHeader(true);
 		int c = 0;
 		for(List<String> line: csvReader.read()) {
 			c++;
@@ -153,5 +159,29 @@ public class CsvReaderTest {
 		}
 		assertEquals(1, c);
 	}
+	
+	@Test
+	public void test17() throws CsvReaderException {
+		csvReaderBase = CsvReaderFactory.newInstance();
+		assertNull(csvReaderBase.getReader());
+		assertEquals(CsvCons.COMMA, csvReaderBase.getDelimiter());
+		assertEquals(CsvCons.DOUBLE_QUOTE, csvReaderBase.getQuote());
+		
+		csvReaderBase = CsvReaderFactory.newInstance(reader);
+		assertNotNull(csvReaderBase.getReader());
+		assertEquals(CsvCons.COMMA, csvReaderBase.getDelimiter());
+		assertEquals(CsvCons.DOUBLE_QUOTE, csvReaderBase.getQuote());
+		
+		csvReaderBase = CsvReaderFactory.newInstance(reader, CsvCons.PIPE);
+		assertNotNull(csvReaderBase.getReader());
+		assertEquals(CsvCons.PIPE, csvReaderBase.getDelimiter());
+		assertEquals(CsvCons.DOUBLE_QUOTE, csvReaderBase.getQuote());
+		
+		csvReaderBase = CsvReaderFactory.newInstance(reader, CsvCons.PIPE, CsvCons.SINGLE_QUOTE);
+		assertNotNull(csvReaderBase.getReader());
+		assertEquals(CsvCons.PIPE, csvReaderBase.getDelimiter());
+		assertEquals(CsvCons.SINGLE_QUOTE, csvReaderBase.getQuote());
+	}
+	
 	
 }

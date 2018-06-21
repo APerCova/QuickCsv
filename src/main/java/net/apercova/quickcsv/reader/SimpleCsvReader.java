@@ -19,50 +19,45 @@ public class SimpleCsvReader extends AbstractCsvReader<List<String>>  {
 	protected SimpleCsvReader(Reader reader) {
 		super(reader);
 	}
-	
+	public SimpleCsvReader(Reader reader, char delimiter) {
+		super(reader, delimiter);
+	}
+	public SimpleCsvReader(Reader reader, char delimiter, char quote) {
+		super(reader, delimiter, quote);
+	}
 	public static SimpleCsvReader newInstance() {
 		return new SimpleCsvReader();
 	}
 	public static SimpleCsvReader newInstance(Reader reader) {
 		return new SimpleCsvReader(reader);
 	}
+	public static SimpleCsvReader newInstance(Reader reader, char delimiter) {
+		return new SimpleCsvReader(reader, delimiter);
+	}
+	public static SimpleCsvReader newInstance(Reader reader, char delimiter, char quote) {
+		return new SimpleCsvReader(reader, delimiter, quote);
+	}
 	
 	public List<List<String>> read() throws CsvReaderException {
-		return read(reader, delimiter, quote, escapeHeader, fromLine, maxLines);
+		return read(reader, delimiter, quote, skipHeader, fromLine, maxLines);
 	}
 
 	public boolean hasNext() {
 		this.fromLine = (this.fromLine < 1)? 1: this.fromLine;
 		this.maxLines = (this.maxLines < 0)? 0: this.maxLines;
 		IterableLineNumberReader r = ((IterableLineNumberReader) reader);
-		boolean  res = r.hasNext();
-		if(res) {
-			if(this.fromLine > 0) {
-				if(this.fromLine == 1) {
-					if(r.getLineNumber() == 1) {
-						if(this.escapeheader()) {
-							r.next();
-							res = this.hasNext();
+		boolean  res = false;
+		if(reader != null) {
+			res = r.hasNext();
+			if(res) {
+				if(this.fromLine > 0) {
+					if(this.fromLine == 1) {
+						if(r.getLineNumber() == 1) {
+							if(this.skipHeader()) {
+								r.next();
+								res = this.hasNext();
+							}
 						}
-					}
-					if(this.maxLines > 0) {
-						long limit = (this.fromLine - 1 + this.maxLines);
-						if(r.getLineNumber() > limit) {
-							r.next();
-							res = this.hasNext();
-						}
-					}
-				}else {
-					if(r.getLineNumber() == 1) {
-						if(this.escapeheader()) {
-							r.next();
-							res = this.hasNext();
-						}
-					}
-					else if(r.getLineNumber() < this.fromLine) {
-						r.next();
-						res = this.hasNext();
-					}else {
 						if(this.maxLines > 0) {
 							long limit = (this.fromLine - 1 + this.maxLines);
 							if(r.getLineNumber() > limit) {
@@ -70,10 +65,30 @@ public class SimpleCsvReader extends AbstractCsvReader<List<String>>  {
 								res = this.hasNext();
 							}
 						}
+					}else {
+						if(r.getLineNumber() == 1) {
+							if(this.skipHeader()) {
+								r.next();
+								res = this.hasNext();
+							}
+						}
+						else if(r.getLineNumber() < this.fromLine) {
+							r.next();
+							res = this.hasNext();
+						}else {
+							if(this.maxLines > 0) {
+								long limit = (this.fromLine - 1 + this.maxLines);
+								if(r.getLineNumber() > limit) {
+									r.next();
+									res = this.hasNext();
+								}
+							}
+						}
 					}
 				}
 			}
 		}
+		
 		return res;
 	}
 
@@ -101,19 +116,19 @@ public class SimpleCsvReader extends AbstractCsvReader<List<String>>  {
     	return read(reader, CsvCons.COMMA, CsvCons.DOUBLE_QUOTE, false, fromLine, maxLines);
     }
     
-    public static List<List<String>> read(Reader reader, boolean escapeHeader) 
+    public static List<List<String>> read(Reader reader, boolean skipHeader) 
     		throws CsvReaderException{
-    	return read(reader, CsvCons.COMMA, CsvCons.DOUBLE_QUOTE, escapeHeader, 0, 0);
+    	return read(reader, CsvCons.COMMA, CsvCons.DOUBLE_QUOTE, skipHeader, 0, 0);
     }
     
-    public static List<List<String>> read(Reader reader, boolean escapeHeader, long fromLine) 
+    public static List<List<String>> read(Reader reader, boolean skipHeader, long fromLine) 
     		throws CsvReaderException{
-    	return read(reader, CsvCons.COMMA, CsvCons.DOUBLE_QUOTE, escapeHeader, fromLine, 0);
+    	return read(reader, CsvCons.COMMA, CsvCons.DOUBLE_QUOTE, skipHeader, fromLine, 0);
     }
     
-    public static List<List<String>> read(Reader reader, boolean escapeHeader, long fromLine, long maxLines)
+    public static List<List<String>> read(Reader reader, boolean skipHeader, long fromLine, long maxLines)
     		throws CsvReaderException{
-    	return read(reader, CsvCons.COMMA, CsvCons.DOUBLE_QUOTE, escapeHeader, fromLine, maxLines);
+    	return read(reader, CsvCons.COMMA, CsvCons.DOUBLE_QUOTE, skipHeader, fromLine, maxLines);
     }
     
     public static List<List<String>> read(Reader reader, char delimiter, long fromLine) 
@@ -126,19 +141,19 @@ public class SimpleCsvReader extends AbstractCsvReader<List<String>>  {
     	return read(reader, delimiter, CsvCons.DOUBLE_QUOTE, false, fromLine, maxLines);
     }
 
-    public static List<List<String>> read(Reader reader, char delimiter, boolean escapeHeader) 
+    public static List<List<String>> read(Reader reader, char delimiter, boolean skipHeader) 
     		throws CsvReaderException{
-    	return read(reader, delimiter, CsvCons.DOUBLE_QUOTE, escapeHeader, 0, 0);
+    	return read(reader, delimiter, CsvCons.DOUBLE_QUOTE, skipHeader, 0, 0);
     }
     
-    public static List<List<String>> read(Reader reader, char delimiter, boolean escapeHeader, long fromLine) 
+    public static List<List<String>> read(Reader reader, char delimiter, boolean skipHeader, long fromLine) 
     		throws CsvReaderException{
-    	return read(reader, delimiter, CsvCons.DOUBLE_QUOTE, escapeHeader, fromLine, 0);
+    	return read(reader, delimiter, CsvCons.DOUBLE_QUOTE, skipHeader, fromLine, 0);
     }
     
-    public static List<List<String>> read(Reader reader, char delimiter, boolean escapeHeader, long fromLine, long maxLines) 
+    public static List<List<String>> read(Reader reader, char delimiter, boolean skipHeader, long fromLine, long maxLines) 
     		throws CsvReaderException{
-    	return read(reader, delimiter, CsvCons.DOUBLE_QUOTE, escapeHeader, fromLine, maxLines);
+    	return read(reader, delimiter, CsvCons.DOUBLE_QUOTE, skipHeader, fromLine, maxLines);
     }
     
     public static List<List<String>> read(Reader reader, char delimiter) 
@@ -161,22 +176,22 @@ public class SimpleCsvReader extends AbstractCsvReader<List<String>>  {
     	return read(reader, delimiter, quote, false, fromLine, maxLines);
     }
         
-    public static List<List<String>> read(Reader reader, char delimiter, char quote, boolean escapeHeader) 
+    public static List<List<String>> read(Reader reader, char delimiter, char quote, boolean skipHeader) 
     		throws CsvReaderException{
-    	return read(reader, delimiter, quote, escapeHeader, 0, 0);
+    	return read(reader, delimiter, quote, skipHeader, 0, 0);
     }
     
-    public static List<List<String>> read(Reader reader, char delimiter, char quote, boolean escapeHeader, long fromLine) 
+    public static List<List<String>> read(Reader reader, char delimiter, char quote, boolean skipHeader, long fromLine) 
     		throws CsvReaderException{
-    	return read(reader, delimiter, quote, escapeHeader, fromLine, 0);
+    	return read(reader, delimiter, quote, skipHeader, fromLine, 0);
     }
     
-    public static List<List<String>> read(Reader reader, char delimiter, char quote, boolean escapeHeader, long fromLine, long maxLines){
+    public static List<List<String>> read(Reader reader, char delimiter, char quote, boolean skipHeader, long fromLine, long maxLines){
 		SimpleCsvReader csvReader = SimpleCsvReader.newInstance();
 		csvReader.setReader(reader)
 		.setDelimiter(delimiter)
 		.setQuote(quote)
-		.escapeheader(escapeHeader)
+		.skipHeader(skipHeader)
 		.fromLine(fromLine)
 		.maxLines(maxLines);
 		

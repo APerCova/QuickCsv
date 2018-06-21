@@ -43,7 +43,7 @@ public class Sales2009Test {
 		
 		Assert.assertNotNull(reader);
 		CsvReader<Sales2009> csvReader = CsvReaderFactory.newInstance(reader, Sales2009.class);
-		csvReader.escapeheader(true);
+		csvReader.skipHeader(true);
 		
 		for(Sales2009 s: csvReader.read()) {//try without read()
 			assertTrue(s.getTransactionDate() instanceof Date);

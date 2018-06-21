@@ -21,4 +21,16 @@ public final class CsvReaderFactory {
 	public static <T> CsvReader<T> newInstance(Reader reader, Class<T> type) {
 		return EntityCsvReader.newInstance(reader, type);
 	}
+	public static CsvReader<List<String>> newInstance(Reader reader, char delimiter) {
+		return SimpleCsvReader.newInstance(reader, delimiter);
+	}	
+	public static <T> CsvReader<T> newInstance(Reader reader, char delimiter, Class<T> type) {
+		return EntityCsvReader.newInstance(reader, delimiter, type);
+	}
+	public static CsvReader<List<String>> newInstance(Reader reader, char delimiter, char quote) {
+		return SimpleCsvReader.newInstance(reader, delimiter, quote);
+	}	
+	public static <T> CsvReader<T> newInstance(Reader reader, char delimiter, char quote, Class<T> type) {
+		return EntityCsvReader.newInstance(reader, delimiter, quote, type);
+	}
 }

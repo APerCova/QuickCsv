@@ -22,8 +22,11 @@ public interface CsvReader<T> extends Iterator<T>, Iterable<T>, Closeable{
 	CsvReader<T> setQuote(char quote);
 	CsvReader<T> fromLine(long fromLine);
 	CsvReader<T> maxLines(long maxLines);
-	CsvReader<T> escapeheader(boolean readHeader);
-	boolean escapeheader();
+	CsvReader<T> skipHeader(boolean skipHeader);
+	Reader getReader();
+	char getDelimiter();
+	char getQuote();
+	boolean skipHeader();
 	List<T> read() throws CsvReaderException;
 	int getLineNumber();
 	List<Throwable> getSuppressed();

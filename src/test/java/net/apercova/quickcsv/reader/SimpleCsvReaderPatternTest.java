@@ -108,7 +108,7 @@ public class SimpleCsvReaderPatternTest {
     	
     	reader = new InputStreamReader(ClassLoader.getSystemResourceAsStream("Months.csv"), Charset.forName("utf-8"));
     	csvReader.setReader(reader)
-                .escapeheader(true);
+                .skipHeader(true);
     	rows = csvReader.read();
     	Assert.assertEquals(rows.size(), 5);
     	csvReader.close();
@@ -116,7 +116,7 @@ public class SimpleCsvReaderPatternTest {
     	
     	reader = new InputStreamReader(ClassLoader.getSystemResourceAsStream("Months.csv"), Charset.forName("utf-8"));
     	csvReader.setReader(reader)
-                .escapeheader(true)
+                .skipHeader(true)
                 .fromLine(4);
     	rows = csvReader.read();
     	Assert.assertEquals(rows.size(), 3);
@@ -125,7 +125,7 @@ public class SimpleCsvReaderPatternTest {
     	
     	reader = new InputStreamReader(ClassLoader.getSystemResourceAsStream("Months.csv"), Charset.forName("utf-8"));
     	csvReader.setReader(reader)
-    			.escapeheader(true)
+    			.skipHeader(true)
                 .fromLine(1)
                 .maxLines(4);
     	rows = csvReader.read();
@@ -135,7 +135,7 @@ public class SimpleCsvReaderPatternTest {
     	
     	reader = new InputStreamReader(ClassLoader.getSystemResourceAsStream("Months.csv"), Charset.forName("utf-8"));
     	csvReader.setReader(reader)
-    			.escapeheader(false)
+    			.skipHeader(false)
                 .fromLine(1)
                 .maxLines(4);
     	rows = csvReader.read();
@@ -145,7 +145,7 @@ public class SimpleCsvReaderPatternTest {
         
     	reader = new InputStreamReader(ClassLoader.getSystemResourceAsStream("Months.csv"), Charset.forName("utf-8"));
     	csvReader.setReader(reader)
-    			.escapeheader(true)
+    			.skipHeader(true)
                 .fromLine(3)
                 .maxLines(3);
     	rows = csvReader.read();
@@ -155,7 +155,7 @@ public class SimpleCsvReaderPatternTest {
     	
     	reader = new InputStreamReader(ClassLoader.getSystemResourceAsStream("Months.csv"), Charset.forName("utf-8"));
     	csvReader.setReader(reader)
-    			.escapeheader(false)
+    			.skipHeader(false)
                 .fromLine(3)
                 .maxLines(3);
     	rows = csvReader.read();

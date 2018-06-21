@@ -43,7 +43,7 @@ public class EntityCsvReaderTest {
     public void CustomTest() throws CsvReaderException {
     	Reader reader = new InputStreamReader(countriesStream, Charset.forName("utf-8"));
     	CsvReader<Country> csvReader = CsvReaderFactory.newInstance(reader, Country.class);
-    	csvReader.escapeheader(true);
+    	csvReader.skipHeader(true);
     	csvReader.setDelimiter(CsvCons.PIPE);
     	csvReader.setQuote(CsvCons.SINGLE_QUOTE);
     	
@@ -60,7 +60,7 @@ public class EntityCsvReaderTest {
     	Reader reader = new InputStreamReader(monthsStream, Charset.forName("utf-8"));
     	
     	CsvReader<Month> csvReader = CsvReaderFactory.newInstance(reader, Month.class);
-    	csvReader.escapeheader(false);
+    	csvReader.skipHeader(false);
     	
     	List<Month> values = csvReader.read();
         
@@ -94,7 +94,7 @@ public class EntityCsvReaderTest {
     	int maxLines = 4;
     	Reader reader = new InputStreamReader(monthsStream, Charset.forName("utf-8"));
     	CsvReader<Month> csvReader = CsvReaderFactory.newInstance(reader, Month.class);
-    	csvReader.escapeheader(false);
+    	csvReader.skipHeader(false);
     	csvReader.fromLine(fromLine);
     	csvReader.maxLines(maxLines);
     	

@@ -30,25 +30,43 @@ public class EntityCsvReader<T> extends AbstractCsvReader<T>{
 	protected EntityCsvReader(Class<T> type) {
 		super();
 		//Prevents header invalid casting to entity
-		this.escapeHeader = true;
+		this.skipHeader = true;
 		this.type = type;
 	}
 	protected EntityCsvReader(Reader reader, Class<T> type) {
 		super(reader);
 		//Prevents header invalid casting to entity
-		this.escapeHeader = true;
+		this.skipHeader = true;
 		this.type = type;
 	}
-
+	public EntityCsvReader(Reader reader, char delimiter, Class<T> type) {
+		super(reader, delimiter);
+		//Prevents header invalid casting to entity
+		this.skipHeader = true;
+		this.type = type;
+	}
+	public EntityCsvReader(Reader reader, char delimiter, char quote, Class<T> type) {
+		super(reader, delimiter, quote);
+		//Prevents header invalid casting to entity
+		this.skipHeader = true;
+		this.type = type;
+	}
+	
 	public static <T> EntityCsvReader<T> newInstance(Class<T> type) {
 		return new EntityCsvReader<T>(type);
 	}
 	public static  <T> EntityCsvReader<T> newInstance(Reader reader, Class<T> type) {
 		return new EntityCsvReader<T>(reader, type);
 	}
+	public static  <T> EntityCsvReader<T> newInstance(Reader reader, char delimiter, Class<T> type) {
+		return new EntityCsvReader<T>(reader, delimiter, type);
+	}
+	public static  <T> EntityCsvReader<T> newInstance(Reader reader, char delimiter, char quote, Class<T> type) {
+		return new EntityCsvReader<T>(reader, delimiter, quote, type);
+	}
 	
 	public List<T> read() throws CsvReaderException {
-		return EntityCsvReader.read(reader, delimiter, quote, escapeHeader, fromLine, maxLines, type);
+		return EntityCsvReader.read(reader, delimiter, quote, skipHeader, fromLine, maxLines, type);
 	}
 
 	public boolean hasNext() {
@@ -86,19 +104,19 @@ public class EntityCsvReader<T> extends AbstractCsvReader<T>{
     	return read(reader,CsvCons.COMMA, CsvCons.DOUBLE_QUOTE, true, fromLine, maxLines, type);
     }
         
-    public static <E> List<E> read(Reader reader, boolean escapeHeader, Class<E> type) 
+    public static <E> List<E> read(Reader reader, boolean skipHeader, Class<E> type) 
     		throws CsvReaderException{
-    	return read(reader,CsvCons.COMMA, CsvCons.DOUBLE_QUOTE, escapeHeader, 0, 0, type);
+    	return read(reader,CsvCons.COMMA, CsvCons.DOUBLE_QUOTE, skipHeader, 0, 0, type);
     }
     
-    public static <E> List<E> read(Reader reader, boolean escapeHeader, long fromLine, Class<E> type) 
+    public static <E> List<E> read(Reader reader, boolean skipHeader, long fromLine, Class<E> type) 
     		throws CsvReaderException{
-    	return read(reader,CsvCons.COMMA, CsvCons.DOUBLE_QUOTE, escapeHeader, fromLine, 0, type);
+    	return read(reader,CsvCons.COMMA, CsvCons.DOUBLE_QUOTE, skipHeader, fromLine, 0, type);
     }
 		
-	public static <E> List<E> read(Reader reader, boolean escapeHeader, long fromLine, long maxLines, Class<E> type) 
+	public static <E> List<E> read(Reader reader, boolean skipHeader, long fromLine, long maxLines, Class<E> type) 
 			throws CsvReaderException{
-		return read(reader,CsvCons.COMMA, CsvCons.DOUBLE_QUOTE, escapeHeader, fromLine, maxLines, type);
+		return read(reader,CsvCons.COMMA, CsvCons.DOUBLE_QUOTE, skipHeader, fromLine, maxLines, type);
 	}
 	
     public static <E> List<E> read(Reader reader, char delimiter, Class<E> type) 
@@ -116,19 +134,19 @@ public class EntityCsvReader<T> extends AbstractCsvReader<T>{
     	return read(reader, delimiter, CsvCons.DOUBLE_QUOTE, true, fromLine, maxLines, type);
     }
         
-    public static <E> List<E> read(Reader reader, char delimiter, boolean escapeHeader, Class<E> type) 
+    public static <E> List<E> read(Reader reader, char delimiter, boolean skipHeader, Class<E> type) 
     		throws CsvReaderException{
-    	return read(reader, delimiter, CsvCons.DOUBLE_QUOTE, escapeHeader, 0, 0, type);
+    	return read(reader, delimiter, CsvCons.DOUBLE_QUOTE, skipHeader, 0, 0, type);
     }
     
-    public static <E> List<E> read(Reader reader, char delimiter, boolean escapeHeader, long fromLine, Class<E> type) 
+    public static <E> List<E> read(Reader reader, char delimiter, boolean skipHeader, long fromLine, Class<E> type) 
     		throws CsvReaderException{
-    	return read(reader, delimiter, CsvCons.DOUBLE_QUOTE, escapeHeader, fromLine, 0, type);
+    	return read(reader, delimiter, CsvCons.DOUBLE_QUOTE, skipHeader, fromLine, 0, type);
     }
 		
-	public static <E> List<E> read(Reader reader, char delimiter, boolean escapeHeader, long fromLine, long maxLines, Class<E> type) 
+	public static <E> List<E> read(Reader reader, char delimiter, boolean skipHeader, long fromLine, long maxLines, Class<E> type) 
 			throws CsvReaderException{
-		return read(reader, delimiter, CsvCons.DOUBLE_QUOTE, escapeHeader, fromLine, maxLines, type);
+		return read(reader, delimiter, CsvCons.DOUBLE_QUOTE, skipHeader, fromLine, maxLines, type);
 	}
     
     public static <E> List<E> read(Reader reader, char delimiter, char quote, Class<E> type) 
@@ -146,21 +164,21 @@ public class EntityCsvReader<T> extends AbstractCsvReader<T>{
     	return read(reader, delimiter, quote, true, fromLine, maxLines, type);
     }
         
-    public static <E> List<E> read(Reader reader, char delimiter, char quote, boolean escapeHeader, Class<E> type) 
+    public static <E> List<E> read(Reader reader, char delimiter, char quote, boolean skipHeader, Class<E> type) 
     		throws CsvReaderException{
-    	return read(reader, delimiter, quote, escapeHeader, 0, 0, type);
+    	return read(reader, delimiter, quote, skipHeader, 0, 0, type);
     }
     
-    public static <E> List<E> read(Reader reader, char delimiter, char quote, boolean escapeHeader, long fromLine, Class<E> type) 
+    public static <E> List<E> read(Reader reader, char delimiter, char quote, boolean skipHeader, long fromLine, Class<E> type) 
     		throws CsvReaderException{
-    	return read(reader, delimiter, quote, escapeHeader, fromLine, 0, type);
+    	return read(reader, delimiter, quote, skipHeader, fromLine, 0, type);
     }
 		
-	public static <E> List<E> read(Reader reader, char delimiter, char quote, boolean escapeHeader, long fromLine, long maxLines, Class<E> type) 
+	public static <E> List<E> read(Reader reader, char delimiter, char quote, boolean skipHeader, long fromLine, long maxLines, Class<E> type) 
 			throws CsvReaderException{
 		try {
 			List<E> entities = new LinkedList<E>();
-			List<List<String>> lines = SimpleCsvReader.read(reader, delimiter, quote, escapeHeader, fromLine, maxLines);
+			List<List<String>> lines = SimpleCsvReader.read(reader, delimiter, quote, skipHeader, fromLine, maxLines);
 						
 			for(int cLine = 0; cLine < lines.size(); cLine++) {
 				List<String> line = lines.get(cLine);

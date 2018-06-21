@@ -16,42 +16,52 @@ public abstract class AbstractCsvReader<T> implements CsvReader<T>{
 	protected Reader reader;
 	protected char delimiter;
 	protected char quote;
-	protected boolean escapeHeader;
+	protected boolean skipHeader;
 	protected long fromLine;
 	protected long maxLines;
 
 	protected AbstractCsvReader() {
-		super();
-		delimiter = CsvCons.COMMA;
-		quote = CsvCons.DOUBLE_QUOTE;
-		escapeHeader = false;
-		fromLine = 0;
-		maxLines = 0;
+		this(null, CsvCons.COMMA, CsvCons.DOUBLE_QUOTE);
 	}
 	protected AbstractCsvReader(Reader reader) {
+		this(reader, CsvCons.COMMA, CsvCons.DOUBLE_QUOTE);
+	}
+	protected AbstractCsvReader(Reader reader, char delimiter) {
+		this(reader, delimiter, CsvCons.DOUBLE_QUOTE);
+	}
+	protected AbstractCsvReader(Reader reader, char delimiter, char quote) {
 		super();
 		setReader(reader);
-		delimiter = CsvCons.COMMA;
-		quote = CsvCons.DOUBLE_QUOTE;
-		escapeHeader = false;
+		this.delimiter = delimiter;
+		this.quote = quote;
+		skipHeader = false;
 		fromLine = 0;
 		maxLines = 0;
 	}
-	
+
 	public CsvReader<T> setDelimiter(char delimiter){
 		this.delimiter = delimiter;
 		return this;
+	}
+	public char getDelimiter() {
+		return delimiter;
 	}
 	public CsvReader<T> setQuote(char quote){
 		this.quote = quote;
 		return this;
 	}
+	public char getQuote() {
+		return quote;
+	}
 	public CsvReader<T> setReader(Reader reader){
-		if( !(reader instanceof IterableLineNumberReader)) {
+		if(reader != null && !(reader instanceof IterableLineNumberReader)) {
 			reader = new IterableLineNumberReader(reader);
 		}
 		this.reader = reader;
 		return this;
+	}
+	public Reader getReader() {
+		return reader;
 	}
 	public CsvReader<T> fromLine(long fromLine){
 		this.fromLine = fromLine;
@@ -61,12 +71,12 @@ public abstract class AbstractCsvReader<T> implements CsvReader<T>{
 		this.maxLines = maxLines;
 		return this;
 	}
-	public CsvReader<T> escapeheader(boolean escapeHeader){
-		this.escapeHeader = escapeHeader;
+	public CsvReader<T> skipHeader(boolean skipHeader){
+		this.skipHeader = skipHeader;
 		return this;
 	}
-	public boolean escapeheader() {
-		return escapeHeader;
+	public boolean skipHeader() {
+		return skipHeader;
 	}
 	public int getLineNumber() {
 		return ((IterableLineNumberReader) reader).getLineNumber();
