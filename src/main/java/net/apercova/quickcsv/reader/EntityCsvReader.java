@@ -39,13 +39,13 @@ public class EntityCsvReader<T> extends AbstractCsvReader<T>{
 		this.skipHeader = true;
 		this.type = type;
 	}
-	public EntityCsvReader(Reader reader, char delimiter, Class<T> type) {
+	protected EntityCsvReader(Reader reader, char delimiter, Class<T> type) {
 		super(reader, delimiter);
 		//Prevents header invalid casting to entity
 		this.skipHeader = true;
 		this.type = type;
 	}
-	public EntityCsvReader(Reader reader, char delimiter, char quote, Class<T> type) {
+	protected EntityCsvReader(Reader reader, char delimiter, char quote, Class<T> type) {
 		super(reader, delimiter, quote);
 		//Prevents header invalid casting to entity
 		this.skipHeader = true;
@@ -69,24 +69,15 @@ public class EntityCsvReader<T> extends AbstractCsvReader<T>{
 		return EntityCsvReader.read(reader, delimiter, quote, skipHeader, fromLine, maxLines, type);
 	}
 
-	public boolean hasNext() {
-		return ((IterableLineNumberReader) reader).hasNext();
-	}
-
-	public T next() {
+	public T next() {		
 		try {
-			return EntityCsvReader.readObject(
-					type,
-					readLine(((IterableLineNumberReader) reader).next(), delimiter, quote));
+			T res = EntityCsvReader.readObject(
+					readLine(((IterableLineNumberReader) reader).next(), delimiter, quote), type);
+			return res;
 		} catch (Exception e) {
 			logger.log(Level.WARNING, "Error reading next entity", e);
 			return null;
 		}
-		
-	}
-
-	public Iterator<T> iterator() {
-		return this;
 	}
 	
     public static <E> List<E> read(Reader reader, Class<E> type) 
@@ -177,41 +168,49 @@ public class EntityCsvReader<T> extends AbstractCsvReader<T>{
 	public static <E> List<E> read(Reader reader, char delimiter, char quote, boolean skipHeader, long fromLine, long maxLines, Class<E> type) 
 			throws CsvReaderException{
 		try {
-			List<E> entities = new LinkedList<E>();
-			List<List<String>> lines = SimpleCsvReader.read(reader, delimiter, quote, skipHeader, fromLine, maxLines);
-						
-			for(int cLine = 0; cLine < lines.size(); cLine++) {
-				List<String> line = lines.get(cLine);
-				entities.add(readObject(type, line));
+			SimpleCsvReader csvReader = SimpleCsvReader.newInstance();
+			csvReader.setReader(reader)
+			.setDelimiter(delimiter)
+			.setQuote(quote)
+			.skipHeader(skipHeader)
+			.fromLine(fromLine)
+			.maxLines(maxLines);
+			
+			List<E>  lines = new LinkedList<E>();
+			for(List<String> line: csvReader) {
+				lines.add(readObject(line, type));
 			}
 			
-			return entities;	
+			return lines;
 		} catch (Exception e) {
 			throw new CsvReaderException(e);
 		}
 	}
 	
-	public static <E> E readLine(String line, char delimiter, char quote, Class<E> type) 
-			throws InstantiationException, IllegalAccessException, DataTypeConversionException {
-		return readObject(type, readLine(line, delimiter, quote) );
+	public static <E> E readLine(String line, char delimiter, char quote, Class<E> type) throws CsvReaderException {
+		try {
+			return readObject(readLine(line, delimiter, quote), type);
+		} catch (Exception e) {//InstantiationException, IllegalAccessException, DataTypeConversionException
+			throw new CsvReaderException(e);
+		}
 	}
 	
-	protected static <E> E readObject(Class<E> type, List<String> values) 
+	protected static <E> E readObject(List<String> values, Class<E> type) 
 			throws InstantiationException, IllegalAccessException, DataTypeConversionException {
 		E entity = type.newInstance();
 		Map<Integer,Field> fieldMap = CsvEntityHelper.getAnnotatedFields(type);
 		for(Integer k :fieldMap.keySet()) {
 			Field field = fieldMap.get(k);
 			if(!field.isAnnotationPresent(CsvDataTypeConverter.class)) {
-				setDefaultFieldValue(entity, field, values.get(k));
+				setDefaultFieldValue(field, values.get(k), entity);
 			}else {
-				setCustomFieldValue(entity, field, values.get(k));
+				setCustomFieldValue(field, values.get(k), entity);
 			}
 		}
 		return entity;
 	}
 	
-	protected static <E> void setCustomFieldValue(E entity, Field field, String value) 
+	protected static <E> void setCustomFieldValue(Field field, String value, E entity) 
 			throws InstantiationException, IllegalAccessException, IllegalArgumentException, DataTypeConversionException {
 		field.setAccessible(true);
 		CsvDataTypeConverter converterTag = field.getAnnotation(CsvDataTypeConverter.class);
@@ -220,7 +219,7 @@ public class EntityCsvReader<T> extends AbstractCsvReader<T>{
 		field.set(entity, converter.parse(value) );		
 	}
 	
-	protected static <E> void setDefaultFieldValue(E entity, Field field, String value) 
+	protected static <E> void setDefaultFieldValue(Field field, String value, E entity) 
 			throws IllegalAccessException, DataTypeConversionException {
 		field.setAccessible(true);
 		Class<?> type = field.getType();

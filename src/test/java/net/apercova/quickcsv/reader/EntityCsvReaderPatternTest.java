@@ -23,70 +23,70 @@ public class EntityCsvReaderPatternTest {
     public void init() {
     }
     
-    @Test
-    public void IteratorTest() throws CsvReaderException, IOException {
-    	CsvReader<Month> csvReader = CsvReaderFactory.newInstance(Month.class);
-    	
-    	//Getting an Iterator
-    	Reader reader = new InputStreamReader(ClassLoader.getSystemResourceAsStream("Months.csv"), Charset.forName("utf-8"));
-    	csvReader.setReader(reader);
-    	List<Month> values = new ArrayList<Month>();
-    	Iterator<Month> it = csvReader.iterator();
-    	
-    	int currIt = 0;
-    	while(it.hasNext()){
-    		currIt++;
-    		Month row = it.next();
-            int rnum = csvReader.getLineNumber();
-            Assert.assertEquals(currIt, rnum);
-            values.add(row);
-        }
-    	
-    	csvReader.close();
-    	Assert.assertTrue(values != null);
-        Assert.assertEquals(values.size(), 6);
-        Assert.assertEquals(values.get(0).getM1(), "m_01");
-    	
-        //CsvReader instance is actually an Iterator
-    	reader = new InputStreamReader(ClassLoader.getSystemResourceAsStream("Months.csv"), Charset.forName("utf-8"));
-    	csvReader.setReader(reader);
-    	values = new ArrayList<Month>();
-    	
-    	currIt = 0;
-    	while(csvReader.hasNext()){
-    		currIt++;
-    		Month row = csvReader.next();
-            int rnum = csvReader.getLineNumber();
-            Assert.assertEquals(currIt, rnum);
-            values.add(row);
-        }
-    	
-        csvReader.close();
-        Assert.assertTrue(values != null);
-        Assert.assertEquals(values.size(), 6);
-        Assert.assertEquals(values.get(0).getM1(), "m_01");
-        
-        //CsvReader instance can be used inside enhanced for loop
-        reader = new InputStreamReader(ClassLoader.getSystemResourceAsStream("Months.csv"), Charset.forName("utf-8"));
-    	csvReader.setReader(reader);
-    	values = new ArrayList<Month>();
-    	
-    	currIt = 0;
-    	for(Month row : csvReader){
-    		currIt++;
-    		//Get Line number holds state of last row returned
-            int rnum = csvReader.getLineNumber();
-            Assert.assertEquals(currIt, rnum);
-            values.add(row);
-        }
-        
-    	csvReader.close();
-        Assert.assertTrue(values != null);
-        Assert.assertEquals(values.size(), 6);
-        Assert.assertEquals(values.get(0).getM1(), "m_01");
-        
-        logger.info("IteratorTest completed successfully");
-    }
+//    @Test
+//    public void IteratorTest() throws CsvReaderException, IOException {
+//    	CsvReader<Month> csvReader = CsvReaderFactory.newInstance(Month.class);
+//    	
+//    	//Getting an Iterator
+//    	Reader reader = new InputStreamReader(ClassLoader.getSystemResourceAsStream("Months.csv"), Charset.forName("utf-8"));
+//    	csvReader.setReader(reader);
+//    	List<Month> values = new ArrayList<Month>();
+//    	Iterator<Month> it = csvReader.iterator();
+//    	
+//    	int currIt = 0;
+//    	while(it.hasNext()){
+//    		currIt++;
+//    		Month row = it.next();
+//            int rnum = csvReader.getLineNumber();
+//            Assert.assertEquals(currIt, rnum);
+//            values.add(row);
+//        }
+//    	
+//    	csvReader.close();
+//    	Assert.assertTrue(values != null);
+//        Assert.assertEquals(values.size(), 6);
+//        Assert.assertEquals(values.get(0).getM1(), "m_01");
+//    	
+//        //CsvReader instance is actually an Iterator
+//    	reader = new InputStreamReader(ClassLoader.getSystemResourceAsStream("Months.csv"), Charset.forName("utf-8"));
+//    	csvReader.setReader(reader);
+//    	values = new ArrayList<Month>();
+//    	
+//    	currIt = 0;
+//    	while(csvReader.hasNext()){
+//    		currIt++;
+//    		Month row = csvReader.next();
+//            int rnum = csvReader.getLineNumber();
+//            Assert.assertEquals(currIt, rnum);
+//            values.add(row);
+//        }
+//    	
+//        csvReader.close();
+//        Assert.assertTrue(values != null);
+//        Assert.assertEquals(values.size(), 6);
+//        Assert.assertEquals(values.get(0).getM1(), "m_01");
+//        
+//        //CsvReader instance can be used inside enhanced for loop
+//        reader = new InputStreamReader(ClassLoader.getSystemResourceAsStream("Months.csv"), Charset.forName("utf-8"));
+//    	csvReader.setReader(reader);
+//    	values = new ArrayList<Month>();
+//    	
+//    	currIt = 0;
+//    	for(Month row : csvReader){
+//    		currIt++;
+//    		//Get Line number holds state of last row returned
+//            int rnum = csvReader.getLineNumber();
+//            Assert.assertEquals(currIt, rnum);
+//            values.add(row);
+//        }
+//        
+//    	csvReader.close();
+//        Assert.assertTrue(values != null);
+//        Assert.assertEquals(values.size(), 6);
+//        Assert.assertEquals(values.get(0).getM1(), "m_01");
+//        
+//        logger.info("IteratorTest completed successfully");
+//    }
     
     @Test
     public void ReuseReaderTest() throws CsvReaderException, IOException {

@@ -2,6 +2,7 @@ package net.apercova.quickcsv.reader;
 
 import java.io.IOException;
 import java.io.Reader;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.logging.Logger;
@@ -88,6 +89,60 @@ public abstract class AbstractCsvReader<T> implements CsvReader<T>{
 		if(reader != null) {
 			reader.close();
 		}
+	}
+	
+	public boolean hasNext() {
+		this.fromLine = (this.fromLine < 1)? 1: this.fromLine;
+		this.maxLines = (this.maxLines < 0)? 0: this.maxLines;
+		IterableLineNumberReader r = ((IterableLineNumberReader) reader);
+		boolean  res = false;
+		if(reader != null) {
+			res = r.hasNext();
+			if(res) {
+				if(this.fromLine > 0) {
+					if(this.fromLine == 1) {
+						if(r.getLineNumber() == 1) {
+							if(this.skipHeader()) {
+								r.next();
+								res = this.hasNext();
+							}
+						}
+						if(this.maxLines > 0) {
+							long limit = (this.fromLine - 1 + this.maxLines);
+							if(r.getLineNumber() > limit) {
+								r.next();
+								res = this.hasNext();
+							}
+						}
+					}else {
+						if(r.getLineNumber() == 1) {
+							if(this.skipHeader()) {
+								r.next();
+								res = this.hasNext();
+							}
+						}
+						else if(r.getLineNumber() < this.fromLine) {
+							r.next();
+							res = this.hasNext();
+						}else {
+							if(this.maxLines > 0) {
+								long limit = (this.fromLine - 1 + this.maxLines);
+								if(r.getLineNumber() > limit) {
+									r.next();
+									res = this.hasNext();
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		
+		return res;
+	}
+	
+	public Iterator<T> iterator() {
+		return this;
 	}
 	
     public static List<String> readLine(String line, char delimiter, char quote) {
