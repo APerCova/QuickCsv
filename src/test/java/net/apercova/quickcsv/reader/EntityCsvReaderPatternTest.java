@@ -23,8 +23,8 @@ public class EntityCsvReaderPatternTest {
     public void init() {
     }
     
-//    @Test
-//    public void IteratorTest() throws CsvReaderException, IOException {
+    @Test
+    public void IteratorTest() throws CsvReaderException, IOException {
 //    	CsvReader<Month> csvReader = CsvReaderFactory.newInstance(Month.class);
 //    	
 //    	//Getting an Iterator
@@ -86,7 +86,7 @@ public class EntityCsvReaderPatternTest {
 //        Assert.assertEquals(values.get(0).getM1(), "m_01");
 //        
 //        logger.info("IteratorTest completed successfully");
-//    }
+    }
     
     @Test
     public void ReuseReaderTest() throws CsvReaderException, IOException {

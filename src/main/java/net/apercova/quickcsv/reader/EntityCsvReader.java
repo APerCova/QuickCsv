@@ -71,11 +71,12 @@ public class EntityCsvReader<T> extends AbstractCsvReader<T>{
 
 	public T next() {		
 		try {
-			T res = EntityCsvReader.readObject(
-					readLine(((IterableLineNumberReader) reader).next(), delimiter, quote), type);
+			T res = readObject(
+					readLine(((IterableLineNumberReader) reader).next(), delimiter, quote), 
+					type);
 			return res;
 		} catch (Exception e) {
-			logger.log(Level.WARNING, "Error reading next entity", e);
+			logger.log(Level.WARNING, "Can not read entity", e);
 			return null;
 		}
 	}
