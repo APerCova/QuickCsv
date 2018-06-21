@@ -78,7 +78,7 @@ public class SimpleCsvReaderStaticTest {
     	int fromLine = 1;
     	int maxLines = 4;
     	Reader reader = new InputStreamReader(monthsStream, Charset.forName("utf-8"));
-        List<List<String>> values = AbstractCsvReader.read(reader, CsvCons.COMMA, CsvCons.DOUBLE_QUOTE, true, fromLine, maxLines);
+        List<List<String>> values = SimpleCsvReader.read(reader, CsvCons.COMMA, CsvCons.DOUBLE_QUOTE, true, fromLine, maxLines);
         
         Assert.assertTrue(values != null);
         Assert.assertEquals(values.size(), (maxLines - 1));

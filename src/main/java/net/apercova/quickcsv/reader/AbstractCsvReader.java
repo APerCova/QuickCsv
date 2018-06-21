@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.io.Reader;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import net.apercova.io.IterableLineNumberReader;
@@ -81,65 +80,6 @@ public abstract class AbstractCsvReader<T> implements CsvReader<T>{
 		}
 	}
 	
-	public static List<List<String>> read(Reader reader, char delimiter, char quote, boolean escapeHeader, long fromLine, long maxLines) 
-    		throws CsvReaderException{
-        if(fromLine < 1) {
-        	fromLine = 1;
-        }
-        
-    	if(reader == null){
-            throw new CsvReaderException("missing reader",
-                    new IllegalArgumentException(new NullPointerException("reader")));
-        }
-        if(delimiter == ' '){
-            delimiter = CsvCons.COMMA;
-        }
-        if(quote == ' '){
-            quote = CsvCons.DOUBLE_QUOTE;
-        }
-        IterableLineNumberReader buff = null;
-        try {
-            //Create an underlying reader to keep original reader's reference
-            buff = new IterableLineNumberReader(reader);
-
-            List<List<String>>  csv = new LinkedList<List<String>>();
-            int lineCount = 0;
-            int lineNumber = 0;
-            while(buff.hasNext()) {
-            	lineNumber = buff.getLineNumber();            	
-            	if(lineNumber == 1 ) {//proccess header
-            		
-            		if(fromLine <= lineNumber) {
-            			lineCount++;
-            		}
-            		if(!escapeHeader) {
-            			csv.add(readLine(buff.next(), delimiter, quote));
-            		}
-            		
-            	}else {
-            		if(lineNumber >= fromLine) {
-            			csv.add(readLine(buff.next(), delimiter, quote));
-            			lineCount++;
-            		}
-            	}
-            	if( maxLines > 0 && lineCount >= maxLines) {
-            		break;
-            	}
-            }
-            return csv;
-        }catch(Exception e){
-            throw new CsvReaderException(e);
-        }finally{
-            if(buff != null){
-                try{
-                    buff.close();
-                    buff = null;
-                }catch(Exception e){
-                    logger.log(Level.WARNING,"Unable to close underlying reader", e);
-                }
-            }
-        }
-    }
     public static List<String> readLine(String line, char delimiter, char quote) {
         if(line == null)
             line = "";
@@ -207,10 +147,11 @@ public abstract class AbstractCsvReader<T> implements CsvReader<T>{
     }
 
 	/**
-	 * Not implemented by default
+	 * Not supported.
 	 */
 	public void remove() {
-		throw new UnsupportedOperationException();
+		logger.warning("java.util.Iterator#remove() not supported");
+		throw new UnsupportedOperationException("java.util.Iterator#remove() not supported");
 	}
 	
 	

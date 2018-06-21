@@ -2,6 +2,7 @@ package net.apercova.quickcsv.reader;
 
 import java.io.Reader;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -27,15 +28,58 @@ public class SimpleCsvReader extends AbstractCsvReader<List<String>>  {
 	}
 	
 	public List<List<String>> read() throws CsvReaderException {
-		return SimpleCsvReader.read(reader, delimiter, quote, escapeHeader, fromLine, maxLines);
+		return read(reader, delimiter, quote, escapeHeader, fromLine, maxLines);
 	}
 
 	public boolean hasNext() {
-		return ((IterableLineNumberReader) reader).hasNext();
+		this.fromLine = (this.fromLine < 1)? 1: this.fromLine;
+		this.maxLines = (this.maxLines < 0)? 0: this.maxLines;
+		IterableLineNumberReader r = ((IterableLineNumberReader) reader);
+		boolean  res = r.hasNext();
+		if(res) {
+			if(this.fromLine > 0) {
+				if(this.fromLine == 1) {
+					if(r.getLineNumber() == 1) {
+						if(this.escapeheader()) {
+							r.next();
+							res = this.hasNext();
+						}
+					}
+					if(this.maxLines > 0) {
+						long limit = (this.fromLine - 1 + this.maxLines);
+						if(r.getLineNumber() > limit) {
+							r.next();
+							res = this.hasNext();
+						}
+					}
+				}else {
+					if(r.getLineNumber() == 1) {
+						if(this.escapeheader()) {
+							r.next();
+							res = this.hasNext();
+						}
+					}
+					else if(r.getLineNumber() < this.fromLine) {
+						r.next();
+						res = this.hasNext();
+					}else {
+						if(this.maxLines > 0) {
+							long limit = (this.fromLine - 1 + this.maxLines);
+							if(r.getLineNumber() > limit) {
+								r.next();
+								res = this.hasNext();
+							}
+						}
+					}
+				}
+			}
+		}
+		return res;
 	}
 
 	public List<String> next() {
-		return SimpleCsvReader.readLine(((IterableLineNumberReader) reader).next(), delimiter, quote);
+		List<String> res = readLine(((IterableLineNumberReader) reader).next(), delimiter, quote);
+		return res;
 	}
 
 	public Iterator<List<String>> iterator() {
@@ -126,5 +170,22 @@ public class SimpleCsvReader extends AbstractCsvReader<List<String>>  {
     		throws CsvReaderException{
     	return read(reader, delimiter, quote, escapeHeader, fromLine, 0);
     }
+    
+    public static List<List<String>> read(Reader reader, char delimiter, char quote, boolean escapeHeader, long fromLine, long maxLines){
+		SimpleCsvReader csvReader = SimpleCsvReader.newInstance();
+		csvReader.setReader(reader)
+		.setDelimiter(delimiter)
+		.setQuote(quote)
+		.escapeheader(escapeHeader)
+		.fromLine(fromLine)
+		.maxLines(maxLines);
+		
+		List<List<String>>  lines = new LinkedList<List<String>>();
+		for(List<String> line: csvReader) {
+			lines.add(line);
+		}
+		
+		return lines;
+	}
 	
 }

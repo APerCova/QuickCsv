@@ -160,7 +160,7 @@ public class EntityCsvReader<T> extends AbstractCsvReader<T>{
 			throws CsvReaderException{
 		try {
 			List<E> entities = new LinkedList<E>();
-			List<List<String>> lines = read(reader, delimiter, quote, escapeHeader, fromLine, maxLines);
+			List<List<String>> lines = SimpleCsvReader.read(reader, delimiter, quote, escapeHeader, fromLine, maxLines);
 						
 			for(int cLine = 0; cLine < lines.size(); cLine++) {
 				List<String> line = lines.get(cLine);
