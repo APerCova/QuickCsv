@@ -1,8 +1,10 @@
 package net.apercova.quickcsv.reader;
 
+import java.io.IOException;
 import java.io.Reader;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import net.apercova.io.IterableLineNumberReader;
@@ -37,14 +39,6 @@ public class SimpleCsvReader extends AbstractCsvReader<List<String>>  {
 		return new SimpleCsvReader(reader, delimiter, quote);
 	}
 	
-	public List<List<String>> read(){
-		List<List<String>>  lines = new LinkedList<List<String>>();
-		for(List<String> line: this) {
-			lines.add(line);
-		}		
-		return lines;
-	}
-
 	public List<String> next() {
 		return readLine(((IterableLineNumberReader) reader).next(), delimiter, quote);
 	}
@@ -118,19 +112,30 @@ public class SimpleCsvReader extends AbstractCsvReader<List<String>>  {
     }
     
     public static List<List<String>> read(Reader reader, char delimiter, char quote, boolean skipHeader, long fromLine, long maxLines){
-		SimpleCsvReader csvReader = SimpleCsvReader.newInstance();
-		csvReader.setReader(reader)
-		.setDelimiter(delimiter)
-		.setQuote(quote)
-		.skipHeader(skipHeader)
-		.fromLine(fromLine)
-		.maxLines(maxLines);
-		
-		List<List<String>>  lines = new LinkedList<List<String>>();
-		for(List<String> line: csvReader) {
-			lines.add(line);
+    	List<List<String>>  lines = new LinkedList<List<String>>();
+    	SimpleCsvReader csvReader = null;
+    	try {
+    		csvReader = SimpleCsvReader.newInstance();
+    		csvReader.setReader(reader)
+    		.setDelimiter(delimiter)
+    		.setQuote(quote)
+    		.skipHeader(skipHeader)
+    		.fromLine(fromLine)
+    		.maxLines(maxLines);
+    		
+    		while(csvReader.hasNext()) {
+    			lines.add(csvReader.next());
+    		}
+		} catch (Exception e) {
+			logger.log(Level.WARNING, e.getMessage(), e);
+		} finally {
+			try {
+				if(csvReader != null) 
+					csvReader.close();
+			} catch (IOException e2) {
+				logger.log(Level.WARNING, e2.getMessage(), e2);
+			}
 		}
-		
 		return lines;
 	}
 	
