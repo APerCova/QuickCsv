@@ -13,14 +13,14 @@ public abstract class AbstractCsvWriter<E> implements CsvWriter<E> {
 	protected Collection<E> lines;
 	protected char delimiter;
 	protected char quote;
-	protected boolean escapeHeader;
+	protected boolean skipHeader;
 	protected boolean autoflush;
 	
 	protected AbstractCsvWriter() {
 		this.lines = new LinkedList<E>();
 		this.delimiter = CsvCons.COMMA;
 		this.quote = CsvCons.DOUBLE_QUOTE;
-		this.escapeHeader = false;
+		this.skipHeader = false;
 		this.autoflush = true;
 	}
 	
@@ -29,7 +29,7 @@ public abstract class AbstractCsvWriter<E> implements CsvWriter<E> {
 		this.lines = new LinkedList<E>();
 		this.delimiter = CsvCons.COMMA;
 		this.quote = CsvCons.DOUBLE_QUOTE;
-		this.escapeHeader = false;
+		this.skipHeader = false;
 		this.autoflush = true;
 	}
 	
@@ -38,7 +38,7 @@ public abstract class AbstractCsvWriter<E> implements CsvWriter<E> {
 		this.lines = lines;
 		this.delimiter = CsvCons.COMMA;
 		this.quote = CsvCons.DOUBLE_QUOTE;
-		this.escapeHeader = false;
+		this.skipHeader = false;
 		this.autoflush = true;
 	}
 	
@@ -58,8 +58,8 @@ public abstract class AbstractCsvWriter<E> implements CsvWriter<E> {
 		this.quote = quote;
 		return this;
 	}
-	public CsvWriter<E> escapeHeader(boolean escapeHeader){
-		this.escapeHeader = escapeHeader;
+	public CsvWriter<E> skipHeader(boolean skipHeader){
+		this.skipHeader = skipHeader;
 		return this;
 	}
 	public CsvWriter<E> autoflush(boolean autoflush){
@@ -86,8 +86,8 @@ public abstract class AbstractCsvWriter<E> implements CsvWriter<E> {
 		return this.lines;
 	}
 	
-	public boolean escapeHeader() {
-		return escapeHeader;
+	public boolean skipHeader() {
+		return skipHeader;
 	}
 	
 	public void flush() throws IOException {
@@ -102,7 +102,7 @@ public abstract class AbstractCsvWriter<E> implements CsvWriter<E> {
 		}
 	}
 	
-	public static  void write(Writer writer, Collection<? extends Collection<String>> lines, char delimiter, char quote, boolean escapeHeader)
+	public static  void write(Writer writer, Collection<? extends Collection<String>> lines, char delimiter, char quote, boolean skipHeader)
             throws CsvWriterException{
         if(writer == null){
             throw new CsvWriterException("missing writer",
@@ -120,7 +120,7 @@ public abstract class AbstractCsvWriter<E> implements CsvWriter<E> {
         	int lineCount = 1;
         	for (Collection<String> line : lines) {
         		
-        		if((lineCount == 1 && !escapeHeader) || lineCount > 1 ) {
+        		if((lineCount == 1 && !skipHeader) || lineCount > 1 ) {
         			writeLine(writer, line, delimiter, quote);
         		}
                 lineCount++;

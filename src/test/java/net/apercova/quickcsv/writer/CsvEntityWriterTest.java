@@ -51,7 +51,7 @@ public class CsvEntityWriterTest {
         csvWriter = CsvWriterFactory.newInstance(Country.class);
         csvWriter.setWriter(writer)
                 .setLines(countries)
-                .escapeHeader(true)
+                .skipHeader(true)
                 .autoflush(true)
                 .write();
         
@@ -96,7 +96,7 @@ public class CsvEntityWriterTest {
         csvWriter.setWriter(writer)
                 .setDelimiter(CsvCons.PIPE)
                 .setLines(countries)
-                .escapeHeader(true)
+                .skipHeader(true)
                 .autoflush(true)
                 .write();
         

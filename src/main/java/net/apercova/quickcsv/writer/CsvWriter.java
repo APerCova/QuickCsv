@@ -25,7 +25,7 @@ public interface CsvWriter<E> extends Closeable,Flushable{
 	CsvWriter<E> addLines(Collection<E> lines);
 	CsvWriter<E> addLine(E line);
 	Collection<E> getLines();
-	CsvWriter<E> escapeHeader(boolean escapeHeader);
-	boolean escapeHeader();
+	CsvWriter<E> skipHeader(boolean skipHeader);
+	boolean skipHeader();
 	void write() throws CsvWriterException;
 }

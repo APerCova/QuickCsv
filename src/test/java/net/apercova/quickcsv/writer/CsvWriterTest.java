@@ -52,7 +52,7 @@ public class CsvWriterTest {
     public void test02() throws Exception {
         csvWriter.setWriter(writer)
                 .setLines(csvValues)
-                .escapeHeader(true)
+                .skipHeader(true)
                 .autoflush(true)
                 .write();
         
@@ -95,7 +95,7 @@ public class CsvWriterTest {
         csvWriter.setWriter(writer)
                 .setDelimiter(CsvCons.PIPE)
                 .setLines(csvValues)
-                .escapeHeader(true)
+                .skipHeader(true)
                 .autoflush(true)
                 .write();
         

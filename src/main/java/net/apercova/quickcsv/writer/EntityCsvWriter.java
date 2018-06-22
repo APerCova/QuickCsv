@@ -45,34 +45,34 @@ public class EntityCsvWriter<E> extends AbstractCsvWriter<E>{
 	}
 	
 	public void write() throws CsvWriterException {
-		EntityCsvWriter.write(writer, lines, delimiter, quote, escapeHeader, type);
+		EntityCsvWriter.write(writer, lines, delimiter, quote, skipHeader, type);
 	}
 	
 	public static <E> void write(Writer writer, Collection<E> lines, Class<E> type) 
     		throws CsvWriterException {
     	write(writer, lines, CsvCons.COMMA, CsvCons.DOUBLE_QUOTE, false, type);
     }
-    public static <E> void write(Writer writer, Collection<E> lines, boolean escapeHeader, Class<E> type) 
+    public static <E> void write(Writer writer, Collection<E> lines, boolean skipHeader, Class<E> type) 
     		throws CsvWriterException {
-    	write(writer, lines, CsvCons.COMMA, CsvCons.DOUBLE_QUOTE, escapeHeader, type);
+    	write(writer, lines, CsvCons.COMMA, CsvCons.DOUBLE_QUOTE, skipHeader, type);
     }
     public static <E> void write(Writer writer, Collection<E> lines, char delimiter, Class<E> type) 
     		throws CsvWriterException {
     	write(writer, lines, delimiter, CsvCons.DOUBLE_QUOTE, false, type);
     }
-    public static <E> void write(Writer writer, Collection<E> lines, char delimiter, boolean escapeHeader, Class<E> type) 
+    public static <E> void write(Writer writer, Collection<E> lines, char delimiter, boolean skipHeader, Class<E> type) 
     		throws CsvWriterException {
-    	write(writer, lines, delimiter, CsvCons.DOUBLE_QUOTE, escapeHeader, type);
+    	write(writer, lines, delimiter, CsvCons.DOUBLE_QUOTE, skipHeader, type);
     }
     public static <E> void write(Writer writer, Collection<E> lines, char delimiter, char quote, Class<E> type) 
     		throws CsvWriterException {
     	write(writer, lines, delimiter, quote, false, type);
     	
     }
-	public static <E> void write(Writer writer, Collection<E> lines, char delimiter, char quote, boolean escapeHeader, Class<E> type)
+	public static <E> void write(Writer writer, Collection<E> lines, char delimiter, char quote, boolean skipHeader, Class<E> type)
             throws CsvWriterException{
 		try {
-			write(writer, readCollectionValues(lines, type), delimiter, quote, escapeHeader);
+			write(writer, readCollectionValues(lines, type), delimiter, quote, skipHeader);
 		} catch (Exception e) {
 			throw new CsvWriterException(e);
 		}

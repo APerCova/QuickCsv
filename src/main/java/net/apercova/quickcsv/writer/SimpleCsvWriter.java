@@ -28,24 +28,24 @@ public class SimpleCsvWriter extends AbstractCsvWriter<Collection<String>> {
 	}
 	
 	public void write() throws CsvWriterException {
-		SimpleCsvWriter.write(writer, lines, delimiter, quote, escapeHeader);
+		SimpleCsvWriter.write(writer, lines, delimiter, quote, skipHeader);
 	}
 
 	public static void write(Writer writer, Collection<Collection<String>> lines) 
     		throws CsvWriterException {
     	write(writer, lines, CsvCons.COMMA, CsvCons.DOUBLE_QUOTE, false);
     }
-    public static void write(Writer writer, Collection<Collection<String>> lines, boolean escapeHeader) 
+    public static void write(Writer writer, Collection<Collection<String>> lines, boolean skipHeader) 
     		throws CsvWriterException {
-    	write(writer, lines, CsvCons.COMMA, CsvCons.DOUBLE_QUOTE, escapeHeader);
+    	write(writer, lines, CsvCons.COMMA, CsvCons.DOUBLE_QUOTE, skipHeader);
     }
     public static void write(Writer writer, Collection<Collection<String>> lines, char delimiter) 
     		throws CsvWriterException {
     	write(writer, lines, delimiter, CsvCons.DOUBLE_QUOTE, false);
     }    
-    public static void write(Writer writer, Collection<Collection<String>> lines, char delimiter, boolean escapeHeader) 
+    public static void write(Writer writer, Collection<Collection<String>> lines, char delimiter, boolean skipHeader) 
     		throws CsvWriterException {
-    	write(writer, lines, delimiter, CsvCons.DOUBLE_QUOTE, escapeHeader);
+    	write(writer, lines, delimiter, CsvCons.DOUBLE_QUOTE, skipHeader);
     }  
     public static void write(Writer writer, Collection<Collection<String>> lines, char delimiter, char quote) 
     		throws CsvWriterException {
