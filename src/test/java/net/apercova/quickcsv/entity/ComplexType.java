@@ -2,18 +2,21 @@ package net.apercova.quickcsv.entity;
 
 import java.nio.charset.Charset;
 import java.security.MessageDigest;
+import java.util.Date;
 
 import net.apercova.quickcsv.annotation.CsvDataTypeConverter;
 import net.apercova.quickcsv.annotation.CsvEntity;
 import net.apercova.quickcsv.annotation.CsvValue;
 import net.apercova.quickcsv.converter.CharsetConverter;
 import net.apercova.quickcsv.converter.MessageDigestConverter;
+import net.apercova.quickcsv.converter.SimpleISODateConverter;
 
 @CsvEntity(headers= {"DATE","CHARSET","MESSAGE_DIGEST"})
 public class ComplexType {
 	
 	@CsvValue(index=0)
-	private String date;
+	@CsvDataTypeConverter(SimpleISODateConverter.class)
+	private Date date;
 	@CsvValue(index=1)
 	@CsvDataTypeConverter(CharsetConverter.class)
 	private Charset charset;
@@ -24,18 +27,18 @@ public class ComplexType {
 	public ComplexType() {
 	}
 	
-	public ComplexType(String date, Charset charset, MessageDigest messageDigest) {
+	public ComplexType(Date date, Charset charset, MessageDigest messageDigest) {
 		super();
 		this.date = date;
 		this.charset = charset;
 		this.messageDigest = messageDigest;
 	}
 	
-	public String getDate() {
+	public Date getDate() {
 		return date;
 	}
 
-	public void setDate(String date) {
+	public void setDate(Date date) {
 		this.date = date;
 	}
 

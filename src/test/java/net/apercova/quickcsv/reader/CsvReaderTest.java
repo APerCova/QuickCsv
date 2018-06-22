@@ -4,12 +4,13 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
+import java.nio.charset.Charset;
 import java.util.List;
 
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -30,8 +31,8 @@ public class CsvReaderTest {
 	public void init() {
 		monthsStream = ClassLoader.getSystemResourceAsStream("Months.csv");
 		countriesStream = ClassLoader.getSystemResourceAsStream("Countries.csv");
-		monthsReader = new InputStreamReader(monthsStream);
-		countriesReader = new InputStreamReader(countriesStream);
+		monthsReader = new InputStreamReader(monthsStream, Charset.forName("utf-8"));
+		countriesReader = new InputStreamReader(countriesStream, Charset.forName("utf-8"));
 		monthsCsvReader = SimpleCsvReader.newInstance(monthsReader);
 		daysOfWeek = "sunday,\"\"\"monday\"\"\",\"tues,day\",wednesday,\"\"\"thu,rsday\"\"\",\"\"\"\"\"friday\"\"\"\"\",saturday";
 	}
@@ -194,13 +195,13 @@ public class CsvReaderTest {
         
     	List<String> values = SimpleCsvReader.readLine(daysOfWeek, CsvCons.COMMA, CsvCons.DOUBLE_QUOTE);
         
-        Assert.assertEquals("sunday", values.get(0));
-        Assert.assertEquals("\"monday\"", values.get(1));
-        Assert.assertEquals("tues,day", values.get(2));
-        Assert.assertEquals("wednesday", values.get(3));
-        Assert.assertEquals("\"thu,rsday\"", values.get(4));
-        Assert.assertEquals("\"\"friday\"\"", values.get(5));
-        Assert.assertEquals("saturday", values.get(6));
+        assertEquals("sunday", values.get(0));
+        assertEquals("\"monday\"", values.get(1));
+        assertEquals("tues,day", values.get(2));
+        assertEquals("wednesday", values.get(3));
+        assertEquals("\"thu,rsday\"", values.get(4));
+        assertEquals("\"\"friday\"\"", values.get(5));
+        assertEquals("saturday", values.get(6));
     }
 	
 	@Test
@@ -229,6 +230,128 @@ public class CsvReaderTest {
     	for(List<String> line: lines) {
     		assertEquals(3, line.size());
     	}
+    }
+    @Test
+    public void test23() throws CsvReaderException, IOException {
+        monthsCsvReader = (SimpleCsvReader) CsvReaderFactory.newInstance();
+        
+        monthsReader = new InputStreamReader(ClassLoader.getSystemResourceAsStream("Months.csv"), Charset.forName("utf-8"));
+        monthsCsvReader.setReader(monthsReader);
+    	lines = monthsCsvReader.read();
+    	assertEquals(6, lines.size());
+    	assertEquals("m_01", lines.get(0).get(0));
+    	monthsCsvReader.close();
+    	
+    	
+    	monthsReader = new InputStreamReader(ClassLoader.getSystemResourceAsStream("Months.csv"), Charset.forName("utf-8"));
+    	monthsCsvReader.setReader(monthsReader)
+                .skipHeader(true);
+    	lines = monthsCsvReader.read();
+    	assertEquals(5, lines.size());
+    	monthsCsvReader.close();
+    	
+    	
+    	monthsReader = new InputStreamReader(ClassLoader.getSystemResourceAsStream("Months.csv"), Charset.forName("utf-8"));
+    	monthsCsvReader.setReader(monthsReader)
+                .skipHeader(true)
+                .fromLine(4);
+    	lines = monthsCsvReader.read();
+    	assertEquals(3, lines.size());
+    	monthsCsvReader.close();
+    	
+    	
+    	monthsReader = new InputStreamReader(ClassLoader.getSystemResourceAsStream("Months.csv"), Charset.forName("utf-8"));
+    	monthsCsvReader.setReader(monthsReader)
+    			.skipHeader(true)
+                .fromLine(1)
+                .maxLines(4);
+    	lines = monthsCsvReader.read();
+    	assertEquals(3, lines.size());
+    	monthsCsvReader.close();
+    	
+    	
+    	monthsReader = new InputStreamReader(ClassLoader.getSystemResourceAsStream("Months.csv"), Charset.forName("utf-8"));
+    	monthsCsvReader.setReader(monthsReader)
+    			.skipHeader(false)
+                .fromLine(1)
+                .maxLines(4);
+    	lines = monthsCsvReader.read();
+    	assertEquals(4, lines.size());
+    	monthsCsvReader.close();
+    	
+        
+    	monthsReader = new InputStreamReader(ClassLoader.getSystemResourceAsStream("Months.csv"), Charset.forName("utf-8"));
+    	monthsCsvReader.setReader(monthsReader)
+    			.skipHeader(true)
+                .fromLine(3)
+                .maxLines(3);
+    	lines = monthsCsvReader.read();
+    	assertEquals(3, lines.size());
+    	monthsCsvReader.close();
+    	
+    	
+    	monthsReader = new InputStreamReader(ClassLoader.getSystemResourceAsStream("Months.csv"), Charset.forName("utf-8"));
+    	monthsCsvReader.setReader(monthsReader)
+    			.skipHeader(false)
+                .fromLine(3)
+                .maxLines(3);
+    	lines = monthsCsvReader.read();
+    	assertEquals(4, lines.size());
+    	monthsCsvReader.close();
+    	
+    }
+    @Test
+    public void test24() throws CsvReaderException {        
+        lines = SimpleCsvReader.read(monthsReader);
+
+        assertEquals(6, lines.size());
+        assertEquals("m_01", lines.get(0).get(0));
+    }
+    
+    @Test
+    public void test25() throws CsvReaderException {
+    	lines = SimpleCsvReader.read(countriesReader, CsvCons.PIPE, CsvCons.SINGLE_QUOTE);
+        
+        assertEquals(6, lines.size());
+        assertEquals("\"Ciudad de México, CDMX\"", lines.get(2).get(1));
+    }
+    
+    @Test
+    public void test26() throws CsvReaderException {
+    	lines = SimpleCsvReader.read(countriesReader, CsvCons.PIPE, CsvCons.SINGLE_QUOTE, true);
+        
+        assertEquals(5, lines.size());
+        assertEquals("\"Ciudad de México, CDMX\"", lines.get(1).get(1));
+    }
+    
+    @Test
+    public void test27() throws CsvReaderException {
+    	lines = SimpleCsvReader.read(monthsReader, false);
+        
+        assertEquals(6, lines.size());
+        assertEquals("m_01", lines.get(0).get(0));
+    }
+    
+    @Test
+    public void test28() throws CsvReaderException {
+    	int fromLine = 1;
+    	int maxLines = 3;
+    	lines = SimpleCsvReader.read(monthsReader, fromLine, maxLines);
+        
+    	assertEquals(maxLines, lines.size());
+        assertEquals("m_01", lines.get(0).get(0));
+        assertEquals("january", lines.get(lines.size()-1).get(0));
+    }
+    
+    @Test
+    public void test29() throws CsvReaderException {
+    	int fromLine = 1;
+    	int maxLines = 4;
+    	lines = SimpleCsvReader.read(monthsReader, true, fromLine, maxLines);
+        
+    	assertEquals((maxLines - 1), lines.size());
+        assertEquals("'enero'", lines.get(0).get(0));
+        assertEquals("janvier", lines.get(lines.size()-1).get(0));
     }
 	
 }

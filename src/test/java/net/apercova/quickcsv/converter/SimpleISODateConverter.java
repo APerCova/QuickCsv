@@ -5,9 +5,9 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class Sales2009DateConverter implements DataTypeConverter<Date>{
+public class SimpleISODateConverter implements DataTypeConverter<Date>{
 
-	private DateFormat df = new SimpleDateFormat("MM/dd/yyyy hh:mm");
+	private DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'hh:mm:ss.SSS");
 	
 	public Date parse(String value) throws DataTypeConversionException {
 		try {
