@@ -4,7 +4,6 @@ import java.io.Reader;
 import java.lang.reflect.Field;
 import java.math.BigDecimal;
 import java.math.BigInteger;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -68,10 +67,10 @@ public class EntityCsvReader<T> extends AbstractCsvReader<T>{
 	public List<T> read() throws CsvReaderException {
 		return EntityCsvReader.read(reader, delimiter, quote, skipHeader, fromLine, maxLines, type);
 	}
-
+	
 	public T next() {		
 		try {
-			T res = readObject(
+			T res = readEntity(
 					readLine(((IterableLineNumberReader) reader).next(), delimiter, quote), 
 					type);
 			return res;
@@ -165,8 +164,8 @@ public class EntityCsvReader<T> extends AbstractCsvReader<T>{
     		throws CsvReaderException{
     	return read(reader, delimiter, quote, skipHeader, fromLine, 0, type);
     }
-		
-	public static <E> List<E> read(Reader reader, char delimiter, char quote, boolean skipHeader, long fromLine, long maxLines, Class<E> type) 
+    
+    public static <E> List<E> read(Reader reader, char delimiter, char quote, boolean skipHeader, long fromLine, long maxLines, Class<E> type) 
 			throws CsvReaderException{
 		try {
 			SimpleCsvReader csvReader = SimpleCsvReader.newInstance();
@@ -179,7 +178,7 @@ public class EntityCsvReader<T> extends AbstractCsvReader<T>{
 			
 			List<E>  lines = new LinkedList<E>();
 			for(List<String> line: csvReader) {
-				lines.add(readObject(line, type));
+				lines.add(readEntity(line, type));
 			}
 			
 			return lines;
@@ -187,25 +186,25 @@ public class EntityCsvReader<T> extends AbstractCsvReader<T>{
 			throw new CsvReaderException(e);
 		}
 	}
-	
+    
 	public static <E> E readLine(String line, char delimiter, char quote, Class<E> type) throws CsvReaderException {
 		try {
-			return readObject(readLine(line, delimiter, quote), type);
+			return readEntity(readLine(line, delimiter, quote), type);
 		} catch (Exception e) {//InstantiationException, IllegalAccessException, DataTypeConversionException
 			throw new CsvReaderException(e);
 		}
 	}
 	
-	protected static <E> E readObject(List<String> values, Class<E> type) 
+	protected static <E> E readEntity(List<String> values, Class<E> type) 
 			throws InstantiationException, IllegalAccessException, DataTypeConversionException {
 		E entity = type.newInstance();
-		Map<Integer,Field> fieldMap = CsvEntityHelper.getAnnotatedFields(type);
-		for(Integer k :fieldMap.keySet()) {
-			Field field = fieldMap.get(k);
+		Map<Field, Integer> fieldMap = CsvEntityHelper.findAnnotatedFields(type);
+		
+		for(Field field :fieldMap.keySet()) {
 			if(!field.isAnnotationPresent(CsvDataTypeConverter.class)) {
-				setDefaultFieldValue(field, values.get(k), entity);
+				setDefaultFieldValue(field, values.get(fieldMap.get(field)), entity);
 			}else {
-				setCustomFieldValue(field, values.get(k), entity);
+				setCustomFieldValue(field, values.get(fieldMap.get(field)), entity);
 			}
 		}
 		return entity;

@@ -3,7 +3,11 @@ package net.apercova.quickcsv.entity;
 import net.apercova.quickcsv.annotation.CsvEntity;
 import net.apercova.quickcsv.annotation.CsvValue;
 
-@CsvEntity(headers= {"NAME","CAPITAL","ISO_CODE"})
+@CsvEntity(headers= {
+		"NAME",
+		"CAPITAL",
+		"ISO_CODE"
+})
 public class Country {
 	
 	@CsvValue(header="NAME")

@@ -7,6 +7,7 @@ import java.util.Collection;
 import java.util.LinkedList;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.TreeMap;
 
 import net.apercova.quickcsv.CsvCons;
 import net.apercova.quickcsv.CsvEntityHelper;
@@ -80,7 +81,7 @@ public class EntityCsvWriter<E> extends AbstractCsvWriter<E>{
 	public static <E> void writeLine(Writer writer, E line, char delimiter, char quote, Class<E> type) 
 			throws CsvWriterException {
 		try {
-			writeLine(writer, readObjectValues(line, CsvEntityHelper.getAnnotatedFields(type)), delimiter, quote);
+			writeLine(writer, readObjectValues(line, CsvEntityHelper.findAnnotatedFields(type)), delimiter, quote);
 		} catch (Exception e) {
 			throw new CsvWriterException(e.getMessage(), e);
 		}
@@ -103,18 +104,25 @@ public class EntityCsvWriter<E> extends AbstractCsvWriter<E>{
 			
 			//Parse fields as CsvCollection
 			for(E line: lines) {
-				values.add(readObjectValues(line, CsvEntityHelper.getAnnotatedFields(type) ));
+				values.add(readObjectValues(line, CsvEntityHelper.findAnnotatedFields(type) ));
 			}
 		}
 		
 		return values;
 	}	
 	@SuppressWarnings("unchecked")
-	protected static <E> Collection<String> readObjectValues(E obj, Map<Integer, Field> fieldMap) 
+	protected static <E> Collection<String> readObjectValues(E obj, Map<Field, Integer> fieldMap) 
 			throws IllegalArgumentException, IllegalAccessException, InstantiationException, DataTypeConversionException {
+		
+		//reversing map to write index based columns
+		Map<Integer, Field> indexMap = new TreeMap<Integer, Field>();
+		for(Map.Entry<Field, Integer> entry : fieldMap.entrySet()){
+			indexMap.put(entry.getValue(), entry.getKey());
+		}
+		
 		Collection<String> values = new LinkedList<String>();
 		int i = 0;
-		for(Entry<Integer, Field> entry: fieldMap.entrySet()) {
+		for(Entry<Integer, Field> entry: indexMap.entrySet()) {
 			Field field = entry.getValue();
 			field.setAccessible(true);
 			while(!(entry.getKey().equals(i))) {
