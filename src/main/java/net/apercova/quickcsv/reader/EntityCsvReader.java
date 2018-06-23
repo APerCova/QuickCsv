@@ -169,7 +169,12 @@ public class EntityCsvReader<T> extends AbstractCsvReader<T>{
 		}
 		return lines;
 	}
-    
+    public static <T> T readLine(String line, Class<T> type) throws CsvReaderException {
+    	return readLine(line, CsvCons.COMMA, CsvCons.DOUBLE_QUOTE, type);
+    }
+    public static <T> T readLine(String line, char delimiter, Class<T> type) throws CsvReaderException {
+    	return readLine(line, delimiter, CsvCons.DOUBLE_QUOTE, type);
+    }
 	public static <T> T readLine(String line, char delimiter, char quote, Class<T> type) throws CsvReaderException {
 		try {
 			return readEntity(readLine(line, delimiter, quote), type);

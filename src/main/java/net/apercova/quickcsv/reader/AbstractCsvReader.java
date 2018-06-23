@@ -152,6 +152,12 @@ public abstract class AbstractCsvReader<T> implements CsvReader<T>{
 		return this;
 	}
 	
+	public static List<String> readLine(String line) {
+		return readLine(line, CsvCons.COMMA, CsvCons.DOUBLE_QUOTE);
+	}
+	public static List<String> readLine(String line, char delimiter) {
+		return readLine(line, delimiter, CsvCons.DOUBLE_QUOTE);
+	}
     public static List<String> readLine(String line, char delimiter, char quote) {
     	List<String> values = null;
     	if(line != null) {

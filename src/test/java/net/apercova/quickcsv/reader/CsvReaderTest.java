@@ -26,6 +26,7 @@ public class CsvReaderTest {
 	private SimpleCsvReader monthsCsvReader;
 	private List<List<String>> lines;
 	private String daysOfWeek;
+	private String quotedWords;
 	
 	@Before
 	public void init() {
@@ -34,7 +35,9 @@ public class CsvReaderTest {
 		monthsReader = new InputStreamReader(monthsStream, Charset.forName("utf-8"));
 		countriesReader = new InputStreamReader(countriesStream, Charset.forName("utf-8"));
 		monthsCsvReader = SimpleCsvReader.newInstance(monthsReader);
+		
 		daysOfWeek = "sunday,\"\"\"monday\"\"\",\"tues,day\",wednesday,\"\"\"thu,rsday\"\"\",\"\"\"\"\"friday\"\"\"\"\",saturday";
+		quotedWords = "\"the \"\"word\"\" is true\",\"a \"\"quoted-field\"\"\"";
 	}
 	
 	@Test
@@ -192,7 +195,6 @@ public class CsvReaderTest {
 	
 	@Test
     public void test18() throws CsvReaderException {
-        
     	List<String> values = SimpleCsvReader.readLine(daysOfWeek, CsvCons.COMMA, CsvCons.DOUBLE_QUOTE);
         
         assertEquals("sunday", values.get(0));
@@ -205,26 +207,34 @@ public class CsvReaderTest {
     }
 	
 	@Test
-    public void test19() throws CsvReaderException {
+	public void test19() {
+		List<String> cline = SimpleCsvReader.readLine(quotedWords);
+		
+		assertEquals("the \"word\" is true", cline.get(0));
+		assertEquals("a \"quoted-field\"", cline.get(1));
+	}
+	
+	@Test
+    public void test20() throws CsvReaderException {
     	lines = SimpleCsvReader.read(monthsReader, CsvCons.COMMA, CsvCons.DOUBLE_QUOTE);
     	assertEquals(6, lines.size());
     }
 	
 	@Test
-    public void test20() throws CsvReaderException {
+    public void test21() throws CsvReaderException {
     	lines = SimpleCsvReader.read(monthsReader, CsvCons.COMMA, CsvCons.DOUBLE_QUOTE, false, 3, 2 );
     	assertEquals(3, lines.size());
     	assertEquals("m_01", lines.get(0).get(0));
     }
 	
 	@Test
-    public void test21() throws CsvReaderException {
+    public void test22() throws CsvReaderException {
     	lines = SimpleCsvReader.read(monthsReader, CsvCons.COMMA, CsvCons.DOUBLE_QUOTE, true, 5, 2 );
     	assertEquals(2, lines.size());
     	assertEquals("gennaio", lines.get(0).get(0));
     }
 	@Test
-    public void test22() throws CsvReaderException {
+    public void test23() throws CsvReaderException {
     	lines = SimpleCsvReader.read(countriesReader, CsvCons.PIPE, CsvCons.SINGLE_QUOTE, false);
     	assertEquals(6, lines.size());
     	for(List<String> line: lines) {
@@ -232,7 +242,7 @@ public class CsvReaderTest {
     	}
     }
     @Test
-    public void test23() throws CsvReaderException, IOException {
+    public void test24() throws CsvReaderException, IOException {
         monthsCsvReader = (SimpleCsvReader) CsvReaderFactory.newInstance();
         
         monthsReader = new InputStreamReader(ClassLoader.getSystemResourceAsStream("Months.csv"), Charset.forName("utf-8"));
@@ -301,7 +311,7 @@ public class CsvReaderTest {
     	
     }
     @Test
-    public void test24() throws CsvReaderException {        
+    public void test25() throws CsvReaderException {        
         lines = SimpleCsvReader.read(monthsReader);
 
         assertEquals(6, lines.size());
@@ -309,7 +319,7 @@ public class CsvReaderTest {
     }
     
     @Test
-    public void test25() throws CsvReaderException {
+    public void test26() throws CsvReaderException {
     	lines = SimpleCsvReader.read(countriesReader, CsvCons.PIPE, CsvCons.SINGLE_QUOTE);
         
         assertEquals(6, lines.size());
@@ -317,7 +327,7 @@ public class CsvReaderTest {
     }
     
     @Test
-    public void test26() throws CsvReaderException {
+    public void test27() throws CsvReaderException {
     	lines = SimpleCsvReader.read(countriesReader, CsvCons.PIPE, CsvCons.SINGLE_QUOTE, true);
         
         assertEquals(5, lines.size());
@@ -325,7 +335,7 @@ public class CsvReaderTest {
     }
     
     @Test
-    public void test27() throws CsvReaderException {
+    public void test28() throws CsvReaderException {
     	lines = SimpleCsvReader.read(monthsReader, false);
         
         assertEquals(6, lines.size());
@@ -333,7 +343,7 @@ public class CsvReaderTest {
     }
     
     @Test
-    public void test28() throws CsvReaderException {
+    public void test29() throws CsvReaderException {
     	int fromLine = 1;
     	int maxLines = 3;
     	lines = SimpleCsvReader.read(monthsReader, fromLine, maxLines);
@@ -344,7 +354,7 @@ public class CsvReaderTest {
     }
     
     @Test
-    public void test29() throws CsvReaderException {
+    public void test30() throws CsvReaderException {
     	int fromLine = 1;
     	int maxLines = 4;
     	lines = SimpleCsvReader.read(monthsReader, true, fromLine, maxLines);
